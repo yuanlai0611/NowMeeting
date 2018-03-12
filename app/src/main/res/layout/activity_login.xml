@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.gongyunhao.nowmeeting.Activity.LoginActivity">
+
+    <FrameLayout
+        android:id="@+id/login_frame"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_above="@id/btn_login"
+            android:layout_marginBottom="56dp">
+
+            <LinearLayout
+                android:id="@+id/linear_edit"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:visibility="gone">
+
+                <EditText
+                    android:id="@+id/et_username"
+                    android:layout_width="match_parent"
+                    android:layout_height="55dp"
+                    android:gravity="center"
+                    android:textSize="20sp"
+                    android:hint="邮箱"
+                    android:layout_marginLeft="82dp"
+                    android:layout_marginRight="82dp"
+                    android:inputType="textEmailAddress"/>
+                <EditText
+                    android:id="@+id/et_userpass"
+                    android:layout_width="match_parent"
+                    android:layout_height="55dp"
+                    android:gravity="center"
+                    android:textSize="20sp"
+                    android:inputType="textPassword"
+                    android:layout_marginLeft="82dp"
+                    android:layout_marginRight="82dp"
+                    android:hint="密码"/>
+
+            </LinearLayout>
+
+
+        <LinearLayout
+            android:id="@+id/linear_text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/textView2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
+            android:gravity="center"
+            android:text="欢迎来到N-Meeting"
+            android:textColor="@color/accent_black"
+            android:textSize="26sp"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="让       会       议       更       精       彩"/>
+    </LinearLayout>
+</FrameLayout>
+        <Button
+            android:id="@+id/btn_login"
+            android:layout_width="match_parent"
+            android:layout_height="42dp"
+            android:layout_above="@+id/textView_signin"
+            android:background="@color/colorPrimary"
+            android:layout_marginLeft="86dp"
+            android:layout_marginRight="86dp"
+            android:text="登录"
+            android:textColor="@color/accent_white"
+            android:layout_marginBottom="25dp"/>
+
+        <TextView
+            android:id="@+id/textView_signin"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true"
+            android:text="新用户注册"
+            android:textColor="@color/colorPrimary"
+            android:layout_marginBottom="100dp"/>
+</RelativeLayout>
+</FrameLayout>

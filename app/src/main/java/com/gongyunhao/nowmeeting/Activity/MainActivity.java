@@ -1,4 +1,4 @@
-package com.gongyunhao.nowmeeting;
+package com.gongyunhao.nowmeeting.Activity;
 
 import android.os.Build;
 import android.os.Bundle;
@@ -24,6 +24,7 @@ import com.gongyunhao.nowmeeting.Base.BaseActivity;
 import com.gongyunhao.nowmeeting.Fragment.FragmentMeeting;
 import com.gongyunhao.nowmeeting.Fragment.FragmentMessage;
 import com.gongyunhao.nowmeeting.Fragment.FragmentMy;
+import com.gongyunhao.nowmeeting.R;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -86,7 +87,7 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
 
         MyPageAdapter myPageAdapter = new MyPageAdapter(getSupportFragmentManager(),datas,titles);
 
-        tabLayout = (TabLayout) findViewById(R.id.tablayout);
+//        tabLayout = (TabLayout) findViewById(R.id.tablayout);
         ViewPager viewPager = (ViewPager) findViewById(R.id.view_pager);
         tabLayout.setTabMode(TabLayout.MODE_FIXED);
         // 将适配器设置进ViewPager
@@ -95,7 +96,7 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
         // 将ViewPager与TabLayout相关联
         tabLayout.setupWithViewPager(viewPager);
         setupTabIcons();
-
+//
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
             //透明状态栏
             getWindow().addFlags( WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);

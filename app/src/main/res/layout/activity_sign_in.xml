@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.gongyunhao.nowmeeting.Activity.SignInActivity">
+
+    <FrameLayout
+        android:id="@+id/login_frame"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+    <EditText
+        android:id="@+id/et_email"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:textSize="20sp"
+        android:maxLines="1"
+        android:maxLength="22"
+        android:hint="邮箱"
+        android:gravity="center"
+        android:layout_marginLeft="45dp"
+        android:layout_marginRight="45dp"/>
+
+    <ImageButton
+        android:id="@+id/ibtn_signin_post"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_below="@id/et_email"
+        android:layout_centerInParent="true"
+        android:layout_alignParentEnd="true"
+        android:layout_margin="36dp"
+        android:background="@drawable/sel_arrow_forward"/>
+</RelativeLayout>
+</FrameLayout>
