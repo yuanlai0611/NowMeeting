@@ -1,10 +1,19 @@
 package com.gongyunhao.nowmeeting.Activity;
 
+import android.content.Context;
+import android.graphics.Typeface;
 import android.os.Build;
+
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
+
+import android.util.Log;
+import android.view.KeyEvent;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.widget.ImageButton;
 import android.view.KeyEvent;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -16,6 +25,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager;
+
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -26,10 +36,18 @@ import com.gongyunhao.nowmeeting.Fragment.FragmentMessage;
 import com.gongyunhao.nowmeeting.Fragment.FragmentMy;
 import com.gongyunhao.nowmeeting.R;
 
+import com.gongyunhao.nowmeeting.util.TypeFaceUtil;
+
 import java.util.ArrayList;
 import java.util.List;
 
+
+public class MainActivity extends BaseActivity {
+
+    private TextView textView;
+
 public class MainActivity extends BaseActivity implements NavigationView.OnNavigationItemSelectedListener {
+
     private List<Fragment> datas;
     private List<String> titles;
     private TabLayout tabLayout;
@@ -39,23 +57,70 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
             R.drawable.selector_tab_my
     };
 
+    private ViewPager viewPager;
+    private MyPageAdapter myPageAdapter;
+    private ImageButton imageButtonSearch;
+    private Context mContext;
+
     private long lastClickTime = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate( savedInstanceState );
         setContentView( R.layout.activity_main );
+
+        initViews();
+        mContext = this;
         Toolbar toolbar = (Toolbar) findViewById( R.id.toolbar );
         setSupportActionBar( toolbar );
         initViews();
-//        FloatingActionButton fab = (FloatingActionButton) findViewById( R.id.fab );
-//        fab.setOnClickListener( new View.OnClickListener( ) {
-//            @Override
-//            public void onClick(View view) {
-//                Snackbar.make( view, "Replace with your own action", Snackbar.LENGTH_SHORT )
-//                        .setAction( "Action", null ).show( );
-//            }
-//        } );
+
+        //设置字体
+        TypeFaceUtil.setTypeFace(textView,TypeFaceUtil.HARD_POINT,mContext);
+        viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+                float temp_positionOffset;
+                if (positionOffset>0.5){
+                    temp_positionOffset = positionOffset;
+                }else {
+                    temp_positionOffset = 1-positionOffset;
+                }
+                textView.setAlpha(temp_positionOffset);
+                if ((position+positionOffset)<0.5){
+                    textView.setText(R.string.title_message);
+                }else if ((position+positionOffset)>=0.5&&(position+positionOffset)<1.5){
+                    textView.setText(R.string.title_meeting);
+                }else {
+                    textView.setText(R.string.title_about_me);
+                }
+                if ((position+positionOffset)>=1){
+                    Log.d("MainActivity","---->开始设置imageButton透明");
+                    imageButtonSearch.setVisibility(View.VISIBLE);
+                    imageButtonSearch.setAlpha(2-(position+positionOffset));
+                }else if ((position+positionOffset)==2){
+                    imageButtonSearch.setVisibility(View.GONE);
+                }else if ((position+positionOffset)==0){
+                    imageButtonSearch.setVisibility(View.VISIBLE);
+                }
+                //positionOffset 是百分比
+                   Log.d("MainActivity","---->position:"+position+"  positionOffset:"+positionOffset);
+            }
+
+            @Override
+            public void onPageSelected(int position) {
+//
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state) {
+
+                //Log.d(Tag,"---->pagerState:"+state);
+               //起始状态为0 正在翻页状态为1 翻页完成状态为2
+
+            }
+        });
+
 
         DrawerLayout drawer = (DrawerLayout) findViewById( R.id.drawer_layout );
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -75,15 +140,26 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
     @Override
     public void initViews() {
 
+
+        textView = findViewById(R.id.title_name);
+        imageButtonSearch = findViewById(R.id.search_button);
         datas = new ArrayList<>();
-        datas.add(new FragmentMeeting());
         datas.add(new FragmentMessage());
+        datas.add(new FragmentMeeting());
         datas.add(new FragmentMy());
 
         titles = new ArrayList<>();
         titles.add("消息");
         titles.add("会议");
         titles.add("我的");
+
+        myPageAdapter = new MyPageAdapter(getSupportFragmentManager(),datas,titles);
+        tabLayout = (TabLayout) findViewById(R.id.tablayout);
+        viewPager = (ViewPager) findViewById(R.id.view_pager);
+        tabLayout.setTabMode(TabLayout.MODE_FIXED);
+        // 将适配器设置进ViewPager
+        viewPager.setAdapter(myPageAdapter);
+        viewPager.setOffscreenPageLimit(1);
 
         MyPageAdapter myPageAdapter = new MyPageAdapter(getSupportFragmentManager(),datas,titles);
 
@@ -92,15 +168,18 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
         tabLayout.setTabMode(TabLayout.MODE_FIXED);
         // 将适配器设置进ViewPager
         viewPager.setAdapter(myPageAdapter);
+
         viewPager.setCurrentItem(0);
         // 将ViewPager与TabLayout相关联
         tabLayout.setupWithViewPager(viewPager);
         setupTabIcons();
+
 //
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
             //透明状态栏
             getWindow().addFlags( WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
         }
+
     }
 
     private void setupTabIcons() {
@@ -129,6 +208,7 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
 
     @Override
     public void onBackPressed() {
+
         DrawerLayout drawer = (DrawerLayout) findViewById( R.id.drawer_layout );
         if (drawer.isDrawerOpen( GravityCompat.START )) {
             drawer.closeDrawer( GravityCompat.START );
@@ -178,7 +258,6 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if (keyCode == KeyEvent.KEYCODE_BACK) {
-
             DrawerLayout drawer = (DrawerLayout) findViewById( R.id.drawer_layout );
             if (drawer.isDrawerOpen( GravityCompat.START )) {
                 drawer.closeDrawer( GravityCompat.START );

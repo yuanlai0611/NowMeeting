@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">New Meeting</string>
+    <string name="app_name">NowMeeting</string>
 
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
@@ -20,5 +20,10 @@
     <string name="register_detail">注册NewMeeting账号</string>
     <string name="register">注册</string>
     <string name="login_in">登录</string>
+
+    <!-- TODO: Text of title here-->
+    <string name="title_message">Message</string>
+    <string name="title_meeting">Meeting</string>
+    <string name="title_about_me">About me</string>
 
 </resources>

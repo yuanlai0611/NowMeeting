@@ -1,11 +1,15 @@
 package com.gongyunhao.nowmeeting.Base;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
+import android.nfc.Tag;
 import android.os.Bundle;
+import android.os.PersistableBundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.View;
@@ -15,21 +19,24 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
+import com.gongyunhao.nowmeeting.util.NetWorkUtil;
+
 /**
  * Created by acer on 2018/2/1.
  */
 
 public abstract class BaseActivity extends AppCompatActivity implements View.OnClickListener{
+
     private Activity mthis;
     protected int mScreenWidth;
     protected int mScreenHeight;
-    public static final String TAG = "WustWXY";
+    public static final String Tag = "BaseActivity";
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate( savedInstanceState );
-
         mthis=this;
+        Log.d(Tag,"---->onCreate");
         requestWindowFeature( Window.FEATURE_NO_TITLE);
         DisplayMetrics metric = new DisplayMetrics();
         getWindowManager().getDefaultDisplay().getMetrics(metric);
@@ -37,10 +44,51 @@ public abstract class BaseActivity extends AppCompatActivity implements View.OnC
         mScreenHeight = metric.heightPixels;
 
         setContentView();
-        initViews();
+        //initViews();
         initListeners();
         initData();
 
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        Log.d(Tag,"---->onSaveInstanceState");
+    }
+
+    @Override
+    public void onRestoreInstanceState(Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
+        Log.d(Tag,"---->onRestoreInstanceState");
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        Context context = mthis.getApplicationContext();
+        if(NetWorkUtil.isNetworkConnected(context)){
+            Log.d(Tag,"网络状态： "+NetWorkUtil.getConnectedType(context));
+        }
+
+        Log.d(Tag,"---->onResume");
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        Log.d(Tag,"---->onPause");
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        Log.d(Tag,"---->onStart");
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        Log.d(Tag,"---->onStop");
     }
 
     public Toast toast;
@@ -99,12 +147,6 @@ public abstract class BaseActivity extends AppCompatActivity implements View.OnC
     public int dp2px(int dp) {
         return (int) TypedValue.applyDimension( TypedValue.COMPLEX_UNIT_DIP, dp,
                 mthis.getResources().getDisplayMetrics());
-    }
-
-    protected void hideStatusBar() {
-        int flag = WindowManager.LayoutParams.FLAG_FULLSCREEN;//隐藏状态栏, 定义全屏参数
-        Window window = getWindow(); //获得当前窗体对象
-        window.setFlags(flag, flag);//设置当前窗体为全屏显示
     }
 
     /**
