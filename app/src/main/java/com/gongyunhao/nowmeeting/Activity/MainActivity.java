@@ -1,5 +1,6 @@
 package com.gongyunhao.nowmeeting.Activity;
 
+import android.content.Context;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
@@ -19,6 +20,7 @@ import com.gongyunhao.nowmeeting.Fragment.FragmentMeeting;
 import com.gongyunhao.nowmeeting.Fragment.FragmentMessage;
 import com.gongyunhao.nowmeeting.Fragment.FragmentMy;
 import com.gongyunhao.nowmeeting.R;
+import com.gongyunhao.nowmeeting.util.TypeFaceUtil;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -37,6 +39,7 @@ public class MainActivity extends BaseActivity {
     private ViewPager viewPager;
     private MyPageAdapter myPageAdapter;
     private ImageButton imageButtonSearch;
+    private Context mContext;
 
     private long lastClickTime = 0;
 
@@ -45,6 +48,7 @@ public class MainActivity extends BaseActivity {
         super.onCreate( savedInstanceState );
         setContentView( R.layout.activity_main );
         initViews();
+        mContext = this;
 //        FloatingActionButton fab = (FloatingActionButton) findViewById( R.id.fab );
 //        fab.setOnClickListener( new View.OnClickListener( ) {
 //            @Override
@@ -55,9 +59,7 @@ public class MainActivity extends BaseActivity {
 //        } );
 
         //设置字体
-        Typeface typeface = Typeface.createFromAsset(getAssets(),"fonts/upright_foursquare_hard_point.TTF");
-        textView.setTypeface(typeface);
-
+        TypeFaceUtil.setTypeFace(textView,TypeFaceUtil.HARD_POINT,mContext);
         viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {

@@ -16,15 +16,12 @@ import android.view.ViewGroup;
 abstract public class BaseFragment extends Fragment {
 
     private String Tag = this.getClass().getSimpleName();
-    private Context mContext;
     private boolean isDataLoaded;
     private boolean isViewInitiated;
-    private Bundle mSavedInstanceState;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mSavedInstanceState = savedInstanceState;
         Log.d(Tag,"----> onCreate");
     }
 
@@ -37,56 +34,54 @@ abstract public class BaseFragment extends Fragment {
         Log.d(Tag,"----> isVisibleToUser "+isVisibleToUser);
     }
 
-    @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-        mContext = context;
-        Log.d(Tag,"----> onAttach");
-    }
+//    @Override
+//    public void onAttach(Context context) {
+//        super.onAttach(context);
+//        Log.d(Tag,"----> onAttach");
+//    }
 
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         isViewInitiated = true;
-
         prepareRequestData();
         Log.d(Tag,"---->onActivityCreated");
     }
 
-    @Override
-    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
-        Log.d(Tag,"----> onViewCreated");
-    }
-
-
-
-    @Override
-    public void onViewStateRestored(@Nullable Bundle savedInstanceState) {
-        super.onViewStateRestored(savedInstanceState);
-        Log.d(Tag,"---->onViewStateRestored");
-    }
-
-    @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-       // mSavedInstanceState.put
-        Log.d(Tag,"----> onDestroyView");
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-
-        Log.d(Tag,"----> onResume");
-    }
-
-    @Override
-    public void onPause() {
-        super.onPause();
-        Log.d(Tag,"---->onPause");
-    }
+//    @Override
+//    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+//        super.onViewCreated(view, savedInstanceState);
+//        Log.d(Tag,"----> onViewCreated");
+//    }
+//
+//
+//
+//    @Override
+//    public void onViewStateRestored(@Nullable Bundle savedInstanceState) {
+//        super.onViewStateRestored(savedInstanceState);
+//        Log.d(Tag,"---->onViewStateRestored");
+//    }
+//
+//    @Override
+//    public void onDestroyView() {
+//        super.onDestroyView();
+//       // mSavedInstanceState.put
+//        Log.d(Tag,"----> onDestroyView");
+//    }
+//
+//    @Override
+//    public void onResume() {
+//        super.onResume();
+//
+//        Log.d(Tag,"----> onResume");
+//    }
+//
+//    @Override
+//    public void onPause() {
+//        super.onPause();
+//        Log.d(Tag,"---->onPause");
+//    }
 
     //初始化数据
     protected abstract void requestData();
@@ -98,6 +93,7 @@ abstract public class BaseFragment extends Fragment {
     public boolean prepareRequestData(boolean forceUpdate) {
         if (getUserVisibleHint() && isViewInitiated && (!isDataLoaded || forceUpdate)) {
             requestData();
+            Log.d(Tag,"---->请求数据");
             isDataLoaded = true;
             return true;
         }
