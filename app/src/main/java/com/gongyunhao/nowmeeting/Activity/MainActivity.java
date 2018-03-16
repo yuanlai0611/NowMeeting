@@ -5,7 +5,7 @@ import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
-import android.support.v4.view.ViewPager;
+
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -21,6 +21,7 @@ import com.gongyunhao.nowmeeting.Fragment.FragmentMessage;
 import com.gongyunhao.nowmeeting.Fragment.FragmentMy;
 import com.gongyunhao.nowmeeting.R;
 import com.gongyunhao.nowmeeting.util.TypeFaceUtil;
+import com.gongyunhao.nowmeeting.view.NoScrollViewpager;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -36,7 +37,7 @@ public class MainActivity extends BaseActivity {
             R.drawable.selector_tab_meeting,
             R.drawable.selector_tab_my
     };
-    private ViewPager viewPager;
+    private NoScrollViewpager viewPager;
     private MyPageAdapter myPageAdapter;
     private ImageButton imageButtonSearch;
     private Context mContext;
@@ -60,7 +61,7 @@ public class MainActivity extends BaseActivity {
 
         //设置字体
         TypeFaceUtil.setTypeFace(textView,TypeFaceUtil.HARD_POINT,mContext);
-        viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+        viewPager.addOnPageChangeListener(new NoScrollViewpager.OnPageChangeListener() {
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
                 float temp_positionOffset;
@@ -129,11 +130,12 @@ public class MainActivity extends BaseActivity {
 
         myPageAdapter = new MyPageAdapter(getSupportFragmentManager(),datas,titles);
         tabLayout = (TabLayout) findViewById(R.id.tablayout);
-        viewPager = (ViewPager) findViewById(R.id.view_pager);
+        viewPager = (NoScrollViewpager) findViewById(R.id.view_pager);
         tabLayout.setTabMode(TabLayout.MODE_FIXED);
         // 将适配器设置进ViewPager
         viewPager.setAdapter(myPageAdapter);
         viewPager.setOffscreenPageLimit(1);
+        viewPager.setNoScroll(true);
         viewPager.setCurrentItem(0);
         // 将ViewPager与TabLayout相关联
         tabLayout.setupWithViewPager(viewPager);

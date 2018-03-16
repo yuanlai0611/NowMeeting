@@ -36,4 +36,17 @@
     <color name="transparent">#00ffffff</color> //透明
     <color name="toast_bg_loading">#50000000</color>  //半透明
 
+    <!--About me 界面的颜色-->
+    <color name="about_me_background">#f2f1f1</color>
+    <color name="picture_background">#f2f0f0</color>
+    <color name="personalize_signature_text">#353434</color>
+    <color name="cut_off_line">#b5b5b5</color>
+
+    <!--Meeting-->
+    <color name="meeting_participate">#36c2d1</color>
+
+    <!--item_recyclerview_meeting-->
+    <color name="item_recyclerview_meeting_color">#FF353434</color>
+
+
 </resources>

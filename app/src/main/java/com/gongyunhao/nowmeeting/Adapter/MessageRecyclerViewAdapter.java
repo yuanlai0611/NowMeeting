@@ -98,7 +98,11 @@ public class MessageRecyclerViewAdapter extends RecyclerView.Adapter<MessageRecy
 
     @Override
     public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        MyViewHolder holder = new MyViewHolder(LayoutInflater.from(mContext).inflate(R.layout.item_recyclerview_message,parent,false));
+        View view = LayoutInflater.from(mContext).inflate(R.layout.item_recyclerview_message,parent,false);
+        MyViewHolder holder = new MyViewHolder(view);
+        view.setOnClickListener(this);
+        view.setOnLongClickListener(this);
+
         return holder;
     }
 

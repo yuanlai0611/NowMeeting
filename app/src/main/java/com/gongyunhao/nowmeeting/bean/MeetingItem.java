@@ -1,62 +1,41 @@
 package com.gongyunhao.nowmeeting.bean;
 
+import java.util.List;
+
 /**
  * Created by yuanyuanlai on 2018/3/10.
  */
 
 public class MeetingItem {
 
-
     private static final int TITLE = 1;
 
     private static final int MEETING = 2;
 
-    private String meetingName;
-
     private int viewType;
-
-    private String titleName;
-
-
-
-    //这个不需要，暂时测试用
 
     private int meetingPictureId;
 
-    private String startTime;
-
-    private userItem []users;
-
-    private String []picturesAboutMeeting;
-
-    private String meetingDescription;
-
-    public String getMeetingName(){
-        return meetingName;
-    }
-
-    public String getMeetingDescription(){
-        return meetingDescription;
-    }
+    private String meetingName;
 
     public void setMeetingName(String meetingName){
         this.meetingName = meetingName;
     }
 
-    public void setMeetingDescription(String meetingDescription){
-        this.meetingDescription = meetingDescription;
+    public String getMeetingName(){
+        return meetingName;
+    }
+
+    public void setMeetingPictureId(int meetingPictureId){
+        this.meetingPictureId = meetingPictureId;
+    }
+
+    public int getMeetingPictureId(){
+        return meetingPictureId;
     }
 
     public int getViewType(){
         return viewType;
-    }
-
-    public String getTitleName(){
-        return titleName;
-    }
-
-    public void setTitleName(String titleName){
-        this.titleName = titleName;
     }
 
     public void setViewType(int viewType){
