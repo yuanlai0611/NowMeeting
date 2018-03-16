@@ -5,6 +5,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.TextView;
 import com.gongyunhao.nowmeeting.R;
 import com.gongyunhao.nowmeeting.bean.MeetingItem;
@@ -26,12 +27,13 @@ import java.util.List;
  * Created by yuanlai on 2018/3/11.
  */
 
-public class MeetingRecyclerviewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+public class MeetingRecyclerviewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> implements View.OnClickListener{
 
     private List<MeetingItem> meetingItemList;
     private Context mContext;
     private final int TITLE = 1;
     private final int MEETING = 2;
+    private OnItemClickListener onItemClickListener;
 
     public MeetingRecyclerviewAdapter(Context mContext,List<MeetingItem> meetingItemList){
         this.mContext = mContext;
@@ -47,9 +49,22 @@ public class MeetingRecyclerviewAdapter extends RecyclerView.Adapter<RecyclerVie
             return new TitleViewHolder(view);
         } else if (viewType == MEETING) {
             view = LayoutInflater.from(mContext).inflate(R.layout.item_recyclerview_meeting, parent, false);
+
+
+
             return new MeetingViewHolder(view);
         }
         return null;
+
+    }
+
+    public interface OnItemClickListener{
+        void onItemClick(View view,int position);
+        void onItemLongClick(View view,int position);
+    }
+
+    @Override
+    public void onClick(View view) {
 
     }
 

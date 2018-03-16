@@ -4,20 +4,17 @@ import android.app.ActivityOptions;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
-import android.transition.Explode;
-import android.transition.Slide;
+import android.util.Pair;
 import android.view.View;
 import android.view.WindowManager;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.gongyunhao.nowmeeting.Base.BaseActivity;
-import com.gongyunhao.nowmeeting.DrawView;
 import com.gongyunhao.nowmeeting.R;
 
 public class LoginActivity extends BaseActivity {
@@ -26,6 +23,7 @@ public class LoginActivity extends BaseActivity {
     private Animation animation1,animation2;
     private TextView textView_signin;
     private EditText editText_username,editText_userpass;
+    private View title_m;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,6 +58,7 @@ public class LoginActivity extends BaseActivity {
         editText_username=findViewById( R.id.et_username );
         editText_userpass=findViewById( R.id.et_userpass );
         textView_signin=findViewById( R.id.textView_signin );
+        title_m=findViewById( R.id.cool_title_m );
         animation1= AnimationUtils.loadAnimation( this,R.anim.login_anim_linear_hint );
         animation2=AnimationUtils.loadAnimation( this,R.anim.login_anim_linear_show );
     }
@@ -85,11 +84,20 @@ public class LoginActivity extends BaseActivity {
                     linear_edit.startAnimation( animation2 );
                 }else {
                     //账号密码登录
+                    startIntent( MainActivity.class );
+                    finish();
                 }
                 break;
             case R.id.textView_signin:
                 Intent intent=new Intent( LoginActivity.this,SignInActivity.class );
                 startActivity(intent, ActivityOptions.makeSceneTransitionAnimation(this).toBundle());
+
+                // 跳转时，要为每一个共享的view设置对应的transitionName
+//                startActivity(intent, ActivityOptions.makeSceneTransitionAnimation(this,
+//                        Pair.create(title_m, "cool_title"))
+//                        .toBundle());
+
+
                 break;
         }
 
@@ -106,10 +114,5 @@ public class LoginActivity extends BaseActivity {
             //透明状态栏
             getWindow().addFlags( WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
         }
-        FrameLayout ll=(FrameLayout) findViewById(R.id.login_frame);
-        final DrawView view=new DrawView(LoginActivity.this,"LoginActivity");
-        //通知view组件重绘
-        view.invalidate();
-        ll.addView(view);
     }
 }

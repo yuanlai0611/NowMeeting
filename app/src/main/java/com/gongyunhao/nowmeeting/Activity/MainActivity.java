@@ -1,32 +1,27 @@
 package com.gongyunhao.nowmeeting.Activity;
 
+import android.app.ActivityOptions;
 import android.content.Context;
-import android.graphics.Typeface;
+import android.content.Intent;
 import android.os.Build;
 
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewPager;
 
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.ImageButton;
-import android.view.KeyEvent;
-import android.support.design.widget.NavigationView;
-import android.support.v4.view.GravityCompat;
-import android.support.v4.widget.DrawerLayout;
-import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.Toolbar;
-import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuItem;
-import android.view.View;
-import android.view.WindowManager;
 
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.gongyunhao.nowmeeting.Adapter.MyPageAdapter;
@@ -43,14 +38,15 @@ import java.util.List;
 
 
 public class MainActivity extends BaseActivity {
-
+    private Boolean isSearchChecked=false;
     private TextView textView;
-
-public class MainActivity extends BaseActivity implements NavigationView.OnNavigationItemSelectedListener {
-
+//    private RelativeLayout relativeLayout_search;
+//    private EditText et_search;
     private List<Fragment> datas;
     private List<String> titles;
     private TabLayout tabLayout;
+    private FragmentManager fm;
+    private Fragment fragment;
     private int[] tabIcons = {
             R.drawable.selector_tab_message,
             R.drawable.selector_tab_meeting,
@@ -75,6 +71,27 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
         setSupportActionBar( toolbar );
         initViews();
 
+        imageButtonSearch.setOnClickListener( new View.OnClickListener( ) {
+            @Override
+            public void onClick(View view) {
+
+//                Intent intent=new Intent( MainActivity.this,SearchActivity.class );
+//                startActivity(intent, ActivityOptions.makeSceneTransitionAnimation(MainActivity.this).toBundle());
+
+                startIntent( MeetingDetailActivity.class );
+
+//                fm=getSupportFragmentManager();
+//                fragment=fm.findFragmentById( R.id.fragment_search_container );
+//                if (fragment==null){
+//                    fragment=new SearchFragment();
+//                    fm.beginTransaction()
+//                            .add( R.id.fragment_search_container,fragment )
+//                            .commit();
+//                }
+
+            }
+        } );
+
         //设置字体
         TypeFaceUtil.setTypeFace(textView,TypeFaceUtil.HARD_POINT,mContext);
         viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
@@ -94,14 +111,17 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
                 }else {
                     textView.setText(R.string.title_about_me);
                 }
-                if ((position+positionOffset)>=1){
+                if ((position+positionOffset)>=1&&(position+positionOffset)<2){
                     Log.d("MainActivity","---->开始设置imageButton透明");
                     imageButtonSearch.setVisibility(View.VISIBLE);
                     imageButtonSearch.setAlpha(2-(position+positionOffset));
+                    imageButtonSearch.setEnabled( true );
                 }else if ((position+positionOffset)==2){
                     imageButtonSearch.setVisibility(View.GONE);
+                    imageButtonSearch.setEnabled( false );
                 }else if ((position+positionOffset)==0){
                     imageButtonSearch.setVisibility(View.VISIBLE);
+                    imageButtonSearch.setEnabled( true );
                 }
                 //positionOffset 是百分比
                    Log.d("MainActivity","---->position:"+position+"  positionOffset:"+positionOffset);
@@ -109,7 +129,6 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
 
             @Override
             public void onPageSelected(int position) {
-//
             }
 
             @Override
@@ -121,15 +140,6 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
             }
         });
 
-
-        DrawerLayout drawer = (DrawerLayout) findViewById( R.id.drawer_layout );
-        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
-                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close );
-        drawer.addDrawerListener( toggle );
-        toggle.syncState( );
-
-        NavigationView navigationView = (NavigationView) findViewById( R.id.nav_view );
-        navigationView.setNavigationItemSelectedListener( this );
     }
 
     @Override
@@ -139,8 +149,8 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
 
     @Override
     public void initViews() {
-
-
+//        et_search=findViewById( R.id.edittext_search );
+//        relativeLayout_search=findViewById( R.id.relative_search );
         textView = findViewById(R.id.title_name);
         imageButtonSearch = findViewById(R.id.search_button);
         datas = new ArrayList<>();
@@ -174,11 +184,6 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
         tabLayout.setupWithViewPager(viewPager);
         setupTabIcons();
 
-//
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-            //透明状态栏
-            getWindow().addFlags( WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
-        }
 
     }
 
@@ -208,62 +213,13 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
 
     @Override
     public void onBackPressed() {
-
-        DrawerLayout drawer = (DrawerLayout) findViewById( R.id.drawer_layout );
-        if (drawer.isDrawerOpen( GravityCompat.START )) {
-            drawer.closeDrawer( GravityCompat.START );
-        } else {
-            super.onBackPressed( );
-        }
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater( ).inflate( R.menu.main, menu );
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        int id = item.getItemId( );
-        if (id == R.id.action_settings) {
-            return true;
-        }
-        return super.onOptionsItemSelected( item );
-    }
-
-    @SuppressWarnings("StatementWithEmptyBody")
-    @Override
-    public boolean onNavigationItemSelected(MenuItem item) {
-        // Handle navigation view item clicks here.
-        int id = item.getItemId( );
-        switch (id){
-            case R.id.nav_camera:
-                // Handle the camera action
-                break;
-            case R.id.nav_slideshow:
-                break;
-            case R.id.nav_manage:
-                break;
-            case R.id.nav_share:
-                break;
-            case R.id.nav_send:
-                break;
-        }
-        DrawerLayout drawer = (DrawerLayout) findViewById( R.id.drawer_layout );
-        drawer.closeDrawer( GravityCompat.START );
-        return true;
+        super.onBackPressed( );
     }
 
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if (keyCode == KeyEvent.KEYCODE_BACK) {
-            DrawerLayout drawer = (DrawerLayout) findViewById( R.id.drawer_layout );
-            if (drawer.isDrawerOpen( GravityCompat.START )) {
-                drawer.closeDrawer( GravityCompat.START );
-            }else {
-                exit();
-            }
+            exit();
             return false;
         }
         return super.onKeyDown(keyCode, event);
