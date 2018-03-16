@@ -69,9 +69,11 @@ public class MeetingRecyclerviewAdapter extends RecyclerView.Adapter<RecyclerVie
     }
 
     class TitleViewHolder extends RecyclerView.ViewHolder{
+        View meetingView;
         TextView textViewTitle;
         public TitleViewHolder(View itemView){
             super(itemView);
+            meetingView=itemView;
             textViewTitle = (TextView)itemView.findViewById(R.id.meeting_title);
         }
     }
