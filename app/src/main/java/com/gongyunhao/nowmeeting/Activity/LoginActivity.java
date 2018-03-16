@@ -15,6 +15,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.gongyunhao.nowmeeting.Base.BaseActivity;
+
 import com.gongyunhao.nowmeeting.R;
 
 public class LoginActivity extends BaseActivity {
@@ -23,7 +24,6 @@ public class LoginActivity extends BaseActivity {
     private Animation animation1,animation2;
     private TextView textView_signin;
     private EditText editText_username,editText_userpass;
-    private View title_m;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,7 +58,6 @@ public class LoginActivity extends BaseActivity {
         editText_username=findViewById( R.id.et_username );
         editText_userpass=findViewById( R.id.et_userpass );
         textView_signin=findViewById( R.id.textView_signin );
-        title_m=findViewById( R.id.cool_title_m );
         animation1= AnimationUtils.loadAnimation( this,R.anim.login_anim_linear_hint );
         animation2=AnimationUtils.loadAnimation( this,R.anim.login_anim_linear_show );
     }
@@ -91,13 +90,6 @@ public class LoginActivity extends BaseActivity {
             case R.id.textView_signin:
                 Intent intent=new Intent( LoginActivity.this,SignInActivity.class );
                 startActivity(intent, ActivityOptions.makeSceneTransitionAnimation(this).toBundle());
-
-                // 跳转时，要为每一个共享的view设置对应的transitionName
-//                startActivity(intent, ActivityOptions.makeSceneTransitionAnimation(this,
-//                        Pair.create(title_m, "cool_title"))
-//                        .toBundle());
-
-
                 break;
         }
 

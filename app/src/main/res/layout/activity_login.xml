@@ -11,11 +11,9 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
 
-        <com.gongyunhao.nowmeeting.DrawView
-            android:id="@+id/cool_title_m"
+        <com.gongyunhao.nowmeeting.view.DrawView
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:transitionName="cool_title"/>
+            android:layout_height="wrap_content"/>
 
         <FrameLayout
             android:layout_width="match_parent"

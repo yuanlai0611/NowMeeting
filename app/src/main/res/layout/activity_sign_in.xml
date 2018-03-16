@@ -10,10 +10,9 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <com.gongyunhao.nowmeeting.SignInTitleView
+        <com.gongyunhao.nowmeeting.view.SignInTitleView
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:transitionName="cool_title"/>
+            android:layout_height="wrap_content"/>
 
     <EditText
         android:id="@+id/et_email"

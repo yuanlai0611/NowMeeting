@@ -5,11 +5,14 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
+import android.widget.ImageView;
 import android.widget.TextView;
+
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.resource.bitmap.CenterCrop;
+import com.bumptech.glide.request.RequestOptions;
 import com.gongyunhao.nowmeeting.R;
 import com.gongyunhao.nowmeeting.bean.MeetingItem;
-import com.gongyunhao.nowmeeting.util.TypeFaceUtil;
 
 import java.util.List;
 
@@ -50,8 +53,6 @@ public class MeetingRecyclerviewAdapter extends RecyclerView.Adapter<RecyclerVie
         } else if (viewType == MEETING) {
             view = LayoutInflater.from(mContext).inflate(R.layout.item_recyclerview_meeting, parent, false);
 
-
-
             return new MeetingViewHolder(view);
         }
         return null;
@@ -69,21 +70,25 @@ public class MeetingRecyclerviewAdapter extends RecyclerView.Adapter<RecyclerVie
     }
 
     class TitleViewHolder extends RecyclerView.ViewHolder{
-        View meetingView;
-        TextView textViewTitle;
-        public TitleViewHolder(View itemView){
-            super(itemView);
-            meetingView=itemView;
-            textViewTitle = (TextView)itemView.findViewById(R.id.meeting_title);
+
+
+        ImageView imageViewMeetingTitlePicture;
+        public TitleViewHolder(View view){
+            super(view);
+            imageViewMeetingTitlePicture = (ImageView)view.findViewById(R.id.meeting_title_picture);
+
         }
     }
 
     class MeetingViewHolder extends RecyclerView.ViewHolder
     {
+        ImageView imageViewMeetingPicture;
         TextView textViewMeetingName;
         public MeetingViewHolder(View view){
             super(view);
+            imageViewMeetingPicture = (ImageView)view.findViewById(R.id.meeting_picture);
             textViewMeetingName = (TextView)view.findViewById(R.id.meeting_name);
+
         }
     }
     @Override
@@ -106,11 +111,13 @@ public class MeetingRecyclerviewAdapter extends RecyclerView.Adapter<RecyclerVie
 
         if (holder instanceof TitleViewHolder){
             TitleViewHolder titleViewHolder = (TitleViewHolder)holder;
-            TypeFaceUtil.setTypeFace(titleViewHolder.textViewTitle,TypeFaceUtil.NEW_SONG,mContext);
-            titleViewHolder.textViewTitle.setText(meetingItemList.get(position).getTitleName());
-        }else if (holder instanceof  MeetingViewHolder){
-            MeetingViewHolder meetingViewHolder = (MeetingViewHolder)holder;
+//            TypeFaceUtil.setTypeFace(titleViewHolder.textViewTitle,TypeFaceUtil.NEW_SONG,mContext);
+            Glide.with(mContext).load(meetingItemList.get(position).getMeetingPictureId()).apply(RequestOptions.bitmapTransform(new CenterCrop())).into(titleViewHolder.imageViewMeetingTitlePicture);
+        }else if (holder instanceof MeetingViewHolder){
+            MeetingViewHolder meetingViewHolder = (MeetingViewHolder) holder;
             meetingViewHolder.textViewMeetingName.setText(meetingItemList.get(position).getMeetingName());
+            Glide.with(mContext).load(R.drawable.meeting_test).apply(RequestOptions.bitmapTransform(new CenterCrop())).into(meetingViewHolder.imageViewMeetingPicture);
+
         }
 
     }

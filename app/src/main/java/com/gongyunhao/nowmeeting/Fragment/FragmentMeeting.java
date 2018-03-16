@@ -50,10 +50,13 @@ public class FragmentMeeting extends BaseFragment{
     private Context mContext;
     String Tag = "FragmentMeeting";
     private List<MeetingItem> meetingItemList;
-    private RecyclerView recyclerView;
+    private RecyclerView recyclerViewMeeting;
     private MeetingRecyclerviewAdapter meetingRecyclerviewAdapter;
+
+
     private final int TITLE = 1;
     private final int MEETING = 2;
+   // private MeetingItem meetingItem;
 
     @Override
     public void onAttach(Context context) {
@@ -81,40 +84,64 @@ public class FragmentMeeting extends BaseFragment{
 
     @Override
     protected void initViews(View view) {
-        recyclerView = (RecyclerView)view.findViewById(R.id.meeting_recyclerview);
-//        LinearLayoutManager layoutManager = new LinearLayoutManager(mContext);
-//        layoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
-        recyclerView.setLayoutManager(new LinearLayoutManager(mContext));
-        recyclerView.setItemAnimator(new DefaultItemAnimator());
+        recyclerViewMeeting = (RecyclerView)view.findViewById(R.id.recyclerview_meeting);
+        recyclerViewMeeting.setLayoutManager(new LinearLayoutManager(mContext));
+        recyclerViewMeeting.setItemAnimator(new DefaultItemAnimator());
+        meetingRecyclerviewAdapter = new MeetingRecyclerviewAdapter(mContext,meetingItemList);
+        recyclerViewMeeting.setAdapter(meetingRecyclerviewAdapter);
 
     }
 
     @Override
     protected void requestData() {
+        initMeetingParticipate();
+        initMeetingFriendParticipate();
+        initMeetingHot();
+        meetingRecyclerviewAdapter.notifyDataSetChanged();
+    }
+
+
+    private void initMeetingParticipate(){
         MeetingItem meetingItem = new MeetingItem();
         meetingItem.setViewType(TITLE);
-        meetingItem.setTitleName("参加的会议");
+        meetingItem.setMeetingPictureId(R.drawable.meeting_participate);
         meetingItemList.add(meetingItem);
-        for (int i=0 ; i<3 ; i++){
+        for (int i=0;i<3;i++){
             MeetingItem meetingItem1 = new MeetingItem();
             meetingItem1.setViewType(MEETING);
             meetingItem1.setMeetingName("GDG Wuhan");
             meetingItemList.add(meetingItem1);
         }
-        MeetingItem meetingItem2 = new MeetingItem();
-        meetingItem2.setViewType(TITLE);
-        meetingItem2.setTitleName("好友参加的会议");
-        meetingItemList.add(meetingItem2);
-        for (int i=0 ; i<2 ; i++){
-            MeetingItem meetingItem3 = new MeetingItem();
-            meetingItem3.setViewType(MEETING);
-            meetingItem3.setMeetingName("安卓巴士-线下沙龙");
-            meetingItemList.add(meetingItem3);
-        }
-        meetingRecyclerviewAdapter = new MeetingRecyclerviewAdapter(mContext,meetingItemList);
-        recyclerView.setAdapter(meetingRecyclerviewAdapter);
+        //设置参加的会议的具体会议
     }
 
+    private void initMeetingFriendParticipate(){
+        MeetingItem meetingItem = new MeetingItem();
+        meetingItem.setViewType(TITLE);
+        meetingItem.setMeetingPictureId(R.drawable.meeting_friend_participate);
+        meetingItemList.add(meetingItem);
+        for (int i=0;i<3;i++){
+            MeetingItem meetingItem1 = new MeetingItem();
+            meetingItem1.setViewType(MEETING);
+            meetingItem1.setMeetingName("GDG Wuhan");
+            meetingItemList.add(meetingItem1);
+        }
+        //设置朋友参加的具体会议
+    }
+
+    private void initMeetingHot(){
+        MeetingItem meetingItem = new MeetingItem();
+        meetingItem.setViewType(TITLE);
+        meetingItem.setMeetingPictureId(R.drawable.meeting_hot);
+        meetingItemList.add(meetingItem);
+        for (int i=0;i<3;i++){
+            MeetingItem meetingItem1 = new MeetingItem();
+            meetingItem1.setViewType(MEETING);
+            meetingItem1.setMeetingName("GDG Wuhan");
+            meetingItemList.add(meetingItem1);
+        }
+        //设置热门会议
+    }
 
 
     @Override

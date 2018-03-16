@@ -1,6 +1,7 @@
 package com.gongyunhao.nowmeeting.Fragment;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.DefaultItemAnimator;
@@ -11,6 +12,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.gongyunhao.nowmeeting.Activity.ChattingActivity;
 import com.gongyunhao.nowmeeting.Adapter.MessageRecyclerViewAdapter;
 import com.gongyunhao.nowmeeting.Base.BaseFragment;
 import com.gongyunhao.nowmeeting.R;
@@ -98,6 +100,20 @@ public class FragmentMessage extends BaseFragment{
         recyclerView.setItemAnimator(new DefaultItemAnimator());
         messageRecyclerViewAdapter = new MessageRecyclerViewAdapter(mContext,messageItemList);
         recyclerView.setAdapter(messageRecyclerViewAdapter);
+        messageRecyclerViewAdapter.setmOnItemClickListener(new MessageRecyclerViewAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(View view, int position) {
+                Intent intent = new Intent(getActivity(), ChattingActivity.class);
+                startActivity(intent);
+                Log.d(Tag,"点击了message一下");
+
+            }
+
+            @Override
+            public void onItemLongClick(View view, int position) {
+
+            }
+        });
     }
 
 

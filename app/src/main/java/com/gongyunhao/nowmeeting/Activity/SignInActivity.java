@@ -6,16 +6,14 @@ import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.transition.Explode;
-import android.transition.Slide;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
-import android.widget.Toast;
 
-import com.gongyunhao.nowmeeting.DrawView;
+import com.gongyunhao.nowmeeting.view.DrawView;
 import com.gongyunhao.nowmeeting.R;
 
 public class SignInActivity extends AppCompatActivity implements View.OnClickListener{

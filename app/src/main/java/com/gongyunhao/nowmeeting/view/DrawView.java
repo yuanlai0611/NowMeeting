@@ -1,4 +1,4 @@
-package com.gongyunhao.nowmeeting;
+package com.gongyunhao.nowmeeting.view;
 
 import android.annotation.SuppressLint;
 import android.content.Context;

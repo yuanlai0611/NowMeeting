@@ -1,28 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
+
+<android.support.v7.widget.CardView
     xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_height="200dp"
     android:layout_width="match_parent"
-    android:layout_height="45dp">
+    android:layout_marginBottom="10dp"
+    android:layout_marginLeft="10dp"
+    android:layout_marginRight="10dp">
 
-    <TextView
-        android:paddingLeft="10dp"
-        android:gravity="center_vertical"
-        android:layout_centerInParent="true"
-        android:layout_toRightOf="@+id/item_recyclerview_meeting_title_image"
-        android:textSize="18sp"
-        android:text="参与的会议"
-        android:textStyle="bold"
-        android:id="@+id/meeting_title"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+   <LinearLayout
+       android:orientation="horizontal"
+       android:layout_width="match_parent"
+       android:layout_height="match_parent">
 
-    <ImageView
-        android:id="@+id/item_recyclerview_meeting_title_image"
-        android:layout_alignParentLeft="true"
-        android:layout_centerInParent="true"
-        android:layout_marginLeft="10dp"
-        android:src="@drawable/meeting"
-        android:layout_width="25dp"
-        android:layout_height="25dp" />
+      <ImageView
+          android:id="@+id/meeting_title_picture"
+          android:layout_width="match_parent"
+          android:layout_height="match_parent" />
 
-</RelativeLayout>
+   </LinearLayout>
+
+</android.support.v7.widget.CardView>
