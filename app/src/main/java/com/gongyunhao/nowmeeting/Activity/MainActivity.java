@@ -1,31 +1,25 @@
 package com.gongyunhao.nowmeeting.Activity;
 
 import android.content.Context;
-import android.graphics.Typeface;
+import android.content.Intent;
 import android.os.Build;
 
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.ImageButton;
-import android.view.KeyEvent;
-import android.support.design.widget.NavigationView;
-import android.support.v4.view.GravityCompat;
-import android.support.v4.widget.DrawerLayout;
-import android.support.v7.app.ActionBarDrawerToggle;
-import android.support.v7.widget.Toolbar;
-import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuItem;
-import android.view.View;
 import android.view.WindowManager;
+import android.widget.EditText;
+import android.widget.ImageButton;
+import android.support.v7.widget.Toolbar;
 
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.gongyunhao.nowmeeting.Adapter.MyPageAdapter;
@@ -43,35 +37,48 @@ import java.util.List;
 
 
 public class MainActivity extends BaseActivity {
-
+    private Boolean isSearchChecked=false;
     private TextView textView;
+    private List<Fragment> datas;
+    private List<String> titles;
+    private TabLayout tabLayout;
+    private FragmentManager fm;
+    private Fragment fragment;
+    private int[] tabIcons = {
+            R.drawable.selector_tab_message,
+            R.drawable.selector_tab_meeting,
+            R.drawable.selector_tab_my
+    };
+
+    private NoScrollViewpager viewPager;
+    private MyPageAdapter myPageAdapter;
+    private ImageButton imageButtonSearch;
+    private Context mContext;
+
+    private long lastClickTime = 0;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate( savedInstanceState );
+        setContentView( R.layout.activity_main );
+        initViews();
+        mContext = this;
+        Toolbar toolbar = (Toolbar) findViewById( R.id.toolbar );
+        setSupportActionBar( toolbar );
+        initViews();
+
+        imageButtonSearch.setOnClickListener( new View.OnClickListener( ) {
+            @Override
+            public void onClick(View view) {
+
+//                Intent intent=new Intent( MainActivity.this,SearchActivity.class );
+//                startActivity(intent, ActivityOptions.makeSceneTransitionAnimation(MainActivity.this).toBundle());
+
+                startIntent( MeetingDetailActivity.class );
 
 
-        private List<Fragment> datas;
-        private List<String> titles;
-        private TabLayout tabLayout;
-        private int[] tabIcons = {
-                R.drawable.selector_tab_message,
-                R.drawable.selector_tab_meeting,
-                R.drawable.selector_tab_my
-        };
-        private NoScrollViewpager viewPager;
-        private MyPageAdapter myPageAdapter;
-        private ImageButton imageButtonSearch;
-        private Context mContext;
-
-        private long lastClickTime = 0;
-
-        @Override
-        protected void onCreate(Bundle savedInstanceState) {
-            super.onCreate(savedInstanceState);
-            setContentView(R.layout.activity_main);
-
-            initViews();
-            mContext = this;
-            Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-            setSupportActionBar(toolbar);
-            initViews();
+            }
+        } );
 
             //设置字体
             TypeFaceUtil.setTypeFace(textView, TypeFaceUtil.HARD_POINT, mContext);
@@ -105,66 +112,66 @@ public class MainActivity extends BaseActivity {
                     Log.d("MainActivity", "---->position:" + position + "  positionOffset:" + positionOffset);
                 }
 
-                @Override
-                public void onPageSelected(int position) {
-//
-                }
-
-                @Override
-                public void onPageScrollStateChanged(int state) {
-
-                    //Log.d(Tag,"---->pagerState:"+state);
-                    //起始状态为0 正在翻页状态为1 翻页完成状态为2
-
-                }
-            });
-
-
-        }
-
-        @Override
-        public void setContentView() {
-
-        }
-
-        @Override
-        public void initViews() {
-
-
-            textView = findViewById(R.id.title_name);
-            imageButtonSearch = findViewById(R.id.search_button);
-            datas = new ArrayList<>();
-            datas.add(new FragmentMessage());
-            datas.add(new FragmentMeeting());
-            datas.add(new FragmentMy());
-
-            titles = new ArrayList<>();
-            titles.add("消息");
-            titles.add("会议");
-            titles.add("我的");
-
-            myPageAdapter = new MyPageAdapter(getSupportFragmentManager(), datas, titles);
-            tabLayout = (TabLayout) findViewById(R.id.tablayout);
-            viewPager = (NoScrollViewpager) findViewById(R.id.view_pager);
-            tabLayout.setTabMode(TabLayout.MODE_FIXED);
-            // 将适配器设置进ViewPager
-            viewPager.setAdapter(myPageAdapter);
-            viewPager.setOffscreenPageLimit(1);
-            viewPager.setNoScroll(true);
-            viewPager.setCurrentItem(0);
-            // 将ViewPager与TabLayout相关联
-            tabLayout.setupWithViewPager(viewPager);
-            setupTabIcons();
-
-//
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-                //透明状态栏
-                getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+            @Override
+            public void onPageSelected(int position) {
             }
 
-        }
+            @Override
+            public void onPageScrollStateChanged(int state) {
 
-        private void setupTabIcons() {
+                //Log.d(Tag,"---->pagerState:"+state);
+               //起始状态为0 正在翻页状态为1 翻页完成状态为2
+
+            }
+        });
+
+    }
+
+    @Override
+    public void setContentView() {
+
+    }
+
+    @Override
+    public void initViews() {
+        textView = findViewById(R.id.title_name);
+        imageButtonSearch = findViewById(R.id.search_button);
+        datas = new ArrayList<>();
+        datas.add(new FragmentMessage());
+        datas.add(new FragmentMeeting());
+        datas.add(new FragmentMy());
+
+        titles = new ArrayList<>();
+        titles.add("消息");
+        titles.add("会议");
+        titles.add("我的");
+
+        myPageAdapter = new MyPageAdapter(getSupportFragmentManager(), datas, titles);
+        tabLayout = (TabLayout) findViewById(R.id.tablayout);
+        viewPager = (NoScrollViewpager) findViewById(R.id.view_pager);
+        tabLayout.setTabMode(TabLayout.MODE_FIXED);
+        // 将适配器设置进ViewPager
+        viewPager.setAdapter(myPageAdapter);
+        viewPager.setOffscreenPageLimit(1);
+        viewPager.setNoScroll(true);
+        viewPager.setCurrentItem(0);
+        // 将ViewPager与TabLayout相关联
+        tabLayout.setupWithViewPager(viewPager);
+        setupTabIcons();
+
+    }
+
+    @Override
+    public void initListeners() {
+
+    }
+
+    @Override
+    public void initData() {
+
+    }
+
+    private void setupTabIcons() {
             tabLayout.getTabAt(0).setCustomView(getTabView(0));
             tabLayout.getTabAt(1).setCustomView(getTabView(1));
             tabLayout.getTabAt(2).setCustomView(getTabView(2));
@@ -178,17 +185,6 @@ public class MainActivity extends BaseActivity {
             img_title.setImageResource(tabIcons[position]);
             return view;
         }
-
-        @Override
-        public void initListeners() {
-
-        }
-
-        @Override
-        public void initData() {
-
-        }
-
 
         @Override
         public boolean onKeyDown(int keyCode, KeyEvent event) {

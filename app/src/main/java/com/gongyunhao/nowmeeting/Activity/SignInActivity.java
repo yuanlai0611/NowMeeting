@@ -7,6 +7,7 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.transition.Explode;
 import android.view.View;
+import android.view.Window;
 import android.view.WindowManager;
 import android.widget.EditText;
 import android.widget.FrameLayout;
@@ -23,6 +24,7 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate( savedInstanceState );
+//        getWindow().requestFeature( Window.FEATURE_CONTENT_TRANSITIONS);
         getWindow().setEnterTransition(new Explode(  ));
         setContentView( R.layout.activity_sign_in );
         initWindow();
@@ -66,11 +68,6 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
             //透明状态栏
             getWindow().addFlags( WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
         }
-        FrameLayout ll=(FrameLayout) findViewById(R.id.login_frame);
-        final DrawView view=new DrawView(SignInActivity.this,"SignInActivity");
-        //通知view组件重绘
-        view.invalidate();
-        ll.addView(view);
     }
 
 }

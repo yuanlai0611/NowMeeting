@@ -4,18 +4,18 @@ import android.app.ActivityOptions;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
+import android.util.Pair;
 import android.view.View;
 import android.view.WindowManager;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.gongyunhao.nowmeeting.Base.BaseActivity;
-import com.gongyunhao.nowmeeting.view.DrawView;
+
 import com.gongyunhao.nowmeeting.R;
 
 public class LoginActivity extends BaseActivity {
@@ -83,6 +83,8 @@ public class LoginActivity extends BaseActivity {
                     linear_edit.startAnimation( animation2 );
                 }else {
                     //账号密码登录
+                    startIntent( MainActivity.class );
+                    finish();
                 }
                 break;
             case R.id.textView_signin:
@@ -104,10 +106,5 @@ public class LoginActivity extends BaseActivity {
             //透明状态栏
             getWindow().addFlags( WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
         }
-        FrameLayout ll=(FrameLayout) findViewById(R.id.login_frame);
-        final DrawView view=new DrawView(LoginActivity.this,"LoginActivity");
-        //通知view组件重绘
-        view.invalidate();
-        ll.addView(view);
     }
 }

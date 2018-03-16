@@ -6,15 +6,14 @@
     android:layout_height="match_parent"
     tools:context="com.gongyunhao.nowmeeting.Activity.LoginActivity">
 
-    <FrameLayout
-        android:id="@+id/login_frame"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
-
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical">
+
+        <com.gongyunhao.nowmeeting.view.DrawView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
 
         <FrameLayout
             android:layout_width="match_parent"
