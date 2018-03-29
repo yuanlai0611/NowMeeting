@@ -1,8 +1,11 @@
 package com.gongyunhao.nowmeeting.Fragment;
 
+import android.app.ActivityOptions;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.util.Pair;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -10,7 +13,9 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 
+import com.gongyunhao.nowmeeting.Activity.MeetingDetailActivity;
 import com.gongyunhao.nowmeeting.Adapter.MeetingRecyclerviewAdapter;
 import com.gongyunhao.nowmeeting.Base.BaseFragment;
 import com.gongyunhao.nowmeeting.R;
@@ -52,7 +57,7 @@ public class FragmentMeeting extends BaseFragment{
     private List<MeetingItem> meetingItemList;
     private RecyclerView recyclerViewMeeting;
     private MeetingRecyclerviewAdapter meetingRecyclerviewAdapter;
-
+    private ImageView imageView_meeting;
 
     private final int TITLE = 1;
     private final int MEETING = 2;
@@ -80,8 +85,6 @@ public class FragmentMeeting extends BaseFragment{
         return view;
     }
 
-
-
     @Override
     protected void initViews(View view) {
         recyclerViewMeeting = (RecyclerView)view.findViewById(R.id.recyclerview_meeting);
@@ -89,6 +92,30 @@ public class FragmentMeeting extends BaseFragment{
         recyclerViewMeeting.setItemAnimator(new DefaultItemAnimator());
         meetingRecyclerviewAdapter = new MeetingRecyclerviewAdapter(mContext,meetingItemList);
         recyclerViewMeeting.setAdapter(meetingRecyclerviewAdapter);
+        imageView_meeting=view.findViewById( R.id.meeting_picture );
+
+
+        meetingRecyclerviewAdapter.setmOnItemClickListener( new MeetingRecyclerviewAdapter.OnItemClickListener( ) {
+            @Override
+            public void onItemClick(View view, int position) {
+                MeetingItem meetingItem=meetingItemList.get( position );
+                Intent intent=new Intent( getActivity(), MeetingDetailActivity.class );
+                intent.putExtra( "Extra_meeting_posithon",position );
+                intent.putExtra( "Extra_meeting_name" ,meetingItem.getMeetingName());
+                intent.putExtra( "Extra_meeting_picture",meetingItem.getMeetingPictureId() );
+                intent.putExtra( "Extra_meeting_city",meetingItem.getMeetingCity() );
+                intent.putExtra( "Extra_meeting_date",meetingItem.getMeetingDate() );
+                int firstVisiblePosition = ((LinearLayoutManager)recyclerViewMeeting.getLayoutManager()).findFirstVisibleItemPosition();
+
+                View itemView = recyclerViewMeeting.getChildAt(position - firstVisiblePosition);
+                View meeting_p = itemView.findViewById(R.id.meeting_picture);
+                //实现了share动画在recyclerview中传递的效果
+                startActivity(intent, ActivityOptions.makeSceneTransitionAnimation(getActivity(),
+                        android.util.Pair.create(meeting_p, "iv_meeting_share"))
+                        .toBundle());
+
+            }
+        } );
 
     }
 
@@ -109,6 +136,9 @@ public class FragmentMeeting extends BaseFragment{
         for (int i=0;i<3;i++){
             MeetingItem meetingItem1 = new MeetingItem();
             meetingItem1.setViewType(MEETING);
+            meetingItem1.setMeetingCity( "武汉" );
+            meetingItem1.setMeetingDate( "2017-10-21" );
+            meetingItem1.setMeetingPictureId(R.drawable.meeting_test);
             meetingItem1.setMeetingName("GDG Wuhan");
             meetingItemList.add(meetingItem1);
         }
@@ -123,6 +153,9 @@ public class FragmentMeeting extends BaseFragment{
         for (int i=0;i<3;i++){
             MeetingItem meetingItem1 = new MeetingItem();
             meetingItem1.setViewType(MEETING);
+            meetingItem1.setMeetingCity( "武汉" );
+            meetingItem1.setMeetingDate( "2017-10-21" );
+            meetingItem1.setMeetingPictureId(R.drawable.meeting_test);
             meetingItem1.setMeetingName("GDG Wuhan");
             meetingItemList.add(meetingItem1);
         }
@@ -137,6 +170,9 @@ public class FragmentMeeting extends BaseFragment{
         for (int i=0;i<3;i++){
             MeetingItem meetingItem1 = new MeetingItem();
             meetingItem1.setViewType(MEETING);
+            meetingItem1.setMeetingCity( "武汉" );
+            meetingItem1.setMeetingDate( "2017-10-21" );
+            meetingItem1.setMeetingPictureId(R.drawable.meeting_test);
             meetingItem1.setMeetingName("GDG Wuhan");
             meetingItemList.add(meetingItem1);
         }

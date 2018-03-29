@@ -5,6 +5,15 @@
     android:layout_height="?attr/actionBarSize"
     android:background="@color/colorPrimaryDark">
 
+    <ImageButton
+        android:id="@+id/ib_qr_scan"
+        android:layout_centerInParent="true"
+        android:layout_marginLeft="14dp"
+        android:layout_alignParentStart="true"
+        android:background="@drawable/qr_scan"
+        android:layout_width="23dp"
+        android:layout_height="23dp" />
+
     <TextView
         android:id="@+id/title_name"
         android:textSize="@dimen/big_text"

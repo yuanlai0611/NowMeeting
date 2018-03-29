@@ -12,11 +12,28 @@ public class MeetingItem {
 
     private static final int MEETING = 2;
 
-    private int viewType;
-
-    private int meetingPictureId;
+    private int viewType,meetingPictureId;
 
     private String meetingName;
+    private String meetingDate;
+
+    public String getMeetingDate() {
+        return meetingDate;
+    }
+
+    public void setMeetingDate(String meetingDate) {
+        this.meetingDate = meetingDate;
+    }
+
+    public String getMeetingCity() {
+        return meetingCity;
+    }
+
+    public void setMeetingCity(String meetingCity) {
+        this.meetingCity = meetingCity;
+    }
+
+    private String meetingCity;
 
     public void setMeetingName(String meetingName){
         this.meetingName = meetingName;

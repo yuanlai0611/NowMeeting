@@ -58,6 +58,7 @@ public class LoginActivity extends BaseActivity {
         editText_username=findViewById( R.id.et_username );
         editText_userpass=findViewById( R.id.et_userpass );
         textView_signin=findViewById( R.id.textView_signin );
+
         animation1= AnimationUtils.loadAnimation( this,R.anim.login_anim_linear_hint );
         animation2=AnimationUtils.loadAnimation( this,R.anim.login_anim_linear_show );
     }

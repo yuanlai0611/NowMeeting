@@ -52,7 +52,7 @@ public class MeetingRecyclerviewAdapter extends RecyclerView.Adapter<RecyclerVie
             return new TitleViewHolder(view);
         } else if (viewType == MEETING) {
             view = LayoutInflater.from(mContext).inflate(R.layout.item_recyclerview_meeting, parent, false);
-
+            view.setOnClickListener( this );
             return new MeetingViewHolder(view);
         }
         return null;
@@ -61,12 +61,18 @@ public class MeetingRecyclerviewAdapter extends RecyclerView.Adapter<RecyclerVie
 
     public interface OnItemClickListener{
         void onItemClick(View view,int position);
-        void onItemLongClick(View view,int position);
+    }
+
+    //在activity中调用她
+    public void setmOnItemClickListener(OnItemClickListener listener){
+        this.onItemClickListener = listener;
     }
 
     @Override
     public void onClick(View view) {
-
+        if (onItemClickListener != null){
+            onItemClickListener.onItemClick(view,(int)view.getTag());
+        }
     }
 
     class TitleViewHolder extends RecyclerView.ViewHolder{
@@ -82,10 +88,12 @@ public class MeetingRecyclerviewAdapter extends RecyclerView.Adapter<RecyclerVie
 
     class MeetingViewHolder extends RecyclerView.ViewHolder
     {
+        View meetingView;
         ImageView imageViewMeetingPicture;
         TextView textViewMeetingName;
         public MeetingViewHolder(View view){
             super(view);
+            meetingView=view;
             imageViewMeetingPicture = (ImageView)view.findViewById(R.id.meeting_picture);
             textViewMeetingName = (TextView)view.findViewById(R.id.meeting_name);
 
@@ -116,8 +124,8 @@ public class MeetingRecyclerviewAdapter extends RecyclerView.Adapter<RecyclerVie
         }else if (holder instanceof MeetingViewHolder){
             MeetingViewHolder meetingViewHolder = (MeetingViewHolder) holder;
             meetingViewHolder.textViewMeetingName.setText(meetingItemList.get(position).getMeetingName());
-            Glide.with(mContext).load(R.drawable.meeting_test).apply(RequestOptions.bitmapTransform(new CenterCrop())).into(meetingViewHolder.imageViewMeetingPicture);
-
+            Glide.with(mContext).load(meetingItemList.get(position).getMeetingPictureId()).apply(RequestOptions.bitmapTransform(new CenterCrop())).into(meetingViewHolder.imageViewMeetingPicture);
+            ((MeetingViewHolder) holder).meetingView.setTag( position );
         }
 
     }
