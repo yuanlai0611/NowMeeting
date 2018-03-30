@@ -66,7 +66,6 @@ public class FragmentMy extends BaseFragment{
         mContext = context;
     }
 
-
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {

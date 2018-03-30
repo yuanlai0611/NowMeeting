@@ -55,7 +55,7 @@ public class MeetingRecyclerviewAdapter extends RecyclerView.Adapter<RecyclerVie
         View view;
         if (viewType == MEETING) {
             view = LayoutInflater.from(mContext).inflate(R.layout.item_recyclerview_meeting, parent, false);
-
+            view.setOnClickListener( this );
             return new MeetingViewHolder(view);
         }
         return null;
@@ -64,17 +64,24 @@ public class MeetingRecyclerviewAdapter extends RecyclerView.Adapter<RecyclerVie
 
     public interface OnItemClickListener{
         void onItemClick(View view,int position);
-        void onItemLongClick(View view,int position);
+    }
+
+    //在activity中调用她
+    public void setmOnItemClickListener(OnItemClickListener listener){
+        this.onItemClickListener = listener;
     }
 
     @Override
     public void onClick(View view) {
-
+        if (onItemClickListener != null){
+            onItemClickListener.onItemClick(view,(int)view.getTag());
+        }
     }
 
 
     class MeetingViewHolder extends RecyclerView.ViewHolder
     {
+        View meetingView;
         ImageView imageViewMeetingPicture;
         TextView textViewMeetingName;
         LinearLayout linearLayoutMeetingType;
@@ -83,6 +90,7 @@ public class MeetingRecyclerviewAdapter extends RecyclerView.Adapter<RecyclerVie
         public MeetingViewHolder(View view){
 
             super(view);
+            meetingView=view;
             imageViewMeetingPicture = (ImageView)view.findViewById(R.id.meeting_picture);
             textViewMeetingName = (TextView)view.findViewById(R.id.meeting_name);
             linearLayoutMeetingType = (LinearLayout)view.findViewById(R.id.linearLayoutMeetingType);
@@ -120,6 +128,7 @@ public class MeetingRecyclerviewAdapter extends RecyclerView.Adapter<RecyclerVie
             }
             meetingViewHolder.textViewMeetingName.setText(meetingItemList.get(position).getMeetingName());
             Glide.with(mContext).load(meetingItemList.get(position).getMeetingPictureId()).into(meetingViewHolder.imageViewMeetingPicture);
+
 
         }
 

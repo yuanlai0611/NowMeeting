@@ -1,13 +1,17 @@
 package com.gongyunhao.nowmeeting.Activity;
 
 import android.content.Context;
+import android.graphics.Canvas;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.View;
+import android.widget.ImageButton;
 
 import com.gongyunhao.nowmeeting.Adapter.ChattingRecyclerviewAdapter;
+import com.gongyunhao.nowmeeting.Base.BaseActivity;
 import com.gongyunhao.nowmeeting.R;
 import com.gongyunhao.nowmeeting.test.ChattingItem;
 
@@ -15,24 +19,53 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-public class ChattingActivity extends AppCompatActivity {
-
+public class ChattingActivity extends BaseActivity {
+    private ImageButton ib_back;
     private List<ChattingItem> chattingItems;
     private Context mContext;
+    private RecyclerView recyclerView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setContentView();
+
+        initData();
+
+        initViews();
+
+        ib_back.setOnClickListener( new View.OnClickListener( ) {
+            @Override
+            public void onClick(View view) {
+                finish();
+            }
+        } );
+    }
+
+    @Override
+    public void setContentView() {
         setContentView(R.layout.activity_chatting);
-        chattingItems = new ArrayList<>();
-        mContext = this;
-        testInit();
-        RecyclerView recyclerView = (RecyclerView)findViewById(R.id.chatting_recyclerview);
+    }
+
+    @Override
+    public void initViews() {
+        ib_back=findViewById( R.id.chatting_back );
+        recyclerView = findViewById(R.id.chatting_recyclerview);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setItemAnimator(new DefaultItemAnimator());
         ChattingRecyclerviewAdapter chattingRecyclerviewAdapter = new ChattingRecyclerviewAdapter(mContext,chattingItems);
         recyclerView.setAdapter(chattingRecyclerviewAdapter);
+    }
 
+    @Override
+    public void initListeners() {
+    }
+
+    @Override
+    public void initData() {
+        chattingItems = new ArrayList<>();
+        mContext = this;
+        testInit();
     }
 
     public void testInit(){

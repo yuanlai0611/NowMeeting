@@ -1,5 +1,6 @@
 package com.gongyunhao.nowmeeting.Activity;
 
+import android.app.ActivityOptions;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
@@ -38,6 +39,7 @@ import java.util.List;
 
 public class MainActivity extends BaseActivity {
     private Boolean isSearchChecked=false;
+    private ImageButton ib_scan_qr;
     private TextView textView;
     private List<Fragment> datas;
     private List<String> titles;
@@ -67,16 +69,18 @@ public class MainActivity extends BaseActivity {
         setSupportActionBar( toolbar );
         initViews();
 
+        ib_scan_qr.setOnClickListener( new View.OnClickListener( ) {
+            @Override
+            public void onClick(View view) {
+                startIntent( ScanActivity.class );
+            }
+        } );
+
         imageButtonSearch.setOnClickListener( new View.OnClickListener( ) {
             @Override
             public void onClick(View view) {
-
-//                Intent intent=new Intent( MainActivity.this,SearchActivity.class );
-//                startActivity(intent, ActivityOptions.makeSceneTransitionAnimation(MainActivity.this).toBundle());
-
-                startIntent( MeetingDetailActivity.class );
-
-
+                Intent intent=new Intent( MainActivity.this,SearchActivity.class );
+                startActivity(intent, ActivityOptions.makeSceneTransitionAnimation(MainActivity.this).toBundle());
             }
         } );
 
@@ -141,6 +145,7 @@ public class MainActivity extends BaseActivity {
     public void initViews() {
         textView = findViewById(R.id.title_name);
         imageButtonSearch = findViewById(R.id.search_button);
+        ib_scan_qr=findViewById( R.id.ib_qr_scan );
         datas = new ArrayList<>();
         datas.add(new FragmentMessage());
         datas.add(new FragmentMeeting());
