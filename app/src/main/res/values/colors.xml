@@ -48,5 +48,10 @@
     <!--item_recyclerview_meeting-->
     <color name="item_recyclerview_meeting_color">#FF353434</color>
 
+    <!-- meeting type -->
+    <color name="hot_meeting">#f75050</color>
+    <color name="friend_participate">#fac92d</color>
+    <color name="participate">#1c7cdc</color>
+
 
 </resources>
