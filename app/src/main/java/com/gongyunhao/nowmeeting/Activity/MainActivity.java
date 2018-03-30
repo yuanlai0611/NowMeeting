@@ -89,13 +89,17 @@ public class MainActivity extends BaseActivity {
             viewPager.addOnPageChangeListener(new NoScrollViewpager.OnPageChangeListener() {
                 @Override
                 public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
                     float temp_positionOffset;
+
                     if (positionOffset > 0.5) {
                         temp_positionOffset = positionOffset;
                     } else {
                         temp_positionOffset = 1 - positionOffset;
                     }
+
                     textView.setAlpha(temp_positionOffset);
+
                     if ((position + positionOffset) < 0.5) {
                         textView.setText(R.string.title_message);
                     } else if ((position + positionOffset) >= 0.5 && (position + positionOffset) < 1.5) {
@@ -103,9 +107,10 @@ public class MainActivity extends BaseActivity {
                     } else {
                         textView.setText(R.string.title_about_me);
                     }
+
                     if ((position + positionOffset) >= 1) {
                         Log.d("MainActivity", "---->开始设置imageButton透明");
-                        imageButtonSearch.setVisibility(View.VISIBLE);
+                        //imageButtonSearch.setVisibility(View.VISIBLE);
                         imageButtonSearch.setAlpha(2 - (position + positionOffset));
                     } else if ((position + positionOffset) == 2) {
                         imageButtonSearch.setVisibility(View.GONE);

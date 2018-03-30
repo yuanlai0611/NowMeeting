@@ -92,6 +92,7 @@ public class FragmentMy extends BaseFragment{
             userItem2.setUserPictureId(R.drawable.head3);
             userItems.add(userItem2);
         }
+        userRecyclerviewAdapter.notifyDataSetChanged();
     }
 
     @Override

@@ -12,7 +12,18 @@ public class MeetingItem {
 
     private static final int MEETING = 2;
 
-    private int viewType,meetingPictureId;
+    private int viewType;
+
+    private int meetingType;
+
+    public static final int HOT = 3;
+
+    public static final int FRIEND_PARTICIPATE = 4;
+
+    public static final int PARTICIPATE = 5;
+
+    private int meetingPictureId;
+
 
     private String meetingName;
     private String meetingDate;
@@ -34,6 +45,14 @@ public class MeetingItem {
     }
 
     private String meetingCity;
+
+    public void setMeetingType(int meetingType){
+        this.meetingType = meetingType;
+    }
+
+    public int getMeetingType(){
+        return meetingType;
+    }
 
     public void setMeetingName(String meetingName){
         this.meetingName = meetingName;

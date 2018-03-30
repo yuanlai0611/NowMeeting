@@ -15,7 +15,7 @@
             <android.support.v7.widget.CardView
                 android:layout_marginTop="15dp"
                 android:layout_width="match_parent"
-                android:layout_height="180dp">
+                android:layout_height="150dp">
 
                 <RelativeLayout
                     android:layout_width="match_parent"
@@ -30,7 +30,7 @@
                         android:layout_marginTop="10dp"
                         android:background="@drawable/about_me_background">
 
-                        <ImageView
+                        <org.raphets.roundimageview.RoundImageView
                             android:id="@+id/user_picture"
                             android:layout_width="60dp"
                             android:layout_height="60dp"
@@ -48,7 +48,7 @@
                             android:layout_toRightOf="@+id/user_picture"
                             android:text="袁大来"
                             android:textColor="@color/accent_black"
-                            android:textSize="19sp" />
+                            android:textSize="18sp" />
 
                         <TextView
                             android:id="@+id/user_city"
@@ -59,12 +59,12 @@
                             android:layout_marginTop="5dp"
                             android:layout_toRightOf="@+id/user_city_symbol"
                             android:text="武汉"
-                            android:textSize="17sp" />
+                            android:textSize="14sp" />
 
                         <ImageView
                             android:id="@+id/user_city_symbol"
-                            android:layout_width="25dp"
-                            android:layout_height="25dp"
+                            android:layout_width="18dp"
+                            android:layout_height="18dp"
                             android:layout_below="@+id/user_name"
                             android:layout_marginLeft="15dp"
                             android:layout_marginTop="5dp"
@@ -89,8 +89,8 @@
                                 android:layout_marginLeft="20dp"
                                 android:src="@drawable/personalize_signature"
                                 android:layout_gravity="center_vertical"
-                                android:layout_width="25dp"
-                                android:layout_height="25dp" />
+                                android:layout_width="20dp"
+                                android:layout_height="20dp" />
 
                             <TextView
                                 android:layout_marginLeft="5dp"
@@ -109,7 +109,7 @@
                                     android:layout_alignParentRight="true"
                                     android:src="@drawable/edit"
                                     android:layout_gravity="center_vertical"
-                                    android:layout_width="25dp"
+                                    android:layout_width="20dp"
                                     android:layout_height="25dp" />
 
                             </RelativeLayout>
@@ -117,7 +117,8 @@
                         </LinearLayout>
 
                         <TextView
-                            android:paddingLeft="20dp"
+                            android:textSize="14sp"
+                            android:paddingLeft="30dp"
                             android:textColor="@color/personalize_signature_text"
                             android:text="欲戴其冠，必承其重"
                             android:layout_width="match_parent"
@@ -132,7 +133,7 @@
             </android.support.v7.widget.CardView>
 
             <android.support.v7.widget.CardView
-                android:layout_marginTop="15dp"
+                android:layout_marginTop="10dp"
                 android:layout_width="match_parent"
                 android:layout_height="200dp">
 
@@ -140,6 +141,29 @@
                     android:orientation="vertical"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent">
+
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="40dp">
+
+                        <TextView
+                            android:layout_centerInParent="true"
+                            android:layout_alignParentLeft="true"
+                            android:textColor="@color/personalize_signature_text"
+                            android:layout_marginLeft="15dp"
+                            android:text="个人简历"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content" />
+
+                        <ImageView
+                            android:layout_marginRight="10dp"
+                            android:layout_alignParentRight="true"
+                            android:layout_centerInParent="true"
+                            android:src="@drawable/edit"
+                            android:layout_width="20dp"
+                            android:layout_height="20dp" />
+
+                    </RelativeLayout>
 
                     <LinearLayout
                         android:orientation="horizontal"
@@ -150,13 +174,13 @@
                             android:layout_marginLeft="10dp"
                             android:layout_gravity="center_vertical"
                             android:src="@drawable/telephone"
-                            android:layout_width="25dp"
-                            android:layout_height="25dp" />
+                            android:layout_width="20dp"
+                            android:layout_height="20dp" />
 
                         <TextView
-                            android:layout_marginLeft="15dp"
+                            android:layout_marginLeft="20dp"
                             android:layout_gravity="center_vertical"
-                            android:textSize="16sp"
+                            android:textSize="15sp"
                             android:text="17607110024"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content" />
@@ -164,7 +188,8 @@
                     </LinearLayout>
 
                     <View
-                        android:layout_marginLeft="30dp"
+                        android:layout_marginRight="10dp"
+                        android:layout_marginLeft="40dp"
                         android:background="@color/cut_off_line"
                         android:layout_width="match_parent"
                         android:layout_height="0.1dp"/>
@@ -173,17 +198,18 @@
                         android:orientation="horizontal"
                         android:layout_width="match_parent"
                         android:layout_height="40dp">
+
                         <ImageView
-                            android:layout_marginLeft="12dp"
+                            android:layout_width="17dp"
+                            android:layout_height="20dp"
                             android:layout_gravity="center_vertical"
-                            android:src="@drawable/e_mail"
-                            android:layout_width="20dp"
-                            android:layout_height="20dp" />
+                            android:layout_marginLeft="12dp"
+                            android:src="@drawable/e_mail" />
 
                         <TextView
-                            android:layout_marginLeft="15dp"
+                            android:layout_marginLeft="20dp"
                             android:layout_gravity="center_vertical"
-                            android:textSize="16sp"
+                            android:textSize="15sp"
                             android:text="yuanlai0611@gmail.com"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content" />
@@ -191,7 +217,8 @@
                     </LinearLayout>
 
                     <View
-                        android:layout_marginLeft="30dp"
+                        android:layout_marginRight="10dp"
+                        android:layout_marginLeft="40dp"
                         android:background="@color/cut_off_line"
                         android:layout_width="match_parent"
                         android:layout_height="0.1dp"/>
@@ -207,18 +234,19 @@
                         android:layout_width="25dp"
                         android:layout_height="25dp" />
 
-                    <TextView
-                        android:layout_marginLeft="15dp"
-                        android:layout_gravity="center_vertical"
-                        android:textSize="16sp"
-                        android:text="领航工作室"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content" />
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical"
+                            android:layout_marginLeft="15dp"
+                            android:text="领航工作室"
+                            android:textSize="15sp" />
 
                 </LinearLayout>
 
                     <View
-                        android:layout_marginLeft="30dp"
+                        android:layout_marginRight="10dp"
+                        android:layout_marginLeft="40dp"
                         android:background="@color/cut_off_line"
                         android:layout_width="match_parent"
                         android:layout_height="0.1dp"/>
@@ -235,12 +263,12 @@
                             android:layout_height="25dp" />
 
                         <TextView
-                            android:layout_marginLeft="15dp"
-                            android:layout_gravity="center_vertical"
-                            android:textSize="16sp"
-                            android:text="武汉科技大学"
                             android:layout_width="wrap_content"
-                            android:layout_height="wrap_content" />
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical"
+                            android:layout_marginLeft="15dp"
+                            android:text="武汉科技大学"
+                            android:textSize="15sp" />
 
                     </LinearLayout>
 
@@ -250,71 +278,55 @@
                         android:layout_width="match_parent"
                         android:layout_height="0.1dp"/>
 
-                    <RelativeLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent">
 
-                        <ImageView
-                            android:layout_marginRight="10dp"
-                            android:layout_alignParentRight="true"
-                            android:layout_centerInParent="true"
-                            android:src="@drawable/edit"
-                            android:layout_width="25dp"
-                            android:layout_height="25dp" />
-
-                    </RelativeLayout>
 
                 </LinearLayout>
 
             </android.support.v7.widget.CardView>
 
            <android.support.v7.widget.CardView
-               android:layout_marginTop="15dp"
+               android:layout_marginTop="10dp"
                android:layout_width="match_parent"
-               android:layout_height="120dp">
+               android:layout_height="130dp">
 
                <LinearLayout
                    android:orientation="vertical"
                    android:layout_width="match_parent"
                    android:layout_height="match_parent">
 
-                       <LinearLayout
+                       <RelativeLayout
                            android:orientation="horizontal"
                            android:layout_width="match_parent"
-                           android:layout_height="30dp">
+                           android:layout_height="40dp">
 
-                           <ImageView
-                               android:layout_marginLeft="10dp"
-                               android:layout_gravity="center_vertical"
-                               android:src="@drawable/friend_list"
-                               android:layout_width="20dp"
-                               android:layout_height="20dp" />
 
                            <TextView
+                               android:layout_alignParentLeft="true"
+                               android:layout_centerInParent="true"
                                android:textColor="@color/personalize_signature_text"
-                               android:layout_marginLeft="10dp"
-                               android:layout_gravity="center_vertical"
+                               android:layout_marginLeft="15dp"
                                android:text="好友列表"
                                android:layout_width="wrap_content"
                                android:layout_height="wrap_content" />
 
 
-                       </LinearLayout>
+                       </RelativeLayout>
 
                     <android.support.v7.widget.RecyclerView
                         android:id="@+id/user_recyclerview"
                         android:layout_width="match_parent"
-                        android:layout_height="match_parent"/>
+                        android:layout_height="match_parent"
+                        android:layout_marginBottom="10dp"/>
 
                </LinearLayout>
 
            </android.support.v7.widget.CardView>
 
            <android.support.v7.widget.CardView
-               android:layout_marginTop="15dp"
+               android:layout_marginTop="10dp"
                android:layout_width="match_parent"
                android:layout_height="70dp"
-               android:layout_marginBottom="15dp">
+               android:layout_marginBottom="10dp">
 
                <LinearLayout
                    android:orientation="horizontal"
@@ -334,7 +346,7 @@
                            android:layout_height="25dp" />
                        <TextView
                            android:layout_marginTop="5dp"
-                           android:textSize="15sp"
+                           android:textSize="14sp"
                            android:layout_gravity="center_horizontal"
                            android:text="社区"
                            android:layout_width="wrap_content"
@@ -354,7 +366,7 @@
                            android:layout_height="25dp" />
                        <TextView
                            android:layout_marginTop="5dp"
-                           android:textSize="15sp"
+                           android:textSize="14sp"
                            android:layout_gravity="center_horizontal"
                            android:text="设置"
                            android:layout_width="wrap_content"
@@ -374,7 +386,7 @@
                            android:layout_height="25dp" />
                        <TextView
                            android:layout_marginTop="5dp"
-                           android:textSize="15sp"
+                           android:textSize="14sp"
                            android:layout_gravity="center_horizontal"
                            android:text="切换账户"
                            android:layout_width="wrap_content"
@@ -395,7 +407,7 @@
                            android:layout_height="25dp" />
                        <TextView
                            android:layout_marginTop="5dp"
-                           android:textSize="15sp"
+                           android:textSize="14sp"
                            android:layout_gravity="center_horizontal"
                            android:text="退出"
                            android:layout_width="wrap_content"
