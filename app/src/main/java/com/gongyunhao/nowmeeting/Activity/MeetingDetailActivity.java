@@ -2,13 +2,16 @@ package com.gongyunhao.nowmeeting.Activity;
 
 import android.content.Intent;
 import android.graphics.Color;
+import android.os.Build;
 import android.os.Bundle;
+import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -26,35 +29,54 @@ import com.github.mikephil.charting.formatter.PercentFormatter;
 import com.github.mikephil.charting.highlight.Highlight;
 import com.github.mikephil.charting.listener.OnChartValueSelectedListener;
 import com.github.mikephil.charting.utils.ColorTemplate;
+import com.gongyunhao.nowmeeting.Adapter.LotteryRecyclerviewAdapter;
 import com.gongyunhao.nowmeeting.Adapter.UserRecyclerviewAdapter;
 import com.gongyunhao.nowmeeting.Base.BaseActivity;
 import com.gongyunhao.nowmeeting.R;
+import com.gongyunhao.nowmeeting.bean.LotteryItem;
 import com.gongyunhao.nowmeeting.bean.UserItem;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import jp.wasabeef.glide.transformations.BlurTransformation;
+
 public class MeetingDetailActivity extends BaseActivity implements View.OnClickListener{
+
     private ImageView imageView_meeting_detail,imageView_qr_code;
     private int position;
     private String name,date,city;
     private int pictureID;
     private CollapsingToolbarLayout collapsingToolbarLayout;
     private RecyclerView recycler_rough;
+    private RecyclerView recyclerView_lottery;
     private UserRecyclerviewAdapter userRecyclerviewAdapter;
+    private LotteryRecyclerviewAdapter lotteryRecyclerviewAdapter;
     private RelativeLayout relativeLayout;
     private List<UserItem> userItems=new ArrayList<>(  );
     private TextView tv_detail_meeting_place,tv_detail_meeting_date;
+    private AppBarLayout appBarLayout;
     private String QR_CODE_CONTENT="Extra_Qr_Content";
+    private List<LotteryItem> lotteryItemList = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate( savedInstanceState );
-//        getWindow().requestFeature( Window.FEATURE_CONTENT_TRANSITIONS);
+        getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
         setContentView();
         initData();
         initViews();
         initListeners();
+
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            getWindow().clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+            getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+                    | View.SYSTEM_UI_FLAG_LAYOUT_STABLE);
+            getWindow().addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+            getWindow().setStatusBarColor(Color.TRANSPARENT);
+        }
+
 
         for (int i=0 ; i<2 ;i++){
             UserItem userItem = new UserItem();
@@ -71,8 +93,19 @@ public class MeetingDetailActivity extends BaseActivity implements View.OnClickL
             userItems.add(userItem2);
         }
 
+        for (int i=0 ; i<12 ; i++){
+            LotteryItem lotteryItem = new LotteryItem();
+            lotteryItem.setLotteryName("  ");
+            lotteryItemList.add(lotteryItem);
+        }
+
         imageView_qr_code.setOnClickListener( this );
         relativeLayout.setOnClickListener( this );
+
+        LinearLayoutManager linearLayoutManager1 = new LinearLayoutManager(MeetingDetailActivity.this,LinearLayoutManager.HORIZONTAL,false);
+        recyclerView_lottery.setLayoutManager(linearLayoutManager1);
+        lotteryRecyclerviewAdapter = new LotteryRecyclerviewAdapter(this,lotteryItemList);
+        recyclerView_lottery.setAdapter(lotteryRecyclerviewAdapter);
 
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager( MeetingDetailActivity.this,LinearLayoutManager.HORIZONTAL,false );
         recycler_rough.setLayoutManager(linearLayoutManager);
@@ -94,7 +127,7 @@ public class MeetingDetailActivity extends BaseActivity implements View.OnClickL
         imageView_meeting_detail=findViewById( R.id.imageView_collapsing );
         collapsingToolbarLayout=findViewById( R.id.collapsing_toolbar_meeting_detail );
         recycler_rough = findViewById(R.id.detail_user_recycler_rough);
-        Glide.with(this).load(pictureID).apply( RequestOptions.bitmapTransform(new CenterCrop())).into(imageView_meeting_detail);
+        Glide.with(this).load(pictureID).apply( RequestOptions.bitmapTransform(new BlurTransformation())).into(imageView_meeting_detail);
         collapsingToolbarLayout.setTitle( name );
         tv_detail_meeting_place=findViewById( R.id.detail_meeting_place );
         tv_detail_meeting_date=findViewById( R.id.detail_meeting_date );
@@ -102,7 +135,8 @@ public class MeetingDetailActivity extends BaseActivity implements View.OnClickL
         imageView_qr_code=findViewById( R.id.iv_meeting_detail_qr_code );
         tv_detail_meeting_date.setText( date );
         relativeLayout=findViewById( R.id.relativate_vote );
-        getWindow().addFlags( WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+        recyclerView_lottery = (RecyclerView)findViewById(R.id.recyclerview_lottery);
+
     }
 
     @Override
