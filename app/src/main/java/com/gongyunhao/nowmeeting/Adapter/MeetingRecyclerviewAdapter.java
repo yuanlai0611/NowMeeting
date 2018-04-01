@@ -1,6 +1,7 @@
 package com.gongyunhao.nowmeeting.Adapter;
 
 import android.content.Context;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -121,6 +122,7 @@ public class MeetingRecyclerviewAdapter extends RecyclerView.Adapter<RecyclerVie
             }
             meetingViewHolder.textViewMeetingName.setText(meetingItemList.get(position).getMeetingName());
             Glide.with(mContext).load(meetingItemList.get(position).getMeetingPictureId()).into(meetingViewHolder.imageViewMeetingPicture);
+            meetingViewHolder.meetingView.setTag(position);
 
 
         }

@@ -110,12 +110,13 @@ public class MainActivity extends BaseActivity {
 
                     if ((position + positionOffset) >= 1) {
                         Log.d("MainActivity", "---->开始设置imageButton透明");
-                        //imageButtonSearch.setVisibility(View.VISIBLE);
                         imageButtonSearch.setAlpha(2 - (position + positionOffset));
                     } else if ((position + positionOffset) == 2) {
                         imageButtonSearch.setVisibility(View.GONE);
                     } else if ((position + positionOffset) == 0) {
+                        imageButtonSearch.setAlpha((float)1);
                         imageButtonSearch.setVisibility(View.VISIBLE);
+                        Log.d("MainActivity","---->使imageButton可见");
                     }
                     //positionOffset 是百分比
                     Log.d("MainActivity", "---->position:" + position + "  positionOffset:" + positionOffset);
@@ -163,7 +164,7 @@ public class MainActivity extends BaseActivity {
         // 将适配器设置进ViewPager
         viewPager.setAdapter(myPageAdapter);
         viewPager.setOffscreenPageLimit(1);
-        viewPager.setNoScroll(true);
+        //viewPager.setNoScroll(true);
         viewPager.setCurrentItem(0);
         // 将ViewPager与TabLayout相关联
         tabLayout.setupWithViewPager(viewPager);

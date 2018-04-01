@@ -2,6 +2,7 @@ package com.gongyunhao.nowmeeting.Activity;
 
 import android.app.ActivityOptions;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Pair;
@@ -33,6 +34,9 @@ public class LoginActivity extends BaseActivity {
         initViews();
         btn_login.setOnClickListener( this );
         textView_signin.setOnClickListener( this );
+
+
+
 
     }
 
@@ -103,9 +107,14 @@ public class LoginActivity extends BaseActivity {
 
 
     private void initWindow() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-            //透明状态栏
-            getWindow().addFlags( WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+
+        if (Build.VERSION.SDK_INT >= 21) {
+            View decorView = getWindow().getDecorView();
+            int option = View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+                    | View.SYSTEM_UI_FLAG_LAYOUT_STABLE;
+            decorView.setSystemUiVisibility(option);
+            getWindow().setStatusBarColor(Color.TRANSPARENT);
         }
+
     }
 }

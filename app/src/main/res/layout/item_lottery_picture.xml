@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    android:orientation="vertical"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="60dp"
+    android:layout_height="70dp">
+
+    <ImageView
+        android:id="@+id/lottery_picture"
+        android:padding="5dp"
+        android:src="@drawable/lottery_picture_pink"
+        android:layout_gravity="center_horizontal"
+        android:layout_width="50dp"
+        android:layout_height="50dp" />
+
+    <TextView
+        android:textSize="12sp"
+        android:id="@+id/lottery_time"
+        android:gravity="center"
+        android:text="12：00"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
+</LinearLayout>

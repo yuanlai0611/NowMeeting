@@ -71,7 +71,7 @@ public class PieChartAdapter extends RecyclerView.Adapter<PieChartAdapter.ViewHo
 
         holder.pieChart.setDragDecelerationFrictionCoef(0.95f);
         //设置中间文件
-        holder.pieChart.setCenterText("哈哈哈哈");
+        holder.pieChart.setCenterText(mVoteName.get( position ));
 
         holder.pieChart.setDrawHoleEnabled(true);
         holder.pieChart.setHoleColor( Color.WHITE);
@@ -96,8 +96,6 @@ public class PieChartAdapter extends RecyclerView.Adapter<PieChartAdapter.ViewHo
 
         //数据和颜色
         ArrayList<Integer> colors = new ArrayList<Integer>();
-        for (int c : ColorTemplate.VORDIPLOM_COLORS)
-            colors.add(c);
         for (int c : ColorTemplate.JOYFUL_COLORS)
             colors.add(c);
         for (int c : ColorTemplate.COLORFUL_COLORS)
