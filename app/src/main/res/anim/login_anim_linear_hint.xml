@@ -5,7 +5,7 @@
         android:toAlpha="0.0"
         android:duration="600"/>
     <translate
-        android:fromYDelta="40.0"
+        android:fromYDelta="100.0"
         android:toYDelta="-260.0"
         android:duration="600"/>
     <!-- 透明度控制动画效果 alpha

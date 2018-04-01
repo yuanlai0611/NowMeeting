@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <com.github.mikephil.charting.charts.PieChart
+        android:layout_marginTop="45dp"
+        android:id="@+id/pieChart"
+        android:layout_width="match_parent"
+        android:layout_height="320dp"/>
+
+    <TextView
+        android:layout_marginTop="25dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="获得投票最多为：海南"
+        android:gravity="center"
+        android:textSize="22sp"
+        />
+
+</LinearLayout>

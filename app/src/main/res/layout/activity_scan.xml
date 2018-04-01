@@ -1,18 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout
+<RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <ImageButton
+        android:layout_width="45dp"
+        android:layout_height="45dp"
+        android:src="@drawable/back"/>
 
     <cn.bingoogolapple.qrcode.zxing.ZXingView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+
         android:id="@+id/zxingview"
-        app:qrcv_animTime="300"
+        app:qrcv_animTime="800"
         app:qrcv_barCodeTipText="将条码放入框内，即可自动扫描"
         app:qrcv_barcodeRectHeight="40dp"
-        app:qrcv_borderColor="#0088d1ff"
+        app:qrcv_borderColor="#0388d1ff"
         app:qrcv_borderSize="0.1dp"
         app:qrcv_cornerColor="#fff"
         app:qrcv_cornerLength="20dp"
@@ -26,15 +33,15 @@
         app:qrcv_isShowTipBackground="false"
         app:qrcv_isShowTipTextAsSingleLine="false"
         app:qrcv_isTipTextBelowRect="true"
-        app:qrcv_maskColor="#9c000000"
-        app:qrcv_qrCodeTipText="扫描中..."
-        app:qrcv_rectWidth="240dp"
+        app:qrcv_maskColor="#80000000"
+        app:qrcv_qrCodeTipText="请对准需要识别的二维码\n或条形码"
+        app:qrcv_rectWidth="256dp"
         app:qrcv_scanLineColor="#48b0ff"
         app:qrcv_scanLineMargin="0dp"
         app:qrcv_scanLineSize="0.5dp"
         app:qrcv_tipTextColor="#80ffffff"
         app:qrcv_tipTextSize="14sp"
-        app:qrcv_toolbarHeight="40dp"
-        app:qrcv_topOffset="80dp" />
+        app:qrcv_toolbarHeight="45dp"
+        app:qrcv_topOffset="120dp" />
 
-</android.support.constraint.ConstraintLayout>
+</RelativeLayout>
