@@ -1,24 +1,74 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    android:orientation="vertical"
+<android.support.v7.widget.CardView
     xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="60dp"
-    android:layout_height="70dp">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    app:cardCornerRadius="10dp"
+    android:layout_width="250dp"
+    android:layout_height="160dp"
+    android:layout_margin="5dp">
+      <RelativeLayout
+          android:layout_height="match_parent"
+          android:layout_width="match_parent">
 
-    <ImageView
-        android:id="@+id/lottery_picture"
-        android:padding="5dp"
-        android:src="@drawable/lottery_picture_pink"
-        android:layout_gravity="center_horizontal"
-        android:layout_width="50dp"
-        android:layout_height="50dp" />
+          <TextView
+              android:text="IWD-Building a new Horizon(From the perspective"
+              android:id="@+id/lottery_name"
+              android:textSize="18sp"
+              android:textColor="@color/text_color"
+              android:padding="5dp"
+              android:textStyle="bold"
+              android:layout_width="match_parent"
+              android:layout_height="60dp"
+              android:maxLines="2"
+              android:ellipsize="end"/>
 
-    <TextView
-        android:textSize="12sp"
-        android:id="@+id/lottery_time"
-        android:gravity="center"
-        android:text="12：00"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+          <TextView
+              android:id="@+id/lottery_time"
+              android:textColor="@color/text_color"
+              android:textSize="12sp"
+              android:paddingLeft="5dp"
+              android:text="下午 7:00"
+              android:layout_below="@+id/lottery_name"
+              android:layout_width="match_parent"
+              android:layout_height="20dp" />
 
-</LinearLayout>
+          <ImageView
+              android:id="@+id/lottery_number_title"
+              android:src="@drawable/lottery_number"
+              android:layout_below="@+id/lottery_time"
+              android:layout_marginLeft="5dp"
+              android:layout_width="30dp"
+              android:layout_height="30dp" />
+
+          <TextView
+              android:id="@+id/winner"
+              android:layout_marginRight="5dp"
+              android:textSize="14sp"
+              android:gravity="center_vertical"
+              android:layout_marginLeft="5dp"
+              android:singleLine="true"
+              android:text="袁来，龚云浩，程文喆，何承毅，徐帆"
+              android:layout_toRightOf="@+id/lottery_number_title"
+              android:layout_below="@+id/lottery_time"
+              android:layout_width="wrap_content"
+              android:layout_height="25dp"/>
+
+          <org.raphets.roundimageview.RoundImageView
+              android:id="@+id/organizer"
+              android:src="@drawable/head1"
+              android:layout_marginLeft="10dp"
+              android:layout_marginTop="5dp"
+              android:layout_below="@+id/lottery_number_title"
+              android:layout_width="35dp"
+              android:layout_height="35dp" />
+
+          <ImageView
+              android:layout_marginLeft="25dp"
+              android:src="@drawable/medal"
+              android:layout_marginTop="27dp"
+              android:layout_below="@+id/lottery_number_title"
+              android:layout_width="20dp"
+              android:layout_height="20dp" />
+
+      </RelativeLayout>
+</android.support.v7.widget.CardView>

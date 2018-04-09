@@ -114,13 +114,11 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
-            <android.support.v7.widget.CardView
-                android:layout_width="match_parent"
-                android:layout_height="120dp">
 
                 <LinearLayout
+                    android:background="@color/accent_white"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
+                    android:layout_height="120dp"
                     android:orientation="vertical">
 
                     <RelativeLayout
@@ -168,14 +166,10 @@
 
                 </LinearLayout>
 
-            </android.support.v7.widget.CardView>
 
-
-            <android.support.v7.widget.CardView
-                android:layout_marginTop="12dp"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
             <RelativeLayout
+                android:layout_marginTop="12dp"
+                android:background="@color/accent_white"
                 android:orientation="horizontal"
                 android:layout_width="match_parent"
                 android:layout_height="45dp"
@@ -213,14 +207,10 @@
                     android:text="全部投票记录"/>
 
             </RelativeLayout>
-            </android.support.v7.widget.CardView>
-
-            <android.support.v7.widget.CardView
-                android:layout_marginTop="12dp"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
 
                 <LinearLayout
+                    android:background="@color/accent_white"
+                    android:layout_marginTop="12dp"
                     android:orientation="vertical"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content">
@@ -260,12 +250,12 @@
                     android:layout_marginBottom="10dp"
                     android:id="@+id/recyclerview_lottery"
                     android:layout_width="match_parent"
-                    android:layout_height="70dp"/>
+                    android:layout_height="170dp"/>
 
                 </LinearLayout>
 
 
-            </android.support.v7.widget.CardView>
+
 
         </LinearLayout>
 

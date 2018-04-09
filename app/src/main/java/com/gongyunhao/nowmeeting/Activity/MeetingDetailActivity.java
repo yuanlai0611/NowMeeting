@@ -14,6 +14,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.resource.bitmap.CenterCrop;
@@ -102,10 +103,19 @@ public class MeetingDetailActivity extends BaseActivity implements View.OnClickL
         imageView_qr_code.setOnClickListener( this );
         relativeLayout.setOnClickListener( this );
 
-        LinearLayoutManager linearLayoutManager1 = new LinearLayoutManager(MeetingDetailActivity.this,LinearLayoutManager.HORIZONTAL,false);
+        final LinearLayoutManager linearLayoutManager1 = new LinearLayoutManager(MeetingDetailActivity.this,LinearLayoutManager.HORIZONTAL,false);
         recyclerView_lottery.setLayoutManager(linearLayoutManager1);
         lotteryRecyclerviewAdapter = new LotteryRecyclerviewAdapter(this,lotteryItemList);
         recyclerView_lottery.setAdapter(lotteryRecyclerviewAdapter);
+        lotteryRecyclerviewAdapter.setmOnItemClickListener(new LotteryRecyclerviewAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(View view, int position) {
+                linearLayoutManager1.getChildAt(position);
+                if (lotteryRecyclerviewAdapter.getItemViewType(position)==1){
+                    Toast.makeText(MeetingDetailActivity.this,"Last one",Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
 
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager( MeetingDetailActivity.this,LinearLayoutManager.HORIZONTAL,false );
         recycler_rough.setLayoutManager(linearLayoutManager);

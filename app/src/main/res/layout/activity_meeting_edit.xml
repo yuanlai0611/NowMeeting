@@ -1,0 +1,169 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".Activity.MeetingEditActivity">
+
+    <include
+        layout="@layout/title_meeting_edit"/>
+
+    <View
+        android:layout_marginTop="20dp"
+        android:background="#bfbfbf"
+        android:layout_width="match_parent"
+        android:layout_height="0.1dp"/>
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:background="@color/accent_white"
+        android:layout_width="match_parent"
+        android:layout_height="250dp">
+
+
+        <EditText
+            android:padding="10dp"
+            android:gravity="start"
+            android:hint="输入对会议的描述..."
+            android:ellipsize="end"
+            android:background="@color/accent_white"
+            android:layout_width="match_parent"
+            android:layout_height="150dp" />
+
+        <LinearLayout
+            android:background="@drawable/choose_picture"
+            android:layout_marginLeft="20dp"
+            android:layout_marginTop="10dp"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:orientation="vertical">
+
+            <ImageView
+                android:src="@drawable/picture"
+                android:layout_marginTop="10dp"
+                android:layout_marginLeft="15dp"
+                android:layout_width="50dp"
+                android:layout_height="50dp" />
+
+            <TextView
+                android:gravity="center"
+                android:text="添加图片"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:textSize="12sp"/>
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <View
+        android:background="#bfbfbf"
+        android:layout_width="match_parent"
+        android:layout_height="0.1dp"/>
+
+
+    <View
+        android:layout_marginTop="20dp"
+        android:background="#bfbfbf"
+        android:layout_width="match_parent"
+        android:layout_height="0.1dp"/>
+
+    <LinearLayout
+        android:background="@color/accent_white"
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="5dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_centerInParent="true"
+            android:layout_marginLeft="15dp"
+            android:textSize="16sp"
+            android:text="编辑详细信息"
+            android:textColor="@color/personalize_signature_text" />
+
+        <EditText
+            android:background="@color/accent_white"
+            android:focusedByDefault="false"
+            android:focusableInTouchMode="true"
+            android:hint="城市（武汉）"
+            android:textSize="16sp"
+            android:id="@+id/place"
+            android:paddingLeft="5dp"
+            android:layout_marginLeft="40dp"
+            android:layout_width="match_parent"
+            android:layout_height="40dp" />
+
+        <View
+            android:layout_marginLeft="40dp"
+            android:background="@color/text_color"
+            android:layout_width="match_parent"
+            android:layout_height="0.1dp"/>
+
+        <EditText
+            android:background="@color/accent_white"
+            android:focusedByDefault="false"
+            android:focusableInTouchMode="true"
+            android:hint="详细地址（武汉科技大学黄家湖校区）"
+            android:textSize="16sp"
+            android:id="@+id/detail_place"
+            android:paddingLeft="5dp"
+            android:layout_marginLeft="40dp"
+            android:layout_width="match_parent"
+            android:layout_height="40dp" />
+
+        <View
+            android:layout_marginLeft="40dp"
+            android:background="@color/text_color"
+            android:layout_width="match_parent"
+            android:layout_height="0.1dp"/>
+
+        <EditText
+            android:background="@color/accent_white"
+            android:focusedByDefault="false"
+            android:focusableInTouchMode="true"
+            android:hint="会议名称（GDG武汉）"
+            android:textSize="16sp"
+            android:id="@+id/meeting_name"
+            android:paddingLeft="5dp"
+            android:layout_marginLeft="40dp"
+            android:layout_width="match_parent"
+            android:layout_height="40dp" />
+
+        <View
+            android:layout_marginLeft="40dp"
+            android:background="@color/text_color"
+            android:layout_width="match_parent"
+            android:layout_height="0.1dp"/>
+
+        <EditText
+            android:background="@color/accent_white"
+            android:focusedByDefault="false"
+            android:focusableInTouchMode="true"
+            android:hint="会议时间（12：00）"
+            android:textSize="16sp"
+            android:id="@+id/meeting_time"
+            android:paddingLeft="5dp"
+            android:layout_marginLeft="40dp"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:layout_marginBottom="10dp"/>
+
+    </LinearLayout>
+
+    <View
+        android:background="#bfbfbf"
+        android:layout_width="match_parent"
+        android:layout_height="0.1dp"/>
+
+
+
+
+</LinearLayout>
