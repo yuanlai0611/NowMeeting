@@ -34,11 +34,11 @@ abstract public class BaseFragment extends Fragment {
         Log.d(Tag,"----> isVisibleToUser "+isVisibleToUser);
     }
 
-//    @Override
-//    public void onAttach(Context context) {
-//        super.onAttach(context);
-//        Log.d(Tag,"----> onAttach");
-//    }
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        Log.d(Tag,"----> onAttach");
+    }
 
 
     @Override
@@ -49,13 +49,13 @@ abstract public class BaseFragment extends Fragment {
         Log.d(Tag,"---->onActivityCreated");
     }
 
-//    @Override
-//    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
-//        super.onViewCreated(view, savedInstanceState);
-//        Log.d(Tag,"----> onViewCreated");
-//    }
-//
-//
+    @Override
+    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        Log.d(Tag,"----> onViewCreated");
+    }
+
+
 //
 //    @Override
 //    public void onViewStateRestored(@Nullable Bundle savedInstanceState) {

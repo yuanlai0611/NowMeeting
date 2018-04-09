@@ -21,6 +21,7 @@
     <dimen name="sub_huge_text">28sp</dimen>
     <dimen name="big_text">25sp</dimen>
     <dimen name="sub_big_text">20sp</dimen>
+    <dimen name="s_sub_big_text">18sp</dimen>
     <dimen name="medium_text">16sp</dimen>
     <dimen name="sub_medium_text">14sp</dimen>
     <dimen name="small_text">12sp</dimen>

@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".Activity.SubmitVoteActivity">
+
+    <de.hdodenhof.circleimageview.CircleImageView
+        android:id="@+id/civ_submit_vote_initiator"
+        android:layout_width="42dp"
+        android:layout_height="42dp"
+        android:layout_marginLeft="@dimen/fab_margin"
+        android:layout_marginTop="@dimen/fab_margin"
+        android:src="@drawable/head2"/>
+
+    <TextView
+        android:id="@+id/tv_submit_vote_initiator_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@+id/civ_submit_vote_initiator"
+        android:layout_marginLeft="@dimen/big_corner"
+        android:layout_marginTop="@dimen/corner"
+        android:layout_toEndOf="@+id/civ_submit_vote_initiator"
+        android:text="龚云浩"
+        android:textColor="@color/accent_indago"
+        android:textSize="13sp"
+        android:textStyle="bold"/>
+
+    <TextView
+        android:id="@+id/tv_submit_vote_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/civ_submit_vote_initiator"
+        android:layout_margin="@dimen/fab_margin"
+        android:text="这是投票的标题"
+        android:textColor="@color/accent_black"
+        android:textSize="15sp"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:layout_below="@+id/tv_submit_vote_title"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_weight="1"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:gravity="center|start"
+            android:paddingLeft="@dimen/fab_margin"
+            android:text="类型，如单选，多选"
+            android:textSize="13sp"/>
+
+        <TextView
+            android:layout_width="100dp"
+            android:layout_height="match_parent"
+            android:text="共3票"
+            android:gravity="center|end"
+            android:paddingRight="@dimen/fab_margin"/>
+
+    </LinearLayout>
+
+
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="45dp"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentStart="true"
+        android:layout_marginBottom="225dp"
+        android:paddingLeft="@dimen/fab_margin"
+        android:paddingTop="@dimen/big_corner"
+        android:text="截止时间：04-10 16：12"/>
+
+
+</RelativeLayout>

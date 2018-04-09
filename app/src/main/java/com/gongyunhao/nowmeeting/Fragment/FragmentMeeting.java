@@ -17,6 +17,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 
 import com.gongyunhao.nowmeeting.Activity.MeetingDetailActivity;
+import com.gongyunhao.nowmeeting.Activity.MeetingDetailNoJoinActivity;
 import com.gongyunhao.nowmeeting.Adapter.MeetingRecyclerviewAdapter;
 import com.gongyunhao.nowmeeting.Base.BaseFragment;
 import com.gongyunhao.nowmeeting.R;
@@ -100,7 +101,9 @@ public class FragmentMeeting extends BaseFragment{
             @Override
             public void onItemClick(View view, int position) {
                 MeetingItem meetingItem=meetingItemList.get( position );
+
                 Intent intent=new Intent( getActivity(), MeetingDetailActivity.class );
+                Intent intent_no_join=new Intent( getActivity(), MeetingDetailNoJoinActivity.class );
                 intent.putExtra( "Extra_meeting_posithon",position );
                 intent.putExtra( "Extra_meeting_name" ,meetingItem.getMeetingName());
                 intent.putExtra( "Extra_meeting_picture",meetingItem.getMeetingPictureId() );
@@ -110,10 +113,22 @@ public class FragmentMeeting extends BaseFragment{
 
                 View itemView = recyclerViewMeeting.getChildAt(position - firstVisiblePosition);
                 View meeting_p = itemView.findViewById(R.id.meeting_picture);
-                //实现了share动画在recyclerview中传递的效果
-                startActivity(intent, ActivityOptions.makeSceneTransitionAnimation(getActivity(),
-                        android.util.Pair.create(meeting_p, "iv_meeting_share"))
-                        .toBundle());
+
+                //模拟判断用户是否参加了此会议
+
+                if (position%2==0){//参加了在这里
+
+                    //实现了share动画在recyclerview中传递的效果
+                    startActivity(intent, ActivityOptions.makeSceneTransitionAnimation(getActivity(),
+                            android.util.Pair.create(meeting_p, "iv_meeting_share"))
+                            .toBundle());
+                }else {//未参加在这里
+
+                    //实现了share动画在recyclerview中传递的效果
+                    startActivity(intent_no_join, ActivityOptions.makeSceneTransitionAnimation(getActivity(),
+                            android.util.Pair.create(meeting_p, "iv_meeting_share"))
+                            .toBundle());
+                }
 
             }
         } );

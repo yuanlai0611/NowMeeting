@@ -32,10 +32,12 @@ import com.github.mikephil.charting.listener.OnChartValueSelectedListener;
 import com.github.mikephil.charting.utils.ColorTemplate;
 import com.gongyunhao.nowmeeting.Adapter.LotteryRecyclerviewAdapter;
 import com.gongyunhao.nowmeeting.Adapter.UserRecyclerviewAdapter;
+import com.gongyunhao.nowmeeting.Adapter.VoteRecyclerAdapter;
 import com.gongyunhao.nowmeeting.Base.BaseActivity;
 import com.gongyunhao.nowmeeting.R;
 import com.gongyunhao.nowmeeting.bean.LotteryItem;
 import com.gongyunhao.nowmeeting.bean.UserItem;
+import com.gongyunhao.nowmeeting.bean.Voteitem;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -49,14 +51,14 @@ public class MeetingDetailActivity extends BaseActivity implements View.OnClickL
     private String name,date,city;
     private int pictureID;
     private CollapsingToolbarLayout collapsingToolbarLayout;
-    private RecyclerView recycler_rough;
-    private RecyclerView recyclerView_lottery;
+    private RecyclerView recycler_rough,recyclerView_lottery,recycler_vote_small;
     private UserRecyclerviewAdapter userRecyclerviewAdapter;
     private LotteryRecyclerviewAdapter lotteryRecyclerviewAdapter;
+    private VoteRecyclerAdapter voteRecyclerAdapter;
+    private List<Voteitem> voteitemList=new ArrayList<>(  );
     private RelativeLayout relativeLayout;
     private List<UserItem> userItems=new ArrayList<>(  );
     private TextView tv_detail_meeting_place,tv_detail_meeting_date;
-    private AppBarLayout appBarLayout;
     private String QR_CODE_CONTENT="Extra_Qr_Content";
     private List<LotteryItem> lotteryItemList = new ArrayList<>();
 
@@ -69,7 +71,6 @@ public class MeetingDetailActivity extends BaseActivity implements View.OnClickL
         initViews();
         initListeners();
 
-
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             getWindow().clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
             getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
@@ -77,7 +78,6 @@ public class MeetingDetailActivity extends BaseActivity implements View.OnClickL
             getWindow().addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
             getWindow().setStatusBarColor(Color.TRANSPARENT);
         }
-
 
         for (int i=0 ; i<2 ;i++){
             UserItem userItem = new UserItem();
@@ -94,7 +94,7 @@ public class MeetingDetailActivity extends BaseActivity implements View.OnClickL
             userItems.add(userItem2);
         }
 
-        for (int i=0 ; i<12 ; i++){
+        for (int i=0 ; i<4 ; i++){
             LotteryItem lotteryItem = new LotteryItem();
             lotteryItem.setLotteryName("  ");
             lotteryItemList.add(lotteryItem);
@@ -122,6 +122,11 @@ public class MeetingDetailActivity extends BaseActivity implements View.OnClickL
         userRecyclerviewAdapter = new UserRecyclerviewAdapter(this,userItems);
         recycler_rough.setAdapter(userRecyclerviewAdapter);
 
+        LinearLayoutManager linearLayoutManager2 = new LinearLayoutManager( MeetingDetailActivity.this,LinearLayoutManager.HORIZONTAL,false );
+        recycler_vote_small.setLayoutManager(linearLayoutManager2);
+        voteRecyclerAdapter = new VoteRecyclerAdapter(this,voteitemList);
+        recycler_vote_small.setAdapter(voteRecyclerAdapter);
+
         showToast( "我是第 "+position+"个会议"+name );
         //图是在adapter中设置的!!!!!
 
@@ -145,8 +150,8 @@ public class MeetingDetailActivity extends BaseActivity implements View.OnClickL
         imageView_qr_code=findViewById( R.id.iv_meeting_detail_qr_code );
         tv_detail_meeting_date.setText( date );
         relativeLayout=findViewById( R.id.relativate_vote );
-        recyclerView_lottery = (RecyclerView)findViewById(R.id.recyclerview_lottery);
-
+        recyclerView_lottery =findViewById(R.id.recyclerview_lottery);
+        recycler_vote_small=findViewById( R.id.recycler_vote_small );
     }
 
     @Override
@@ -160,6 +165,9 @@ public class MeetingDetailActivity extends BaseActivity implements View.OnClickL
         pictureID=getIntent(  ).getIntExtra( "Extra_meeting_picture", 0 );
         city=getIntent(  ).getStringExtra( "Extra_meeting_city" );
         date=getIntent(  ).getStringExtra( "Extra_meeting_date" );
+        for (int i=0;i<3;i++){
+            voteitemList.add( new Voteitem( "天气","2018","龚云浩" ) );
+        }
     }
 
     @Override
@@ -167,12 +175,13 @@ public class MeetingDetailActivity extends BaseActivity implements View.OnClickL
         super.onClick( v );
         switch (v.getId()){
             case R.id.iv_meeting_detail_qr_code:
-                /**
-                 * 在这里放会议的识别信息进去
-                 */
-                Intent intent=new Intent( MeetingDetailActivity.this,QrCodeActivity.class );
-                intent.putExtra( QR_CODE_CONTENT,"棒棒小糖测试,中文测试试用\nQR Code Content" );
-                startActivity( intent );
+//                /**
+//                 * 在这里放会议的识别信息进去
+//                 */
+//                Intent intent=new Intent( MeetingDetailActivity.this,QrCodeActivity.class );
+//                intent.putExtra( QR_CODE_CONTENT,"棒棒小糖测试,中文测试试用\nQR Code Content" );
+//                startActivity( intent );
+                startIntent( CreateVoteActivity.class );
                 break;
             case R.id.relativate_vote:
                 startIntent( PieChartActivity.class );

@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".Activity.CreateVoteActivity"
+    android:orientation="vertical"
+    android:background="#f2eeee">
+
+    <include layout="@layout/title_chatting"/>
+
+    <EditText
+        android:id="@+id/et_crate_vote_name"
+        android:layout_width="match_parent"
+        android:layout_height="70dp"
+        android:gravity="start"
+        android:textSize="15sp"
+        android:padding="@dimen/big_corner"
+        android:hint="输入投票主题，2-30字"
+        android:layout_marginTop="@dimen/big_spacing"
+        android:background="@color/accent_white"/>
+
+    <com.gongyunhao.nowmeeting.view.FlowLayout
+        android:layout_marginTop="@dimen/big_spacing"
+        android:id="@+id/flowlayout"
+        android:padding="@dimen/corner"
+        android:background="@color/accent_white"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/line"
+        android:layout_marginLeft="@dimen/status_height"
+        android:layout_marginRight="@dimen/status_height"
+        android:background="@color/accent_gray"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:background="@color/accent_white">
+
+        <EditText
+            android:id="@+id/et_add_vote_item"
+            android:layout_weight="1"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:maxLength="15"
+            android:background="@color/accent_white"
+            android:hint="输入投票选项"
+            android:textSize="15sp"
+            android:padding="@dimen/corner"
+            android:layout_margin="@dimen/big_corner"/>
+
+        <Button
+            android:id="@+id/btn_add_vote_item"
+            android:layout_width="70dp"
+            android:layout_height="32dp"
+            android:background="@drawable/shape_cavity"
+            android:layout_margin="@dimen/corner"
+            android:text="添加"
+            android:textColor="@color/accent_blue"/>
+
+    </LinearLayout>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="最多支持12个选项，每个选项不超过15字"
+        android:padding="@dimen/corner"/>
+
+    <LinearLayout
+        android:layout_marginTop="16dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/accent_white"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:id="@+id/linear_add_vote_type"
+            android:layout_width="match_parent"
+            android:layout_height="45dp"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_weight="1"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:textSize="15sp"
+                android:gravity="center|start"
+                android:paddingLeft="@dimen/fab_margin"
+                android:text="投票类型"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:padding="@dimen/corner"
+                tools:text="单选"
+                android:textColor="@color/accent_black"
+                android:gravity="center"
+                android:textSize="15sp"
+                android:drawableRight="@drawable/ic_arrow_right_gray_24dp"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="45dp"
+            android:orientation="horizontal"
+            android:id="@+id/linear_add_vote_deadline">
+
+            <TextView
+                android:layout_weight="1"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:textSize="15sp"
+                android:gravity="center|start"
+                android:paddingLeft="@dimen/fab_margin"
+                android:text="结束时间"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                tools:text="2018-04-08 21:38"
+                android:textColor="@color/accent_black"
+                android:padding="@dimen/corner"
+                android:gravity="center"
+                android:textSize="15sp"
+                android:drawableRight="@drawable/ic_arrow_right_gray_24dp"/>
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <Button
+        android:id="@+id/btn_create_vote_publish"
+        android:layout_marginTop="24dp"
+        android:background="@drawable/selector_button_blue"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginRight="12dp"
+        android:layout_marginLeft="12dp"
+        android:enabled="false"
+        android:textColor="@color/accent_blue"
+        android:text="发布投票"/>
+
+</LinearLayout>
