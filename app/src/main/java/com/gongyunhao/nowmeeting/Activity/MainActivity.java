@@ -109,17 +109,17 @@ public class MainActivity extends BaseActivity {
                     }
 
                     if ((position + positionOffset) >= 1) {
-                        Log.d("MainActivity", "---->开始设置imageButton透明");
+//                        Log.d("MainActivity", "---->开始设置imageButton透明");
                         imageButtonSearch.setAlpha(2 - (position + positionOffset));
                     } else if ((position + positionOffset) == 2) {
                         imageButtonSearch.setVisibility(View.GONE);
                     } else if ((position + positionOffset) == 0) {
                         imageButtonSearch.setAlpha((float)1);
                         imageButtonSearch.setVisibility(View.VISIBLE);
-                        Log.d("MainActivity","---->使imageButton可见");
+                    //    Log.d("MainActivity","---->使imageButton可见");
                     }
                     //positionOffset 是百分比
-                    Log.d("MainActivity", "---->position:" + position + "  positionOffset:" + positionOffset);
+                   // Log.d("MainActivity", "---->position:" + position + "  positionOffset:" + positionOffset);
                 }
 
             @Override

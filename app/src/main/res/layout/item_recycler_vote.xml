@@ -1,23 +1,69 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
+<android.support.v7.widget.CardView
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    app:cardCornerRadius="8dp"
+    app:cardElevation="6dp"
+    app:cardMaxElevation="16dp"
+    app:cardUseCompatPadding="true">
 
-    <com.github.mikephil.charting.charts.PieChart
-        android:layout_marginTop="45dp"
-        android:id="@+id/pieChart"
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="320dp"/>
+        android:layout_height="match_parent">
 
-    <TextView
-        android:layout_marginTop="25dp"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="获得投票最多为：海南"
-        android:gravity="center"
-        android:textSize="22sp"
-        />
+        <TextView
+            android:id="@+id/mitem_title_vote"
+            android:layout_margin="22dp"
+            android:textSize="17sp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="你喜欢哪个天气？"/>
 
-</LinearLayout>
+        <ImageView
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:layout_alignParentRight="true"
+            android:layout_margin="6dp"
+            android:background="@drawable/completed"/>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/line"
+            android:layout_marginLeft="25dp"
+            android:layout_marginRight="25dp"
+            android:background="@color/accent_orange"
+            android:layout_below="@id/mitem_title_vote"/>
+
+        <com.github.mikephil.charting.charts.PieChart
+            android:layout_marginTop="24dp"
+            android:id="@+id/pieChart"
+            android:layout_width="match_parent"
+            android:layout_height="220dp"
+            android:layout_below="@id/mitem_title_vote"/>
+
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/pieChart">
+
+        <TextView
+            android:layout_marginTop="18dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="总投票人数：100人\n\n晴天 支持率：40%\n雨 支持率：26%\n阴 支持率：34%"
+            android:gravity="start"
+            android:layout_margin="12dp"
+            android:lineSpacingExtra="@dimen/card_elevation"
+            android:padding="12dp"
+            android:textSize="15sp"
+            />
+
+    </ScrollView>
+</RelativeLayout>
+
+</android.support.v7.widget.CardView>

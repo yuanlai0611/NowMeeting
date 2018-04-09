@@ -13,7 +13,6 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-
         <activity android:name=".Activity.MainActivity">
         </activity>
         <activity android:name=".Activity.LoginActivity">
@@ -34,6 +33,16 @@
         <activity android:name=".Activity.ScanActivity">
         </activity>
         <activity android:name=".Activity.PieChartActivity">
+        </activity>
+        <activity android:name=".Activity.MeetingDetailNoJoinActivity">
+        </activity>
+        <activity android:name=".Activity.AddFriendActivity">
+        </activity>
+        <activity android:name=".Activity.CreateVoteActivity">
+        </activity>
+        <activity android:name=".Activity.CreateMeetingActivity">
+        </activity>
+        <activity android:name=".Activity.SubmitVoteActivity">
         </activity>
     </application>
 

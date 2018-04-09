@@ -90,18 +90,18 @@ public class PieChartAdapter extends RecyclerView.Adapter<PieChartAdapter.ViewHo
         holder.pieChart.setHighlightPerTapEnabled(true);
 
         //设置数据
-        PieDataSet dataSet = new PieDataSet(mpiedata, mVoteName.get( position ));
+        PieDataSet dataSet = new PieDataSet(mpiedata, "");
         dataSet.setSliceSpace(3f);
         dataSet.setSelectionShift(5f);
 
         //数据和颜色
         ArrayList<Integer> colors = new ArrayList<Integer>();
-        for (int c : ColorTemplate.JOYFUL_COLORS)
-            colors.add(c);
-        for (int c : ColorTemplate.COLORFUL_COLORS)
-            colors.add(c);
-        for (int c : ColorTemplate.LIBERTY_COLORS)
-            colors.add(c);
+//        for (int c : ColorTemplate.JOYFUL_COLORS)
+//            colors.add(c);
+//        for (int c : ColorTemplate.COLORFUL_COLORS)
+//            colors.add(c);
+//        for (int c : ColorTemplate.LIBERTY_COLORS)
+//            colors.add(c);
         for (int c : ColorTemplate.PASTEL_COLORS)
             colors.add(c);
         colors.add( ColorTemplate.getHoloBlue());
