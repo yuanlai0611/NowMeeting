@@ -81,6 +81,7 @@ public class MeetingRecyclerviewAdapter extends RecyclerView.Adapter<RecyclerVie
         LinearLayout linearLayoutMeetingType;
         ImageView imageViewMeetingType;
         TextView textViewMeetingTypeName;
+
         public MeetingViewHolder(View view){
 
             super(view);

@@ -13,25 +13,43 @@ import com.gongyunhao.nowmeeting.bean.LotteryItem;
 
 import java.util.List;
 
-public class LotteryRecyclerviewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+public class LotteryRecyclerviewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> implements View.OnClickListener{
 
     private Context context;
 
     private List<LotteryItem> lotteryItemList;
+
+    private OnItemClickListener onItemClickListener = null;
 
     public LotteryRecyclerviewAdapter(Context context,List<LotteryItem> lotteryItemList){
         this.context = context;
         this.lotteryItemList = lotteryItemList;
     }
 
+    public interface OnItemClickListener{
+        void onItemClick(View view,int position);
+    }
+
+    public void setmOnItemClickListener(OnItemClickListener listener){
+        this.onItemClickListener = listener;
+    }
+
+    @Override
+    public void onClick(View v) {
+        onItemClickListener.onItemClick(v,(int)v.getTag());
+    }
+
+
 
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         if(viewType==1){
             View view = LayoutInflater.from(context).inflate(R.layout.item_lottery_more,parent,false);
+            view.setOnClickListener(this);
             return new LotteryMoreViewHolder(view);
         }else if (viewType==2){
             View view = LayoutInflater.from(context).inflate(R.layout.item_lottery_picture,parent,false);
+            view.setOnClickListener(this);
             return new LotteryViewHolder(view);
         }
         return null;
@@ -42,13 +60,10 @@ public class LotteryRecyclerviewAdapter extends RecyclerView.Adapter<RecyclerVie
 
         if (holder instanceof LotteryViewHolder){
             LotteryViewHolder lotteryViewHolder = (LotteryViewHolder)holder;
-            if (position%3==0){
-               lotteryViewHolder.imageViewLottery.setImageResource(R.drawable.lottery_picture_pink);
-            }else if (position%3==1){
-               lotteryViewHolder.imageViewLottery.setImageResource(R.drawable.lottery_picture_yellow);
-            }else {
-               lotteryViewHolder.imageViewLottery.setImageResource(R.drawable.lottery_picture_blue);
-            }
+            lotteryViewHolder.lotteryView.setTag(position);
+        }else {
+            LotteryMoreViewHolder lotteryMoreViewHolder = (LotteryMoreViewHolder)holder;
+            lotteryMoreViewHolder.lotteryMoreView.setTag(position);
         }
 
     }
@@ -66,14 +81,13 @@ public class LotteryRecyclerviewAdapter extends RecyclerView.Adapter<RecyclerVie
 
     class LotteryViewHolder extends RecyclerView.ViewHolder{
 
-        ImageView imageViewLottery;
+
         View lotteryView;
-        TextView textViewLotteryTime;
+
         public LotteryViewHolder(View view){
             super(view);
             lotteryView = view;
-            textViewLotteryTime = (TextView)view.findViewById(R.id.lottery_time);
-            imageViewLottery = (ImageView)view.findViewById(R.id.lottery_picture);
+
         }
 
     }

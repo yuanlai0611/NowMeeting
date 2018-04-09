@@ -1,0 +1,215 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".Activity.LotteryEditActivity"
+    android:background="@color/about_me_background">
+
+    <include
+        layout="@layout/title_lottery_edit"/>
+
+
+        <View
+            android:layout_marginTop="20dp"
+            android:background="#bfbfbf"
+            android:layout_width="match_parent"
+            android:layout_height="0.1dp"/>
+        <EditText
+            android:focusedByDefault="false"
+            android:focusableInTouchMode="true"
+            android:id="@+id/lottery_theme"
+            android:gravity="start"
+            android:hint="输入抽奖的主题，2-80分钟"
+            android:padding="10dp"
+            android:background="@color/accent_white"
+            android:layout_width="match_parent"
+            android:layout_height="100dp" />
+        <View
+            android:background="#bfbfbf"
+            android:layout_width="match_parent"
+            android:layout_height="0.1dp"/>
+
+        <TextView
+            android:layout_marginLeft="10dp"
+            android:textSize="14sp"
+            android:layout_marginTop="15dp"
+            android:text="设置一等奖"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+        <View
+            android:layout_marginTop="5dp"
+            android:background="#bfbfbf"
+            android:layout_width="match_parent"
+            android:layout_height="0.1dp"/>
+
+        <LinearLayout
+            android:background="@color/accent_white"
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <EditText
+                android:background="@color/accent_white"
+                android:focusedByDefault="false"
+                android:focusableInTouchMode="true"
+                android:hint="奖品"
+                android:id="@+id/first_award"
+                android:paddingLeft="5dp"
+                android:layout_marginLeft="40dp"
+                android:layout_width="match_parent"
+                android:layout_height="40dp" />
+
+            <View
+                android:layout_marginLeft="40dp"
+                android:background="@color/text_color"
+                android:layout_width="match_parent"
+                android:layout_height="0.1dp"/>
+
+            <EditText
+                android:background="@color/accent_white"
+                android:focusedByDefault="false"
+                android:focusableInTouchMode="true"
+                android:hint="获奖人数"
+                android:id="@+id/first_number"
+                android:paddingLeft="5dp"
+                android:layout_marginLeft="40dp"
+                android:layout_width="match_parent"
+                android:layout_height="40dp" />
+
+        </LinearLayout>
+
+        <View
+            android:background="#bfbfbf"
+            android:layout_width="match_parent"
+            android:layout_height="0.1dp"/>
+
+        <TextView
+            android:layout_marginLeft="10dp"
+            android:textSize="14sp"
+            android:layout_marginTop="15dp"
+            android:text="设置二等奖"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+        <View
+            android:layout_marginTop="5dp"
+            android:background="#bfbfbf"
+            android:layout_width="match_parent"
+            android:layout_height="0.1dp"/>
+
+        <LinearLayout
+            android:background="@color/accent_white"
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <EditText
+                android:background="@color/accent_white"
+                android:focusedByDefault="false"
+                android:focusableInTouchMode="true"
+                android:hint="奖品"
+                android:id="@+id/second_award"
+                android:paddingLeft="5dp"
+                android:layout_marginLeft="40dp"
+                android:layout_width="match_parent"
+                android:layout_height="40dp" />
+
+            <View
+                android:layout_marginLeft="40dp"
+                android:background="@color/text_color"
+                android:layout_width="match_parent"
+                android:layout_height="0.1dp"/>
+
+            <EditText
+                android:background="@color/accent_white"
+                android:focusedByDefault="false"
+                android:focusableInTouchMode="true"
+                android:hint="获奖人数"
+                android:id="@+id/second_number"
+                android:paddingLeft="5dp"
+                android:layout_marginLeft="40dp"
+                android:layout_width="match_parent"
+                android:layout_height="40dp" />
+
+        </LinearLayout>
+
+        <View
+            android:background="#bfbfbf"
+            android:layout_width="match_parent"
+            android:layout_height="0.1dp"/>
+
+        <TextView
+            android:layout_marginLeft="10dp"
+            android:textSize="14sp"
+            android:layout_marginTop="15dp"
+            android:text="设置三等奖"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+        <View
+            android:layout_marginTop="5dp"
+            android:background="#bfbfbf"
+            android:layout_width="match_parent"
+            android:layout_height="0.1dp"/>
+
+        <LinearLayout
+            android:background="@color/accent_white"
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <EditText
+                android:background="@color/accent_white"
+                android:focusedByDefault="false"
+                android:focusableInTouchMode="true"
+                android:hint="奖品"
+                android:id="@+id/third_award"
+                android:paddingLeft="5dp"
+                android:layout_marginLeft="40dp"
+                android:layout_width="match_parent"
+                android:layout_height="40dp" />
+
+            <View
+                android:layout_marginLeft="40dp"
+                android:background="@color/text_color"
+                android:layout_width="match_parent"
+                android:layout_height="0.1dp"/>
+
+            <EditText
+                android:background="@color/accent_white"
+                android:focusedByDefault="false"
+                android:focusableInTouchMode="true"
+                android:hint="获奖人数"
+                android:id="@+id/third_number"
+                android:paddingLeft="5dp"
+                android:layout_marginLeft="40dp"
+                android:layout_width="match_parent"
+                android:layout_height="40dp" />
+
+        </LinearLayout>
+
+        <View
+            android:background="#bfbfbf"
+            android:layout_width="match_parent"
+            android:layout_height="0.1dp"/>
+
+        <TextView
+            android:paddingRight="15dp"
+            android:paddingLeft="15dp"
+            android:text="提示说明：按顺序填写奖项信息，如果只想设置一种奖项，则设置一等奖即可，依次类推"
+            android:layout_marginTop="20dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+
+
+
+
+
+
+</LinearLayout>
