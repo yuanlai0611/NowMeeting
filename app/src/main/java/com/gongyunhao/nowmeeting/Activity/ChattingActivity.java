@@ -29,8 +29,13 @@ import com.gongyunhao.nowmeeting.util.KeyBoardUtils;
 import java.util.ArrayList;
 import java.util.List;
 
+import io.github.rockerhieu.emojicon.EmojiconEditText;
+import io.github.rockerhieu.emojicon.EmojiconGridFragment;
+import io.github.rockerhieu.emojicon.EmojiconsFragment;
+import io.github.rockerhieu.emojicon.emoji.Emojicon;
 
-public class ChattingActivity extends BaseActivity implements KeyBoardObserver {
+
+public class ChattingActivity extends BaseActivity implements KeyBoardObserver,EmojiconGridFragment.OnEmojiconClickedListener, EmojiconsFragment.OnEmojiconBackspaceClickedListener{
     private ImageButton ib_back,ib_more_emoji;
     private List<ChattingItem> chattingItems;
     private Context mContext;
@@ -38,8 +43,8 @@ public class ChattingActivity extends BaseActivity implements KeyBoardObserver {
 
     private MeasureLinearLayout rootLayout;
     private SwipeRefreshLayout swipeLayout;
-    private EditText et_chatting;
     private LinearLayout pannel;
+    private EmojiconEditText mEditEmojicon;
 
     private boolean isEmoji=false;
 
@@ -56,6 +61,7 @@ public class ChattingActivity extends BaseActivity implements KeyBoardObserver {
                 finish();
             }
         } );
+        setEmojiconFragment(false);
 
         //初始化高度，和软键盘一致，初值为手机高度一半
         pannel.getLayoutParams().height = SharePrefenceUtils.getKeyBoardHeight(this);
@@ -70,8 +76,8 @@ public class ChattingActivity extends BaseActivity implements KeyBoardObserver {
                     if (rootLayout.getKeyBoardObservable().isKeyBoardVisibile()) {
                         //当前软键盘为 挂起状态
                         //隐藏软键盘并显示面板
-                        et_chatting.clearFocus();
-                        KeyBoardUtils.hideKeyboard(et_chatting);
+                        mEditEmojicon.clearFocus();
+                        KeyBoardUtils.hideKeyboard(mEditEmojicon);
                     } else {
                         //显示面板
                         pannel.setVisibility(View.VISIBLE);
@@ -79,8 +85,8 @@ public class ChattingActivity extends BaseActivity implements KeyBoardObserver {
                 } else {
                     //想要关闭面板
                     //挂起软键盘，并隐藏面板
-                    et_chatting.requestFocus();
-                    KeyBoardUtils.showKeyboard(et_chatting);
+                    mEditEmojicon.requestFocus();
+                    KeyBoardUtils.showKeyboard(mEditEmojicon);
                 }
             }
         });
@@ -93,8 +99,8 @@ public class ChattingActivity extends BaseActivity implements KeyBoardObserver {
                         pannel.setVisibility(View.GONE);
                         isEmoji=false;
                     } else {
-                        et_chatting.clearFocus();
-                        KeyBoardUtils.hideKeyboard(et_chatting);
+                        mEditEmojicon.clearFocus();
+                        KeyBoardUtils.hideKeyboard(mEditEmojicon);
                     }
                 }
                 return false;
@@ -107,6 +113,25 @@ public class ChattingActivity extends BaseActivity implements KeyBoardObserver {
             }
         });
 
+    }
+
+    //EmojiconsFragment表情显示的fragment
+    private void setEmojiconFragment(boolean useSystemDefault) {
+        getSupportFragmentManager()
+                .beginTransaction()
+                .replace(R.id.emojicons, EmojiconsFragment.newInstance(useSystemDefault))
+                .commit();
+    }
+
+    //表情点击回调
+    @Override
+    public void onEmojiconClicked(Emojicon emojicon) {
+        EmojiconsFragment.input(mEditEmojicon, emojicon);
+    }
+    //删除表情点击回调
+    @Override
+    public void onEmojiconBackspaceClicked(View v) {
+        EmojiconsFragment.backspace(mEditEmojicon);
     }
 
     @Override
@@ -123,11 +148,11 @@ public class ChattingActivity extends BaseActivity implements KeyBoardObserver {
         ChattingRecyclerviewAdapter chattingRecyclerviewAdapter = new ChattingRecyclerviewAdapter(mContext,chattingItems);
         recyclerView.setAdapter(chattingRecyclerviewAdapter);
 
-        rootLayout = (MeasureLinearLayout) findViewById(R.id.root_layout);
-        swipeLayout = (SwipeRefreshLayout) findViewById(R.id.swipe_layout);
-        et_chatting=findViewById( R.id.et_chatting );
-        pannel = (LinearLayout) findViewById(R.id.pannel);
+        rootLayout =findViewById(R.id.root_layout);
+        swipeLayout =findViewById(R.id.swipe_layout);
+        pannel =findViewById(R.id.pannel);
         ib_more_emoji=findViewById( R.id.ib_chatting_more_emoji );
+        mEditEmojicon=findViewById( R.id.et_chatting );
 
     }
 
