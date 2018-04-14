@@ -92,6 +92,7 @@ public class ChattingActivity extends BaseActivity implements View.OnTouchListen
                 finish();
                 break;
             case R.id.send:
+                
                 messageContent = editTextContent.getText().toString();
                 Message message = conversation.createSendMessage(new TextContent(messageContent));
                 message.setOnSendCompleteCallback(new  BasicCallback() {
