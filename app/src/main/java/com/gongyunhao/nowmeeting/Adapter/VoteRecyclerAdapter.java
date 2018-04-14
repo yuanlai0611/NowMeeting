@@ -53,35 +53,35 @@ public class VoteRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
 
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        if(viewType==1){
-            View view = LayoutInflater.from(context).inflate( R.layout.item_lottery_more,parent,false);
-            return new VoteMoreViewHolder(view);
-        }else if (viewType==2){
+//        if(viewType==1){
+//            View view = LayoutInflater.from(context).inflate( R.layout.item_lottery_more,parent,false);
+//            return new VoteMoreViewHolder(view);
+//        }else if (viewType==2){
             View view = LayoutInflater.from(context).inflate(R.layout.item_small_vote,parent,false);
-            return new VoteMoreViewHolder(view);
-        }
-        return null;
+            return new VoteViewHolder(view);
+//        }
+//        return null;
     }
 
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
-        if (holder instanceof VoteViewHolder){
+//        if (holder instanceof VoteViewHolder){
             VoteViewHolder voteViewHolder = (VoteViewHolder)holder;
 
-        }else if (holder instanceof VoteMoreViewHolder){
-            VoteMoreViewHolder voteMoreViewHolder=(VoteMoreViewHolder) holder;
-        }
+//        }else if (holder instanceof VoteMoreViewHolder){
+//            VoteMoreViewHolder voteMoreViewHolder=(VoteMoreViewHolder) holder;
+//        }
 
     }
 
-    @Override
-    public int getItemViewType(int position) {
-        if(position+1==VoteItemList.size()){
-            return 1;//末尾的显示更多type
-        }else{
-            return 2;//前面的正常item项type
-        }
-    }
+//    @Override
+//    public int getItemViewType(int position) {
+//        if(position+1==VoteItemList.size()){
+//            return 1;//末尾的显示更多type
+//        }else{
+//            return 2;//前面的正常item项type
+//        }
+//    }
 
     class VoteViewHolder extends RecyclerView.ViewHolder{
 
@@ -97,15 +97,15 @@ public class VoteRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
 
     }
 
-    class VoteMoreViewHolder extends RecyclerView.ViewHolder{
-
-        View VoteMoreView;
-        public VoteMoreViewHolder(View view){
-            super(view);
-            VoteMoreView = view;
-        }
-
-    }
+//    class VoteMoreViewHolder extends RecyclerView.ViewHolder{
+//
+//        View VoteMoreView;
+//        public VoteMoreViewHolder(View view){
+//            super(view);
+//            VoteMoreView = view;
+//        }
+//
+//    }
 
     @Override
     public int getItemCount() {

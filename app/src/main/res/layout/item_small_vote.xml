@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.v7.widget.CardView
     xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="180dp"
-    android:layout_height="120dp"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    app:cardCornerRadius="@dimen/big_corner"
-    android:layout_margin="@dimen/big_corner">
+    app:cardCornerRadius="10dp"
+    android:layout_width="250dp"
+    android:layout_height="160dp"
+    android:layout_margin="6dp"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -14,29 +14,56 @@
 
         <TextView
             android:id="@+id/tv_item_vote_small_name"
-            android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:textSize="18sp"
+            android:textColor="@color/text_color"
+            android:padding="5dp"
+            android:textStyle="bold"
+            android:layout_width="match_parent"
             android:ellipsize="end"
             android:maxLines="2"
             android:minLines="2"
-            android:text="投票选择你喜欢的天气"
-            android:textColor="@color/accent_black"
-            android:textSize="15sp"
-            android:padding="@dimen/corner"/>
+            android:text="投票选择你喜欢的天气"/>
 
         <TextView
             android:id="@+id/tv_item_vote_small_date"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:textColor="@color/accent_black"
             android:textSize="14sp"
             android:paddingLeft="12dp"
             android:text="2018-04-08 20:30"/>
 
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:layout_marginLeft="8dp"
+                android:layout_width="24dp"
+                android:layout_height="26dp"
+                android:layout_gravity="center_vertical"
+                android:src="@drawable/ic_vote_small_voteitem"/>
+
+            <TextView
+                android:id="@+id/tv_item_vote_small_voteitem"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="14sp"
+                android:layout_gravity="center_vertical"
+                android:paddingLeft="12dp"
+                android:paddingTop="@dimen/corner"
+                android:text="晴天，雨天，大雪..."/>
+
+        </LinearLayout>
+
         <TextView
+            android:layout_marginTop="8dp"
             android:id="@+id/tv_item_vote_small_organizer"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textSize="13sp"
+            android:textSize="15sp"
             android:paddingLeft="12dp"
             android:paddingTop="@dimen/corner"
         android:text="发起者：龚云浩"/>

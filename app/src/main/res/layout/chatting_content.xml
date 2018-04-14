@@ -49,6 +49,7 @@
                 android:layout_marginBottom="5dp"
                 android:layout_marginTop="5dp"
                 android:layout_marginLeft="6dp"
+                android:layout_marginRight="@dimen/corner"
                 android:paddingRight="8dp"
                 android:paddingBottom="6dp"
                 android:paddingTop="6dp"
@@ -63,28 +64,120 @@
                 android:id="@+id/ib_chatting_more_emoji"
                 android:layout_marginRight="5dp"
                 android:layout_gravity="center"
+                android:background="@drawable/ic_emoji"
+                android:layout_width="36dp"
+                android:layout_height="36dp" />
+
+            <ImageButton
+                android:id="@+id/ib_chatting_more_function"
+                android:layout_marginRight="5dp"
+                android:layout_gravity="center"
                 android:background="@drawable/ic_add_blue_24dp"
                 android:layout_width="36dp"
                 android:layout_height="36dp" />
 
-            <Button
-                android:layout_width="60dp"
-                android:layout_height="32dp"
-                android:text="发送"
-                android:textSize="13sp"
-                android:layout_marginRight="@dimen/corner"
-                android:background="@drawable/shape_fill_blue"
-                android:textColor="@color/accent_white"/>
-
         </LinearLayout>
 
-        <LinearLayout
+        <FrameLayout
             android:id="@+id/pannel"
             android:layout_width="match_parent"
             android:layout_height="200dp"
             android:gravity="center"
-            android:visibility="gone"
-            android:orientation="vertical">
+            android:visibility="gone">
+
+            <LinearLayout
+                android:id="@+id/linear_more_function"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal"
+                android:visibility="gone">
+
+                <LinearLayout
+                    android:layout_marginTop="8dp"
+                    android:layout_weight="1"
+                    android:layout_width="70dp"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <ImageView
+                        android:layout_width="match_parent"
+                        android:layout_height="70dp"
+                        android:src="@drawable/ic_lottery"/>
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:layout_gravity="center"
+                        android:text="抽奖"/>
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_marginTop="8dp"
+                    android:layout_weight="1"
+                    android:layout_width="70dp"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <ImageView
+                        android:layout_width="match_parent"
+                        android:layout_height="70dp"
+                        android:src="@drawable/ic_vote"/>
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:layout_gravity="center"
+                        android:text="抽奖"/>
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_marginTop="8dp"
+                    android:layout_weight="1"
+                    android:layout_width="70dp"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <ImageView
+                        android:layout_width="match_parent"
+                        android:layout_height="70dp"
+                        android:src="@drawable/ic_picture"/>
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:layout_gravity="center"
+                        android:text="选择图片"/>
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_marginTop="8dp"
+                    android:layout_weight="1"
+                    android:layout_marginRight="12dp"
+                    android:layout_width="45dp"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <ImageView
+                        android:layout_width="match_parent"
+                        android:layout_height="70dp"
+                        android:src="@drawable/ic_photo"/>
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:layout_gravity="center"
+                        android:text="拍照"/>
+
+                </LinearLayout>
+
+            </LinearLayout>
 
             <FrameLayout
                 android:id="@+id/emojicons"
@@ -93,8 +186,7 @@
 
             </FrameLayout>
 
-
-        </LinearLayout>
+        </FrameLayout>
     </LinearLayout>
 
 </LinearLayout>

@@ -39,7 +39,9 @@ public class MeetingDetailNoJoinActivity extends BaseActivity implements View.On
 
         //自定义FoldTextView测试文字
         MyFoldTextView myFoldTextView=findViewById( R.id.ftv_meeting_detail );
-        myFoldTextView.setText( "棒棒糖（lollipop）发明人恩里克。\n");
+        myFoldTextView.setText( "1758年，闻名世界的棒棒糖（lollipop）的发明人恩里克·伯纳特·丰利亚多萨，首次推出这种带棍的糖果，结果使一家几乎经营不下去的糖果公司扭亏为盈。\n" +
+                "对于一些人来说，在嘴里含着一颗糖果，糖果的棍从嘴唇间露出来，已经成为一种时髦而有趣的标志。\n" +
+                "生产棒棒糖（lollipop）的这家西班牙家族公司每年生产40亿只棒棒糖。在全世界拥有许多分公司和工厂，雇佣了将近2000人。他们生产的棒棒糖超过50多个品种，其中包括一种专门针对墨西哥市场的辣味棒棒糖。");
 
         add_friend.setOnClickListener( this );
     }

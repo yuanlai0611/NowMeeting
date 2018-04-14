@@ -35,9 +35,6 @@ public class LoginActivity extends BaseActivity {
         btn_login.setOnClickListener( this );
         textView_signin.setOnClickListener( this );
 
-
-
-
     }
 
 

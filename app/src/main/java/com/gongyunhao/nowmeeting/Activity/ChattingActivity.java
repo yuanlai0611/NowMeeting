@@ -14,6 +14,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 
@@ -36,15 +37,16 @@ import io.github.rockerhieu.emojicon.emoji.Emojicon;
 
 
 public class ChattingActivity extends BaseActivity implements KeyBoardObserver,EmojiconGridFragment.OnEmojiconClickedListener, EmojiconsFragment.OnEmojiconBackspaceClickedListener{
-    private ImageButton ib_back,ib_more_emoji;
+    private ImageButton ib_back,ib_more_emoji,ib_more_function;
     private List<ChattingItem> chattingItems;
     private Context mContext;
     private RecyclerView recyclerView;
 
     private MeasureLinearLayout rootLayout;
     private SwipeRefreshLayout swipeLayout;
-    private LinearLayout pannel;
+    private FrameLayout pannel,emojiframe;
     private EmojiconEditText mEditEmojicon;
+    private LinearLayout linear_more_function;
 
     private boolean isEmoji=false;
 
@@ -67,6 +69,34 @@ public class ChattingActivity extends BaseActivity implements KeyBoardObserver,E
         pannel.getLayoutParams().height = SharePrefenceUtils.getKeyBoardHeight(this);
         rootLayout.getKeyBoardObservable().register(this);
 
+        ib_more_function.setOnClickListener( new View.OnClickListener( ) {
+            @Override
+            public void onClick(View view) {
+                if (isEmoji) {
+                    //想要显示面板
+                    if (rootLayout.getKeyBoardObservable().isKeyBoardVisibile()) {
+                        //当前软键盘为 挂起状态
+                        //隐藏软键盘并显示面板
+                        mEditEmojicon.clearFocus();
+                        KeyBoardUtils.hideKeyboard(mEditEmojicon);
+                    } else {
+                        //显示面板
+                        pannel.setVisibility(View.VISIBLE);
+                        linear_more_function.setVisibility( View.VISIBLE );
+                        emojiframe.setVisibility( View.GONE );
+                    }
+                    isEmoji=!isEmoji;
+                } else {
+                    //想要关闭面板
+                    //挂起软键盘，并隐藏面板
+                    mEditEmojicon.requestFocus();
+                    KeyBoardUtils.showKeyboard(mEditEmojicon);
+                    isEmoji=!isEmoji;
+
+                }
+            }
+        } );
+
         ib_more_emoji.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -81,6 +111,8 @@ public class ChattingActivity extends BaseActivity implements KeyBoardObserver,E
                     } else {
                         //显示面板
                         pannel.setVisibility(View.VISIBLE);
+                        linear_more_function.setVisibility( View.GONE );
+                        emojiframe.setVisibility( View.VISIBLE );
                     }
                 } else {
                     //想要关闭面板
@@ -109,6 +141,7 @@ public class ChattingActivity extends BaseActivity implements KeyBoardObserver,E
         swipeLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
+
                 swipeLayout.setRefreshing(false);
             }
         });
@@ -150,6 +183,9 @@ public class ChattingActivity extends BaseActivity implements KeyBoardObserver,E
 
         rootLayout =findViewById(R.id.root_layout);
         swipeLayout =findViewById(R.id.swipe_layout);
+        linear_more_function=findViewById( R.id.linear_more_function );
+        ib_more_function=findViewById( R.id.ib_chatting_more_function );
+        emojiframe=findViewById( R.id.emojicons );
         pannel =findViewById(R.id.pannel);
         ib_more_emoji=findViewById( R.id.ib_chatting_more_emoji );
         mEditEmojicon=findViewById( R.id.et_chatting );
@@ -188,7 +224,6 @@ public class ChattingActivity extends BaseActivity implements KeyBoardObserver,E
             //软键盘挂起
             pannel.setVisibility(View.GONE);
             isEmoji=false;
-
         } else {
             //回复原样
             if (isEmoji) {
