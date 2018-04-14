@@ -52,6 +52,7 @@
                 android:layout_marginRight="@dimen/corner"
                 android:paddingRight="8dp"
                 android:paddingBottom="6dp"
+                android:singleLine="true"
                 android:paddingTop="6dp"
                 android:background="@drawable/edit_text"
                 android:layout_width="match_parent"

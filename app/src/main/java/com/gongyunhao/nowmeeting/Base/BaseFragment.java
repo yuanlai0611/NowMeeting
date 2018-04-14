@@ -9,6 +9,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import cn.jpush.im.android.api.JMessageClient;
+
 /**
  * Created by yuanyuanlai on 2018/3/7.
  */
@@ -52,11 +54,18 @@ abstract public class BaseFragment extends Fragment {
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+//        JMessageClient.registerEventReceiver(this);
         Log.d(Tag,"----> onViewCreated");
     }
 
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+//        JMessageClient.unRegisterEventReceiver(this);
+    }
 
-//
+
+    //
 //    @Override
 //    public void onViewStateRestored(@Nullable Bundle savedInstanceState) {
 //        super.onViewStateRestored(savedInstanceState);

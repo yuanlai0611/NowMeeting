@@ -1,35 +1,19 @@
 package com.gongyunhao.nowmeeting.Activity;
 
-import android.content.Intent;
 import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
-import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.resource.bitmap.CenterCrop;
 import com.bumptech.glide.request.RequestOptions;
-import com.github.mikephil.charting.animation.Easing;
-import com.github.mikephil.charting.charts.PieChart;
-import com.github.mikephil.charting.components.Legend;
-import com.github.mikephil.charting.data.Entry;
-import com.github.mikephil.charting.data.PieData;
-import com.github.mikephil.charting.data.PieDataSet;
-import com.github.mikephil.charting.data.PieEntry;
-import com.github.mikephil.charting.formatter.PercentFormatter;
-import com.github.mikephil.charting.highlight.Highlight;
-import com.github.mikephil.charting.listener.OnChartValueSelectedListener;
-import com.github.mikephil.charting.utils.ColorTemplate;
 import com.gongyunhao.nowmeeting.Adapter.LotteryRecyclerviewAdapter;
 import com.gongyunhao.nowmeeting.Adapter.UserRecyclerviewAdapter;
 import com.gongyunhao.nowmeeting.Adapter.VoteRecyclerAdapter;
@@ -38,10 +22,8 @@ import com.gongyunhao.nowmeeting.R;
 import com.gongyunhao.nowmeeting.bean.LotteryItem;
 import com.gongyunhao.nowmeeting.bean.UserItem;
 import com.gongyunhao.nowmeeting.bean.Voteitem;
-
 import java.util.ArrayList;
 import java.util.List;
-
 import jp.wasabeef.glide.transformations.BlurTransformation;
 
 public class MeetingDetailActivity extends BaseActivity implements View.OnClickListener{
@@ -66,10 +48,6 @@ public class MeetingDetailActivity extends BaseActivity implements View.OnClickL
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate( savedInstanceState );
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
-        setContentView();
-        initData();
-        initViews();
-        initListeners();
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             getWindow().clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
@@ -107,6 +85,7 @@ public class MeetingDetailActivity extends BaseActivity implements View.OnClickL
         recyclerView_lottery.setLayoutManager(linearLayoutManager1);
         lotteryRecyclerviewAdapter = new LotteryRecyclerviewAdapter(this,lotteryItemList);
         recyclerView_lottery.setAdapter(lotteryRecyclerviewAdapter);
+        recyclerView_lottery.setNestedScrollingEnabled(false);
         lotteryRecyclerviewAdapter.setmOnItemClickListener(new LotteryRecyclerviewAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(View view, int position) {
@@ -119,11 +98,13 @@ public class MeetingDetailActivity extends BaseActivity implements View.OnClickL
 
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager( MeetingDetailActivity.this,LinearLayoutManager.HORIZONTAL,false );
         recycler_rough.setLayoutManager(linearLayoutManager);
+        recycler_rough.setNestedScrollingEnabled(false);
         userRecyclerviewAdapter = new UserRecyclerviewAdapter(this,userItems);
         recycler_rough.setAdapter(userRecyclerviewAdapter);
 
         LinearLayoutManager linearLayoutManager2 = new LinearLayoutManager( MeetingDetailActivity.this,LinearLayoutManager.HORIZONTAL,false );
         recycler_vote_small.setLayoutManager(linearLayoutManager2);
+        recycler_vote_small.setNestedScrollingEnabled(false);
         voteRecyclerAdapter = new VoteRecyclerAdapter(this,voteitemList);
         recycler_vote_small.setAdapter(voteRecyclerAdapter);
 

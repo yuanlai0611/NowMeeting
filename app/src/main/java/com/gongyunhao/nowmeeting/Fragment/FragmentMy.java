@@ -1,9 +1,10 @@
 package com.gongyunhao.nowmeeting.Fragment;
 
 import android.content.Context;
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -11,14 +12,17 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 
+import com.gongyunhao.nowmeeting.Activity.LoginActivity;
 import com.gongyunhao.nowmeeting.Adapter.UserRecyclerviewAdapter;
 import com.gongyunhao.nowmeeting.Base.BaseFragment;
 import com.gongyunhao.nowmeeting.R;
 import com.gongyunhao.nowmeeting.bean.UserItem;
-
 import java.util.ArrayList;
 import java.util.List;
+import cn.jpush.im.android.api.JMessageClient;
+
 
 //    ┏┓　   ┏┓
 // ┏━━┛┻━━━━━┛┻ ┓ 
@@ -53,6 +57,7 @@ public class FragmentMy extends BaseFragment{
     private RecyclerView recyclerViewUser;
     private UserRecyclerviewAdapter userRecyclerviewAdapter;
     private List<UserItem> userItems;
+    private LinearLayout linearLayoutLogOut;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -73,6 +78,18 @@ public class FragmentMy extends BaseFragment{
         Log.d(Tag,"---->onCreateView");
         initViews(view);
         setListener();
+        linearLayoutLogOut.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                JMessageClient.logout();
+                SharedPreferences.Editor editor = getActivity().getSharedPreferences("isLogin", Context.MODE_PRIVATE).edit();
+                editor.putBoolean("isLogin",false);
+                editor.apply();
+                Intent intent = new Intent(getActivity(), LoginActivity.class);
+                startActivity(intent);
+                getActivity().finish();
+            }
+        });
         return view;
     }
 
@@ -99,6 +116,7 @@ public class FragmentMy extends BaseFragment{
     protected void initViews(View view) {
 
         recyclerViewUser = (RecyclerView)view.findViewById(R.id.user_recyclerview);
+        linearLayoutLogOut = (LinearLayout)view.findViewById(R.id.linearLayout_log_out);
         recyclerViewUser.setItemAnimator(new DefaultItemAnimator());
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(mContext);
         linearLayoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);

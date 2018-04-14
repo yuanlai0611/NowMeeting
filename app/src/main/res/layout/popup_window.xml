@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:padding="8dp">
+
+    <LinearLayout
+        android:id="@+id/rich_scan"
+        android:orientation="horizontal"
+        android:layout_width="150dp"
+        android:layout_height="40dp">
+
+        <ImageView
+            android:src="@drawable/rich_scan"
+            android:layout_width="25dp"
+            android:layout_height="25dp"
+            android:layout_marginLeft="15dp"
+            android:layout_gravity="center_vertical"/>
+
+        <TextView
+            android:layout_marginLeft="15dp"
+            android:textSize="16sp"
+            android:layout_gravity="center_vertical"
+            android:textColor="#707070"
+            android:text="扫一扫"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/add_friend"
+        android:orientation="horizontal"
+        android:layout_width="150dp"
+        android:layout_height="50dp">
+
+        <ImageView
+            android:src="@drawable/add_friend_gray"
+            android:layout_width="28dp"
+            android:layout_height="28dp"
+            android:layout_marginLeft="15dp"
+            android:layout_gravity="center_vertical"/>
+
+        <TextView
+            android:layout_marginLeft="12dp"
+            android:textSize="16sp"
+            android:layout_gravity="center_vertical"
+            android:textColor="#707070"
+            android:text="添加好友"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/search"
+        android:orientation="horizontal"
+        android:layout_width="150dp"
+        android:layout_height="50dp">
+
+        <ImageView
+            android:src="@drawable/search_gray"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:layout_marginLeft="15dp"
+            android:layout_gravity="center_vertical"/>
+
+        <TextView
+            android:layout_marginLeft="20dp"
+            android:textSize="16sp"
+            android:layout_gravity="center_vertical"
+            android:textColor="#707070"
+            android:text="搜索"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/add_meeting"
+        android:orientation="horizontal"
+        android:layout_width="150dp"
+        android:layout_height="40dp">
+
+        <ImageView
+            android:src="@drawable/add_meeting"
+            android:layout_width="25dp"
+            android:layout_height="25dp"
+            android:layout_marginLeft="15dp"
+            android:layout_gravity="center_vertical"/>
+
+        <TextView
+            android:layout_marginLeft="15dp"
+            android:textSize="16sp"
+            android:layout_gravity="center_vertical"
+            android:textColor="#707070"
+            android:text="添加会议"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+    </LinearLayout>
+
+</LinearLayout>

@@ -1,11 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <com.gongyunhao.nowmeeting.deal.MeasureLinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/root_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    tools:context="com.gongyunhao.nowmeeting.Activity.ChattingActivity"
     android:orientation="vertical">
 
-    <include layout="@layout/chatting_content" />
+    <include layout="@layout/chatting_content"/>
 
 </com.gongyunhao.nowmeeting.deal.MeasureLinearLayout>

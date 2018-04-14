@@ -2,15 +2,19 @@ package com.gongyunhao.nowmeeting.Activity;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
-import android.graphics.Canvas;
 import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.app.AppCompatActivity;
+import android.app.Activity;
+import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
@@ -18,6 +22,15 @@ import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 
+import android.util.Log;
+import android.view.MotionEvent;
+import android.view.View;
+import android.view.inputmethod.InputMethodManager;
+import android.widget.EditText;
+import android.widget.ImageButton;
+import android.widget.LinearLayout;
+import android.widget.TextView;
+import android.widget.Toast;
 import com.gongyunhao.nowmeeting.Adapter.ChattingRecyclerviewAdapter;
 import com.gongyunhao.nowmeeting.Base.BaseActivity;
 import com.gongyunhao.nowmeeting.R;
@@ -29,18 +42,54 @@ import com.gongyunhao.nowmeeting.util.KeyBoardUtils;
 
 import java.util.ArrayList;
 import java.util.List;
+import cn.jpush.im.android.api.JMessageClient;
+import cn.jpush.im.android.api.content.TextContent;
+import cn.jpush.im.android.api.event.MessageEvent;
+import cn.jpush.im.android.api.model.Conversation;
+import cn.jpush.im.android.api.model.Message;
+import cn.jpush.im.android.api.model.UserInfo;
+import cn.jpush.im.android.api.options.MessageSendingOptions;
+import cn.jpush.im.api.BasicCallback;
 
 import io.github.rockerhieu.emojicon.EmojiconEditText;
 import io.github.rockerhieu.emojicon.EmojiconGridFragment;
 import io.github.rockerhieu.emojicon.EmojiconsFragment;
 import io.github.rockerhieu.emojicon.emoji.Emojicon;
 
+import static com.gongyunhao.nowmeeting.Activity.GroupChattingActivity.hideSoftInput;
+import static com.gongyunhao.nowmeeting.Activity.GroupChattingActivity.showSoftInput;
 
-public class ChattingActivity extends BaseActivity implements KeyBoardObserver,EmojiconGridFragment.OnEmojiconClickedListener, EmojiconsFragment.OnEmojiconBackspaceClickedListener{
-    private ImageButton ib_back,ib_more_emoji,ib_more_function;
+
+public class ChattingActivity extends BaseActivity implements View.OnTouchListener,KeyBoardObserver,EmojiconGridFragment.OnEmojiconClickedListener, EmojiconsFragment.OnEmojiconBackspaceClickedListener{
+    private ImageButton ib_more_emoji,ib_more_function;
+
+    private ImageButton imageButtonBack;
+//    private ImageButton imageButtonSend;
+    private EditText editTextContent;
+    private TextView textViewChattingName;
     private List<ChattingItem> chattingItems;
     private Context mContext;
     private RecyclerView recyclerView;
+    private ChattingRecyclerviewAdapter chattingRecyclerviewAdapter;
+    private Conversation conversation;
+    private String userName;
+    private String messageContent;
+    private String myName;
+    private LinearLayout linearLayoutEdit;
+    private Long groupId;
+
+    Handler handler = new Handler(){
+        @Override
+        public void handleMessage(android.os.Message msg) {
+            super.handleMessage(msg);
+            switch (msg.what){
+                case 0:
+                    recyclerView.scrollToPosition(chattingItems.size()-1);
+                    break;
+            }
+        }
+
+    };
 
     private MeasureLinearLayout rootLayout;
     private SwipeRefreshLayout swipeLayout;
@@ -54,15 +103,7 @@ public class ChattingActivity extends BaseActivity implements KeyBoardObserver,E
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView();
-        initData();
-        initViews();
-        ib_back.setOnClickListener( new View.OnClickListener( ) {
-            @Override
-            public void onClick(View view) {
-                finish();
-            }
-        } );
+
         setEmojiconFragment(false);
 
         //初始化高度，和软键盘一致，初值为手机高度一半
@@ -148,6 +189,40 @@ public class ChattingActivity extends BaseActivity implements KeyBoardObserver,E
 
     }
 
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (keyCode==KeyEvent.KEYCODE_ENTER){
+            Log.i("---","搜索操作执行");
+            messageContent = editTextContent.getText().toString();
+            Message message = conversation.createSendMessage(new TextContent(messageContent));
+            message.setOnSendCompleteCallback(new  BasicCallback() {
+                @Override
+                public void gotResult(int responseCode, String responseDesc) {
+                    if (responseCode == 0) {
+                        Log.d(Tag,"---->消息发送成功");
+
+                        ChattingItem chattingItem = new ChattingItem();
+                        chattingItem.setViewType(ChattingItem.RIGHT);
+                        chattingItem.setChattingMessage(messageContent);
+                        chattingItem.setPictureId(R.drawable.head2);
+                        chattingItems.add(chattingItem);
+                        chattingRecyclerviewAdapter.notifyDataSetChanged();
+                        editTextContent.setText("");
+
+                    } else {
+                        Log.d(Tag,"---->消息发送失败");
+                        Toast.makeText(ChattingActivity.this,"消息发送失败",Toast.LENGTH_SHORT).show();
+                    }
+                }
+            });
+            MessageSendingOptions options = new MessageSendingOptions();
+            options.setRetainOffline(true);
+            JMessageClient.sendMessage(message,options);
+            return true;
+        }
+        return false;
+    }
+
     //EmojiconsFragment表情显示的fragment
     private void setEmojiconFragment(boolean useSystemDefault) {
         getSupportFragmentManager()
@@ -165,6 +240,40 @@ public class ChattingActivity extends BaseActivity implements KeyBoardObserver,E
     @Override
     public void onEmojiconBackspaceClicked(View v) {
         EmojiconsFragment.backspace(mEditEmojicon);
+        JMessageClient.registerEventReceiver(this);
+
+    }
+
+    @Override
+    public boolean onTouch(View v, MotionEvent event) {
+
+        switch (v.getId()){
+            case R.id.chatting_recyclerview:
+                hideSoftInput(ChattingActivity.this, editTextContent);
+                break;
+            default:
+                break;
+        }
+
+        return false;
+    }
+
+    @Override
+    public void onClick(View v) {
+        super.onClick(v);
+        switch (v.getId()){
+            case R.id.chatting_back:
+                finish();
+                break;
+            case R.id.layout_edit:
+                editTextContent.requestFocus();
+                showSoftInput(ChattingActivity.this, editTextContent);
+                handler.sendEmptyMessageDelayed(0,250);
+
+                break;
+            default:
+                break;
+        }
     }
 
     @Override
@@ -174,11 +283,18 @@ public class ChattingActivity extends BaseActivity implements KeyBoardObserver,E
 
     @Override
     public void initViews() {
-        ib_back=findViewById( R.id.chatting_back );
+
+        imageButtonBack = findViewById( R.id.chatting_back );
+//        imageButtonSend = findViewById(R.id.send);
         recyclerView = findViewById(R.id.chatting_recyclerview);
+        editTextContent = findViewById(R.id.edit_content);
+        textViewChattingName = (TextView)findViewById(R.id.chatting_title_name);
+        linearLayoutEdit = (LinearLayout)findViewById(R.id.layout_edit);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setItemAnimator(new DefaultItemAnimator());
-        ChattingRecyclerviewAdapter chattingRecyclerviewAdapter = new ChattingRecyclerviewAdapter(mContext,chattingItems);
+        chattingItems = new ArrayList<>();
+        mContext = this;
+        chattingRecyclerviewAdapter = new ChattingRecyclerviewAdapter(mContext,chattingItems);
         recyclerView.setAdapter(chattingRecyclerviewAdapter);
 
         rootLayout =findViewById(R.id.root_layout);
@@ -194,28 +310,72 @@ public class ChattingActivity extends BaseActivity implements KeyBoardObserver,E
 
     @Override
     public void initListeners() {
+
+        imageButtonBack.setOnClickListener(this);
+//        imageButtonSend.setOnClickListener(this);
+
     }
 
     @Override
     public void initData() {
-        chattingItems = new ArrayList<>();
-        mContext = this;
-        testInit();
+
+
+        UserInfo userInfo = JMessageClient.getMyInfo();
+        myName = userInfo.getUserName();
+
+        Intent intent = getIntent();
+
+        userName = intent.getStringExtra("userName");
+        textViewChattingName.setText(userName);
+        conversation = JMessageClient.getSingleConversation(userName);
+
+
+        List<Message> messageList = conversation.getAllMessage();
+        for (int i=0 ; i<messageList.size() ; i++){
+            Log.d( Tag,""+messageList.size() );
+            UserInfo userInfo1 = messageList.get(i).getFromUser();
+            if (userInfo1.getUserName().equals(myName)){
+                ChattingItem chattingItem = new ChattingItem();
+                TextContent textContent = (TextContent)messageList.get(i).getContent();
+                Log.d( Tag,textContent.getText() );
+                chattingItem.setViewType(ChattingItem.RIGHT);
+                chattingItem.setChattingMessage(textContent.getText());
+                chattingItem.setPictureId(R.drawable.head2);
+                chattingItems.add(chattingItem);
+            }else{
+                ChattingItem chattingItem = new ChattingItem();
+                TextContent textContent = (TextContent)messageList.get(i).getContent();
+                Log.d( Tag,textContent.getText() );
+                chattingItem.setViewType(ChattingItem.LEFT);
+                chattingItem.setChattingMessage(textContent.getText());
+                chattingItem.setPictureId(R.drawable.head1);
+                chattingItems.add(chattingItem);
+            }
+        }
+
+        chattingRecyclerviewAdapter.notifyDataSetChanged();
+
     }
 
-    public void testInit(){
-        for (int i=0;i<6;i++){
-            ChattingItem chattingItem = new ChattingItem();
-            chattingItem.setViewType(ChattingItem.LEFT);
-            chattingItem.setChattingMessage("你是傻逼吗？");
-            chattingItem.setPictureId(R.drawable.head3);
-            chattingItems.add(chattingItem);
-            ChattingItem chattingItem1 = new ChattingItem();
-            chattingItem1.setViewType(ChattingItem.RIGHT);
-            chattingItem1.setChattingMessage("不是，你才是傻逼");
-            chattingItem1.setPictureId(R.drawable.head4);
-            chattingItems.add(chattingItem1);
+    public void onEventMainThread(MessageEvent event){
+        //do your own business
+        Message msg = event.getMessage();
+        switch (msg.getContentType()){
+
+            case text:
+
+                    TextContent textContent = (TextContent)msg.getContent();
+                    ChattingItem chattingItem = new ChattingItem();
+                    chattingItem.setViewType(ChattingItem.LEFT);
+                    chattingItem.setChattingMessage(textContent.getText());
+                    chattingItem.setPictureId(R.drawable.head1);
+                    chattingItems.add(chattingItem);
+                    chattingRecyclerviewAdapter.notifyDataSetChanged();
+
+                break;
+
         }
+
     }
 
     @Override
@@ -237,8 +397,20 @@ public class ChattingActivity extends BaseActivity implements KeyBoardObserver,E
 
     @Override
     protected void onDestroy() {
-        super.onDestroy();
-        rootLayout.getKeyBoardObservable().unRegister(this);
+        super.onDestroy( );
+        JMessageClient.unRegisterEventReceiver(this);
+        rootLayout.getKeyBoardObservable( ).unRegister( this );
+    }
+
+    public static void showSoftInput(Context context, View view) {
+        InputMethodManager imm = (InputMethodManager) context.getSystemService(Activity.INPUT_METHOD_SERVICE);
+        imm.showSoftInput(view, InputMethodManager.SHOW_FORCED);
+    }
+
+    public static void hideSoftInput(Context context, View view) {
+        InputMethodManager imm = (InputMethodManager) context.getSystemService(Activity.INPUT_METHOD_SERVICE);
+        imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+
     }
 
 }
