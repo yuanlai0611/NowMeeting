@@ -1,42 +1,333 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout
+<LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="#f4f2f2"
+    android:orientation="vertical"
+    android:fitsSystemWindows="true"
     tools:context="com.gongyunhao.nowmeeting.Activity.SignInActivity">
 
-    <RelativeLayout
+    <include layout="@layout/title_sign_in"/>
+
+    <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <com.gongyunhao.nowmeeting.view.SignInTitleView
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"/>
+            android:layout_height="match_parent"
+            android:orientation="vertical">
 
-    <EditText
-        android:id="@+id/et_email"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerInParent="true"
-        android:textSize="20sp"
-        android:minWidth="150dp"
-        android:padding="8dp"
-        android:maxLines="1"
-        android:maxLength="21"
-        android:hint="邮箱"
-        android:gravity="center"
-        android:layout_marginLeft="45dp"
-        android:layout_marginRight="45dp"/>
+            <org.raphets.roundimageview.RoundImageView
+                android:id="@+id/rv_select_photo_sign_in"
+                android:layout_marginTop="24dp"
+                android:layout_width="75dp"
+                android:layout_height="75dp"
+                android:layout_gravity="center"
+                android:background="@drawable/ic_signin_add_picture"/>
 
-    <ImageButton
-        android:id="@+id/ibtn_signin_post"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
-        android:layout_below="@id/et_email"
-        android:layout_centerInParent="true"
-        android:layout_alignParentEnd="true"
-        android:layout_margin="36dp"
-        android:background="@drawable/sel_arrow_forward"/>
-</RelativeLayout>
-</FrameLayout>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/s_small_spacing"
+                android:text="选择头像"
+                android:textSize="13sp"
+                android:layout_gravity="center_horizontal"
+                android:textColor="@color/colorPrimary"/>
+
+            <LinearLayout
+                android:layout_marginTop="20dp"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:background="@color/accent_white"
+                android:orientation="vertical">
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/line"
+                    android:background="#e6e5e5"/>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="80dp"
+                        android:layout_height="match_parent"
+                        android:text="密码"
+                        android:gravity="center"
+                        android:textSize="15sp"/>
+
+                    <EditText
+                        android:id="@+id/et_password_sign_in"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:inputType="textPassword"
+                        android:background="@color/transparent"
+                        android:hint="填写密码"
+                        android:gravity="start|center"
+                        android:textSize="15sp"/>
+
+                </LinearLayout>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:background="@color/accent_white"
+                android:orientation="vertical">
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/line"
+                    android:background="#e6e5e5"/>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="80dp"
+                        android:layout_height="match_parent"
+                        android:text="密码"
+                        android:gravity="center"
+                        android:textSize="15sp"/>
+
+                    <EditText
+                        android:id="@+id/et_password_re_sign_in"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:inputType="textPassword"
+                        android:background="@color/transparent"
+                        android:hint="确认密码"
+                        android:gravity="start|center"
+                        android:textSize="15sp"/>
+
+                </LinearLayout>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_marginTop="@dimen/sub_big_spacing"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:background="@color/accent_white"
+                android:orientation="vertical">
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/line"
+                    android:background="#e6e5e5"/>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="80dp"
+                        android:layout_height="match_parent"
+                        android:text="昵称"
+                        android:gravity="center"
+                        android:textSize="15sp"/>
+
+                    <EditText
+                        android:id="@+id/et_remark_name_sign_in"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:background="@color/transparent"
+                        android:hint="填写昵称"
+                        android:gravity="start|center"
+                        android:textSize="15sp"/>
+
+                </LinearLayout>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:background="@color/accent_white"
+                android:orientation="vertical">
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/line"
+                    android:background="#e6e5e5"/>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="80dp"
+                        android:layout_height="match_parent"
+                        android:text="手机"
+                        android:gravity="center"
+                        android:textSize="15sp"/>
+
+                    <EditText
+                        android:id="@+id/et_phone_number_sign_in"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:inputType="number"
+                        android:background="@color/transparent"
+                        android:hint="填写号码"
+                        android:gravity="start|center"
+                        android:textSize="15sp"/>
+
+                </LinearLayout>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:background="@color/accent_white"
+                android:orientation="vertical">
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/line"
+                    android:background="#e6e5e5"/>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="80dp"
+                        android:layout_height="match_parent"
+                        android:text="邮箱"
+                        android:gravity="center"
+                        android:textSize="15sp"/>
+
+                    <EditText
+                        android:id="@+id/et_email_sign_in"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:background="@color/transparent"
+                        android:hint="填写邮箱"
+                        android:gravity="start|center"
+                        android:textSize="15sp"/>
+
+                </LinearLayout>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_marginTop="24dp"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:background="@color/accent_white"
+                android:orientation="vertical">
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/line"
+                    android:background="#e6e5e5"/>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="80dp"
+                        android:layout_height="match_parent"
+                        android:text="地址"
+                        android:gravity="center"
+                        android:textSize="15sp"/>
+
+                    <EditText
+                        android:id="@+id/et_user_address_sign_in"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:background="@color/transparent"
+                        android:hint="填写住址"
+                        android:gravity="start|center"
+                        android:textSize="15sp"/>
+
+                </LinearLayout>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:background="@color/accent_white"
+                android:orientation="vertical">
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/line"
+                    android:background="#e6e5e5"/>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="80dp"
+                        android:layout_height="match_parent"
+                        android:text="公司/学校"
+                        android:gravity="center"
+                        android:textSize="15sp"/>
+
+                    <EditText
+                        android:id="@+id/et_company_sign_in"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:background="@color/transparent"
+                        android:hint="填写单位"
+                        android:gravity="start|center"
+                        android:textSize="15sp"/>
+
+                </LinearLayout>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_marginBottom="24dp"
+                android:layout_marginTop="24dp"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:background="@color/accent_white"
+                android:orientation="vertical">
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/line"
+                    android:background="#e6e5e5"/>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="80dp"
+                        android:layout_height="match_parent"
+                        android:text="描述"
+                        android:gravity="center"
+                        android:textSize="15sp"/>
+
+                    <EditText
+                        android:id="@+id/et_signature_sign_in"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:background="@color/transparent"
+                        android:hint="填写描述"
+                        android:gravity="start|center"
+                        android:textSize="15sp"/>
+
+                </LinearLayout>
+            </LinearLayout>
+
+
+        </LinearLayout>
+
+    </ScrollView>
+
+</LinearLayout>

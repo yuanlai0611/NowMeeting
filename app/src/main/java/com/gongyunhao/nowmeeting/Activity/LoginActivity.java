@@ -49,7 +49,9 @@ public class LoginActivity extends BaseActivity {
 
         super.onCreate( savedInstanceState );
         initWindow();
-
+        initViews();
+        btn_login.setOnClickListener( this );
+        textView_signin.setOnClickListener( this );
 
     }
 
