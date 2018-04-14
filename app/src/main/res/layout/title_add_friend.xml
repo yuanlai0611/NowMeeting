@@ -3,25 +3,25 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="?attr/actionBarSize"
+    xmlns:tools="http://schemas.android.com/tools"
     android:background="@color/colorPrimaryDark">
 
     <TextView
-        android:id="@+id/title_name"
-        android:textSize="@dimen/big_text"
+        android:typeface="sans"
+        android:id="@+id/chatting_title_name"
+        android:textSize="@dimen/s_sub_big_text"
         android:layout_centerInParent="true"
         android:textColor="@color/accent_white"
-        android:text="@string/title_message"
+        tools:text="新朋友"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" />
 
     <ImageButton
-        android:id="@+id/add_menu"
-        android:background="@drawable/add_menu"
-        android:layout_alignParentRight="true"
-        android:layout_width="22dp"
-        android:layout_height="22dp"
-        android:layout_marginTop="20dp"
-        android:layout_marginRight="10dp"/>
-
+        android:id="@+id/chatting_back"
+        android:layout_margin="@dimen/big_corner"
+        android:layout_centerVertical="true"
+        android:background="@drawable/back"
+        android:layout_width="28dp"
+        android:layout_height="28dp" />
 
 </RelativeLayout>

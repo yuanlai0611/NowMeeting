@@ -7,19 +7,24 @@ import android.nfc.Tag;
 import android.os.Bundle;
 import android.os.PersistableBundle;
 import android.support.annotation.Nullable;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.util.TypedValue;
 import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
+import com.gongyunhao.nowmeeting.R;
 import com.gongyunhao.nowmeeting.util.NetWorkUtil;
+import com.wang.avi.AVLoadingIndicatorView;
 
 /**
  * Created by acer on 2018/2/1.
@@ -42,9 +47,8 @@ public abstract class BaseActivity extends AppCompatActivity implements View.OnC
         getWindowManager().getDefaultDisplay().getMetrics(metric);
         mScreenWidth = metric.widthPixels;
         mScreenHeight = metric.heightPixels;
-
         setContentView();
-        //initViews();
+        initViews();
         initListeners();
         initData();
 
@@ -126,6 +130,20 @@ public abstract class BaseActivity extends AppCompatActivity implements View.OnC
         toastImg.setImageResource(imgId);
         toastView.addView(toastImg, 0);
         toast.show();
+    }
+
+    public AlertDialog loadingDialog(String text, boolean cancelable){
+        View view= LayoutInflater.from(mthis).inflate
+                (R.layout.toast_loading,null);
+        AVLoadingIndicatorView avl=(AVLoadingIndicatorView) view.findViewById(R.id.avl);
+        avl.show();
+        TextView tv=view.findViewById(R.id.tv);
+        tv.setText(text);
+        AlertDialog dialog=new AlertDialog.Builder(mthis,R.style.CustomDialog)
+                .setView(view)
+                .setCancelable(cancelable)
+                .create();
+        return dialog;
     }
 
     public void showToast(int textId) {

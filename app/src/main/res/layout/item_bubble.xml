@@ -13,24 +13,29 @@
         android:layout_gravity="left"
         android:orientation="horizontal">
         <ImageView
-            android:layout_marginLeft="5dp"
-            android:layout_gravity="center_vertical"
+            android:src="@drawable/head3"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="10dp"
             android:id="@+id/left_user_image"
             android:layout_width="40dp"
             android:layout_height="40dp" />
 
         <RelativeLayout
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="22dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:background="@drawable/msg_left">
+
             <TextView
                 android:textColor="@color/accent_black"
                 android:layout_centerInParent="true"
                 android:text="你是不是傻逼"
-                android:paddingBottom="5dp"
-                android:paddingLeft="10dp"
+                android:textSize="14sp"
+                android:paddingBottom="2dp"
+                android:paddingLeft="7dp"
                 android:paddingRight="5dp"
-                android:paddingTop="5dp"
+                android:paddingTop="2dp"
                 android:id="@+id/left_msg"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -49,28 +54,33 @@
         android:orientation="horizontal">
 
         <RelativeLayout
+            android:layout_marginRight="10dp"
+            android:layout_marginTop="22dp"
             android:background="@drawable/msg_right"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content">
 
             <TextView
                 android:layout_centerInParent="true"
-                android:paddingRight="10dp"
-                android:paddingTop="5dp"
+                android:paddingRight="7dp"
+                android:paddingTop="2dp"
                 android:paddingLeft="5dp"
-                android:paddingBottom="5dp"
+                android:paddingBottom="2dp"
                 android:text="你才傻"
+                android:textSize="14sp"
                 android:id="@+id/right_msg"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:gravity="center"
                 android:textColor="@color/accent_white" />
+
         </RelativeLayout>
 
 
         <ImageView
-            android:layout_marginRight="5dp"
-            android:layout_gravity="center_vertical"
+            android:src="@drawable/head4"
+            android:layout_marginTop="10dp"
+            android:layout_marginRight="10dp"
             android:id="@+id/right_user_image"
             android:layout_width="40dp"
             android:layout_height="40dp" />

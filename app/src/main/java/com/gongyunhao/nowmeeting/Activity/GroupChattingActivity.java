@@ -3,8 +3,8 @@ package com.gongyunhao.nowmeeting.Activity;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.os.Bundle;
 import android.os.Handler;
+import android.os.Bundle;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -32,7 +32,7 @@ import cn.jpush.im.android.api.model.UserInfo;
 import cn.jpush.im.android.api.options.MessageSendingOptions;
 import cn.jpush.im.api.BasicCallback;
 
-public class ChattingActivity extends BaseActivity implements View.OnTouchListener{
+public class GroupChattingActivity extends BaseActivity implements View.OnTouchListener{
 
     private ImageButton imageButtonBack;
     private ImageButton imageButtonSend;
@@ -75,7 +75,7 @@ public class ChattingActivity extends BaseActivity implements View.OnTouchListen
 
         switch (v.getId()){
             case R.id.chatting_recyclerview:
-                hideSoftInput(ChattingActivity.this, editTextContent);
+                hideSoftInput(GroupChattingActivity.this, editTextContent);
                 break;
             default:
                 break;
@@ -110,7 +110,7 @@ public class ChattingActivity extends BaseActivity implements View.OnTouchListen
 
                         } else {
                             Log.d(Tag,"---->消息发送失败");
-                            Toast.makeText(ChattingActivity.this,"消息发送失败",Toast.LENGTH_SHORT).show();
+                            Toast.makeText(GroupChattingActivity.this,"消息发送失败",Toast.LENGTH_SHORT).show();
                         }
                     }
                 });
@@ -122,7 +122,7 @@ public class ChattingActivity extends BaseActivity implements View.OnTouchListen
             case R.id.layout_edit:
 
                 editTextContent.requestFocus();
-                showSoftInput(ChattingActivity.this, editTextContent);
+                showSoftInput(GroupChattingActivity.this, editTextContent);
                 handler.sendEmptyMessageDelayed(0,250);
 
                 break;
@@ -139,7 +139,7 @@ public class ChattingActivity extends BaseActivity implements View.OnTouchListen
 
     @Override
     public void setContentView() {
-        setContentView(R.layout.activity_chatting);
+        setContentView(R.layout.activity_group_chatting);
     }
 
     @Override
@@ -176,25 +176,28 @@ public class ChattingActivity extends BaseActivity implements View.OnTouchListen
         myName = userInfo.getUserName();
 
         Intent intent = getIntent();
-
-        userName = intent.getStringExtra("userName");
-        textViewChattingName.setText(userName);
-        conversation = JMessageClient.getSingleConversation(userName);
-
+        groupId = Long.parseLong(intent.getStringExtra("groupNumber"));
+        Log.d(Tag,"---->"+groupId);
+        conversation = JMessageClient.getGroupConversation(groupId);
+        textViewChattingName.setText(conversation.getTitle());
 
         List<Message> messageList = conversation.getAllMessage();
-        for (int i=0 ; i<messageList.size() ; i++){
+        Log.d(Tag,"---->"+messageList.size());
+
+
+        for (int i=1 ; i<messageList.size() ; i++){
             UserInfo userInfo1 = messageList.get(i).getFromUser();
+            TextContent textContent = (TextContent)messageList.get(i).getContent();
+            Log.d(Tag,"---->"+textContent.getText());
+
             if (userInfo1.getUserName().equals(myName)){
                 ChattingItem chattingItem = new ChattingItem();
-                TextContent textContent = (TextContent)messageList.get(i).getContent();
                 chattingItem.setViewType(ChattingItem.RIGHT);
                 chattingItem.setChattingMessage(textContent.getText());
                 chattingItem.setPictureId(R.drawable.head2);
                 chattingItems.add(chattingItem);
             }else{
                 ChattingItem chattingItem = new ChattingItem();
-                TextContent textContent = (TextContent)messageList.get(i).getContent();
                 chattingItem.setViewType(ChattingItem.LEFT);
                 chattingItem.setChattingMessage(textContent.getText());
                 chattingItem.setPictureId(R.drawable.head1);
@@ -211,13 +214,13 @@ public class ChattingActivity extends BaseActivity implements View.OnTouchListen
 
             case text:
 
-                    TextContent textContent = (TextContent)msg.getContent();
-                    ChattingItem chattingItem = new ChattingItem();
-                    chattingItem.setViewType(ChattingItem.LEFT);
-                    chattingItem.setChattingMessage(textContent.getText());
-                    chattingItem.setPictureId(R.drawable.head1);
-                    chattingItems.add(chattingItem);
-                    chattingRecyclerviewAdapter.notifyDataSetChanged();
+                TextContent textContent = (TextContent)msg.getContent();
+                ChattingItem chattingItem = new ChattingItem();
+                chattingItem.setViewType(ChattingItem.LEFT);
+                chattingItem.setChattingMessage(textContent.getText());
+                chattingItem.setPictureId(R.drawable.head1);
+                chattingItems.add(chattingItem);
+                chattingRecyclerviewAdapter.notifyDataSetChanged();
 
                 break;
 
