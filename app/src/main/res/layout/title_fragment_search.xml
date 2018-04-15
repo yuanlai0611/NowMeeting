@@ -22,6 +22,8 @@
         android:layout_marginRight="30dp"
         android:layout_marginLeft="6dp"
         android:layout_marginTop="10dp"
+        android:singleLine="true"
+        android:imeOptions="actionSearch"
         android:layout_toEndOf="@+id/search_imageButton_back"
         android:background="@drawable/shape_search"
         android:hint="搜索"

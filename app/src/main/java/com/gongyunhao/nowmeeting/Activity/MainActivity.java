@@ -50,8 +50,6 @@ import cn.jpush.im.android.api.JMessageClient;
 
 
 public class MainActivity extends BaseActivity {
-
-
     private TextView textView;
     private List<Fragment> datas;
     private List<String> titles;
@@ -212,6 +210,7 @@ public class MainActivity extends BaseActivity {
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if (keyCode == KeyEvent.KEYCODE_BACK) {
           exit();
+          return false;
         }
         return super.onKeyDown(keyCode, event);
     }
@@ -230,24 +229,27 @@ public class MainActivity extends BaseActivity {
     public void onClick(View v) {
         super.onClick(v);
         switch (v.getId()){
-
             case R.id.add_menu:
                 showPop();
                 toggleBright();
                 break;
             case R.id.rich_scan:
+                startIntent( ScanActivity.class );
                 popupWindow.dismiss();
                 break;
             case R.id.add_friend:
+                Intent intent=new Intent( MainActivity.this,SearchFriendActivity.class );
+                startActivity(intent, ActivityOptions.makeSceneTransitionAnimation(this).toBundle());
                 popupWindow.dismiss();
                 break;
             case R.id.search:
+                startIntent( SearchActivity.class );
                 popupWindow.dismiss();
                 break;
             case R.id.add_meeting:
                 popupWindow.dismiss();
-                Intent intent = new Intent(MainActivity.this,MeetingEditActivity.class);
-                startActivity(intent);
+                Intent intent2 = new Intent(MainActivity.this,MeetingEditActivity.class);
+                startActivity(intent2);
                 break;
 
             default:
@@ -270,7 +272,7 @@ public class MainActivity extends BaseActivity {
         // 设置点击pop外侧消失，默认为false；在focusable为true时点击外侧始终消失
         popupWindow.setOutsideTouchable(true);
         // 相对于 + 号正下面，同时可以设置偏移量
-        popupWindow.showAsDropDown(imageButtonAddMenu, -100, 50);
+        popupWindow.showAsDropDown(imageButtonAddMenu, -100, dp2px( 16 ));
 
 
 
@@ -290,9 +292,6 @@ public class MainActivity extends BaseActivity {
         linearLayoutAddFriend.setOnClickListener(this);
         linearLayoutSearch.setOnClickListener(this);
         linearLayoutAddMeeting.setOnClickListener(this);
-
-
-
 
     }
 

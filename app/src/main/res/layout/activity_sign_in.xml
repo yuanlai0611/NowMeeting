@@ -140,6 +140,7 @@
                         android:layout_height="match_parent"
                         android:background="@color/transparent"
                         android:hint="填写昵称"
+                        android:inputType="textEmailAddress"
                         android:gravity="start|center"
                         android:textSize="15sp"/>
 
@@ -218,7 +219,6 @@
             </LinearLayout>
 
             <LinearLayout
-                android:layout_marginTop="24dp"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
                 android:background="@color/accent_white"
@@ -254,6 +254,7 @@
             </LinearLayout>
 
             <LinearLayout
+                android:layout_marginTop="24dp"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
                 android:background="@color/accent_white"
@@ -282,6 +283,41 @@
                         android:layout_height="match_parent"
                         android:background="@color/transparent"
                         android:hint="填写单位"
+                        android:gravity="start|center"
+                        android:textSize="15sp"/>
+
+                </LinearLayout>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:background="@color/accent_white"
+                android:orientation="vertical">
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/line"
+                    android:background="#e6e5e5"/>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="80dp"
+                        android:layout_height="match_parent"
+                        android:text="地点"
+                        android:gravity="center"
+                        android:textSize="15sp"/>
+
+                    <EditText
+                        android:id="@+id/et_workplace_sign_in"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:background="@color/transparent"
+                        android:hint="工作地点"
                         android:gravity="start|center"
                         android:textSize="15sp"/>
 

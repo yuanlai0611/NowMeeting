@@ -51,7 +51,6 @@ public class LoginActivity extends BaseActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-
         super.onCreate( savedInstanceState );
         initWindow();
         initViews();
@@ -184,9 +183,7 @@ public class LoginActivity extends BaseActivity {
                         public void call(Subscriber<? super String > subscriber) {
                             try {
 
-
-
-                                String response = OkHttpUtil.getInstance().getInfo("yuanlaidada",inforUrl);
+                                String response = OkHttpUtil.getInstance().getInfo(editText_username.getText().toString(),inforUrl);
                                 Log.d(Tag,"---->执行完网络请求");
                                 Log.d(Tag,"---->"+response);
 

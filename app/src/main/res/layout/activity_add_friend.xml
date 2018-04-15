@@ -17,6 +17,7 @@
         android:textSize="16sp"/>
 
     <EditText
+        android:id="@+id/et_add_friend_reason"
         android:layout_width="match_parent"
         android:layout_height="150dp"
         android:layout_margin="@dimen/fab_margin"
@@ -27,11 +28,12 @@
         />
 
     <Button
+        android:id="@+id/btn_send_add_friend_request"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="@dimen/fab_margin"
         android:text="发送"
-        android:background="#33abf4"
+        android:background="@drawable/shape_fill_blue"
         android:textColor="@color/accent_white"/>
 
 </LinearLayout>

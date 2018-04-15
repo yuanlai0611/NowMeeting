@@ -1,30 +1,30 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    package="com.gongyunhao.nowmeeting">
+          xmlns:tools="http://schemas.android.com/tools"
+          package="com.gongyunhao.nowmeeting">
 
     <permission
         android:name="com.gongyunhao.nowmeeting.permission.JPUSH_MESSAGE"
-        android:protectionLevel="signature" />
+        android:protectionLevel="signature"/>
 
     <!-- Required -->
-    <uses-permission android:name="com.gongyunhao.nowmeeting.permission.JPUSH_MESSAGE" />
-    <uses-permission android:name="android.permission.RECEIVE_USER_PRESENT" />
-    <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.WAKE_LOCK" />
-    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
-    <uses-permission android:name="android.permission.VIBRATE" />
+    <uses-permission android:name="com.gongyunhao.nowmeeting.permission.JPUSH_MESSAGE"/>
+    <uses-permission android:name="android.permission.RECEIVE_USER_PRESENT"/>
+    <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.WAKE_LOCK"/>
+    <uses-permission android:name="android.permission.READ_PHONE_STATE"/>
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.VIBRATE"/>
     <uses-permission
         android:name="android.permission.MOUNT_UNMOUNT_FILESYSTEMS"
-        tools:ignore="ProtectedPermissions" />
+        tools:ignore="ProtectedPermissions"/>
     <uses-permission
         android:name="android.permission.WRITE_SETTINGS"
-        tools:ignore="ProtectedPermissions" />
-    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-    <uses-permission android:name="android.permission.CAMERA" />
+        tools:ignore="ProtectedPermissions"/>
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE"/>
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
+    <uses-permission android:name="android.permission.CAMERA"/>
 
     <application
         android:name=".Application.initClass"
@@ -39,10 +39,10 @@
             android:enabled="true"
             android:exported="false">
             <intent-filter>
-                <action android:name="cn.jpush.android.intent.REGISTER" />
-                <action android:name="cn.jpush.android.intent.REPORT" />
-                <action android:name="cn.jpush.android.intent.PushService" />
-                <action android:name="cn.jpush.android.intent.PUSH_TIME" />
+                <action android:name="cn.jpush.android.intent.REGISTER"/>
+                <action android:name="cn.jpush.android.intent.REPORT"/>
+                <action android:name="cn.jpush.android.intent.PushService"/>
+                <action android:name="cn.jpush.android.intent.PUSH_TIME"/>
             </intent-filter>
         </service>
 
@@ -51,75 +51,77 @@
             android:enabled="true"
             android:exported="false">
             <intent-filter android:priority="1000">
-                <action android:name="cn.jpush.android.intent.NOTIFICATION_RECEIVED_PROXY" />
+                <action android:name="cn.jpush.android.intent.NOTIFICATION_RECEIVED_PROXY"/>
 
-                <category android:name="com.gongyunhao.nowmeeing" />
+                <category android:name="com.gongyunhao.nowmeeing"/>
             </intent-filter>
             <intent-filter>
-                <action android:name="android.intent.action.USER_PRESENT" />
-                <action android:name="android.net.conn.CONNECTIVITY_CHANGE" />
+                <action android:name="android.intent.action.USER_PRESENT"/>
+                <action android:name="android.net.conn.CONNECTIVITY_CHANGE"/>
             </intent-filter>
             <!-- Optional -->
             <intent-filter>
-                <action android:name="android.intent.action.PACKAGE_ADDED" />
-                <action android:name="android.intent.action.PACKAGE_REMOVED" />
+                <action android:name="android.intent.action.PACKAGE_ADDED"/>
+                <action android:name="android.intent.action.PACKAGE_REMOVED"/>
 
-                <data android:scheme="package" />
+                <data android:scheme="package"/>
             </intent-filter>
         </receiver>
 
         <!-- Required SDK核心功能 -->
         <receiver
             android:name="cn.jpush.android.service.AlarmReceiver"
-            android:exported="false" />
+            android:exported="false"/>
 
         <!-- Required since JCore 1.1.7. SDK 核心功能 -->
         <provider
             android:name="cn.jpush.android.service.DataProvider"
             android:authorities="com.gongyunhao.nowmeeting.DataProvider"
-            android:exported="true" />
+            android:exported="true"/>
 
         <!-- Required JMessage SDK核心功能 -->
         <receiver
             android:name="cn.jpush.im.android.helpers.IMReceiver"
             android:enabled="true"
-            android:exported="false"></receiver>
+            android:exported="false"/>
 
         <meta-data
             android:name="JPUSH_CHANNEL"
-            android:value="developer-default" />
+            android:value="developer-default"/>
 
         <!-- Required. AppKey copied from Portal -->
         <meta-data
             android:name="JPUSH_APPKEY"
-            android:value="79a7ac3d8c9a642369d3bee4" />
+            android:value="79a7ac3d8c9a642369d3bee4"/>
 
-        <activity android:name=".Activity.MainActivity" />
+        <activity android:name=".Activity.MainActivity"/>
         <activity android:name=".Activity.LoginActivity">
             <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
+                <action android:name="android.intent.action.MAIN"/>
 
-                <category android:name="android.intent.category.LAUNCHER" />
+                <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
-        <activity android:name=".Activity.MeetingDetailNoJoinActivity" />
-        <activity android:name=".Activity.AddFriendActivity" />
-        <activity android:name=".Activity.CreateVoteActivity" />
-        <activity android:name=".Activity.CreateMeetingActivity" />
-        <activity android:name=".Activity.SubmitVoteActivity" />
-        <activity android:name=".Activity.ChattingActivity" />
-        <activity android:name=".Activity.SignInActivity" />
-        <activity android:name=".Activity.SearchActivity" />
-        <activity android:name=".Activity.MeetingDetailActivity" />
-        <activity android:name=".Activity.QrCodeActivity" />
-        <activity android:name=".Activity.ScanActivity" />
-        <activity android:name=".Activity.PieChartActivity" />
-        <activity android:name=".Activity.LotteryDetailActivity" />
-        <activity android:name=".Activity.LotteryEditActivity" />
-        <activity android:name=".Activity.UserDetailActivity" />
-        <activity android:name=".Activity.MeetingEditActivity" />
-        <activity android:name=".Activity.AddActivity" />
-        <activity android:name=".Activity.GroupChattingActivity"></activity>
+        <activity android:name=".Activity.MeetingDetailNoJoinActivity"/>
+        <activity android:name=".Activity.AddFriendActivity"/>
+        <activity android:name=".Activity.CreateVoteActivity"/>
+        <activity android:name=".Activity.CreateMeetingActivity"/>
+        <activity android:name=".Activity.SubmitVoteActivity"/>
+        <activity android:name=".Activity.ChattingActivity"/>
+        <activity android:name=".Activity.SignInActivity"/>
+        <activity android:name=".Activity.SearchActivity"/>
+        <activity android:name=".Activity.MeetingDetailActivity"/>
+        <activity android:name=".Activity.QrCodeActivity"/>
+        <activity android:name=".Activity.ScanActivity"/>
+        <activity android:name=".Activity.PieChartActivity"/>
+        <activity android:name=".Activity.LotteryDetailActivity"/>
+        <activity android:name=".Activity.LotteryEditActivity"/>
+        <activity android:name=".Activity.UserDetailActivity"/>
+        <activity android:name=".Activity.MeetingEditActivity"/>
+        <activity android:name=".Activity.AddActivity"/>
+        <activity android:name=".Activity.GroupChattingActivity"/>
+        <activity android:name=".Activity.SearchFriendActivity">
+        </activity>
     </application>
 
 </manifest>

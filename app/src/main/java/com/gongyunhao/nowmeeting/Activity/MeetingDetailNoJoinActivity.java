@@ -14,7 +14,7 @@ import com.gongyunhao.nowmeeting.view.MyFoldTextView;
 public class MeetingDetailNoJoinActivity extends BaseActivity implements View.OnClickListener{
     private Button add_friend;
 
-    private String ADD_FRIEND_EXTRA="MeetingDetailNoJoinActivity_AddFriend";
+    private String ADD_FRIEND_EXTRA="AddFriendActivity_AddFriend";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,10 +60,9 @@ public class MeetingDetailNoJoinActivity extends BaseActivity implements View.On
     public void onClick(View view) {
         switch (view.getId()){
             case R.id.btn_add_friend:
-                Intent intent1=new Intent( MeetingDetailNoJoinActivity.this,CreateVoteActivity.class );
-                Intent intent=new Intent( MeetingDetailNoJoinActivity.this,AddFriendActivity.class );
-                intent.putExtra( ADD_FRIEND_EXTRA,"传入用户id用于添加好友" );
-                startActivity( intent1 );
+                Intent intent=new Intent( MeetingDetailNoJoinActivity.this,UserDetailActivity.class );
+                intent.putExtra( ADD_FRIEND_EXTRA,"传入用户id用于添加好友" );//传入用户名
+                startActivity( intent );
                 break;
         }
     }
