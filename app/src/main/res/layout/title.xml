@@ -18,9 +18,9 @@
         android:id="@+id/add_menu"
         android:background="@drawable/add_menu"
         android:layout_alignParentRight="true"
-        android:layout_width="22dp"
-        android:layout_height="22dp"
-        android:layout_centerVertical="true"
+        android:layout_width="23dp"
+        android:layout_height="23dp"
+        android:layout_marginTop="20dp"
         android:layout_marginRight="12dp"/>
 
 

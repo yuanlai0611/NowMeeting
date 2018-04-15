@@ -26,6 +26,8 @@ import com.gongyunhao.nowmeeting.deal.MeasureLinearLayout;
 import com.gongyunhao.nowmeeting.deal.SharePrefenceUtils;
 import com.gongyunhao.nowmeeting.test.ChattingItem;
 import com.gongyunhao.nowmeeting.util.KeyBoardUtils;
+
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 import cn.jpush.im.android.api.JMessageClient;
@@ -62,12 +64,14 @@ public class ChattingActivity extends BaseActivity implements View.OnTouchListen
     private EmojiconEditText mEditEmojicon;
     private LinearLayout linear_more_function;
     private boolean isEmoji=false;
+    private SimpleDateFormat format;
 
     @SuppressLint("ClickableViewAccessibility")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        JMessageClient.registerEventReceiver(this);
         setEmojiconFragment(true);
         //初始化高度，和软键盘一致，初值为手机高度一半
         pannel.getLayoutParams().height = SharePrefenceUtils.getKeyBoardHeight(this);
@@ -146,10 +150,25 @@ public class ChattingActivity extends BaseActivity implements View.OnTouchListen
     @Override
     public void onEmojiconBackspaceClicked(View v) {
         EmojiconsFragment.backspace(mEditEmojicon);
-        JMessageClient.registerEventReceiver(this);
+
 
     }
 
+    @Override
+    public void onBackPressed() {
+
+        Message message = conversation.getLatestMessage();
+        UserInfo userInfo = message.getFromUser();
+        TextContent textContent = (TextContent)message.getContent();
+        Intent intent = new Intent();
+        intent.putExtra("title",conversation.getTitle());
+        intent.putExtra("message",textContent.getText());
+        intent.putExtra("time",format.format(message.getCreateTime()));
+        intent.putExtra("userName",userInfo.getUserName());
+        setResult(RESULT_OK,intent);
+        finish();
+
+    }
 
     @Override
     public void onClick(View v) {
@@ -157,6 +176,15 @@ public class ChattingActivity extends BaseActivity implements View.OnTouchListen
         switch (v.getId()){
 
             case R.id.chatting_back:
+                Message message = conversation.getLatestMessage();
+                TextContent textContent = (TextContent)message.getContent();
+                UserInfo userInfo = message.getFromUser();
+                Intent intent = new Intent();
+                intent.putExtra("title",conversation.getTitle());
+                intent.putExtra("message",textContent.getText());
+                intent.putExtra("time",format.format(message.getCreateTime()));
+                intent.putExtra("userName",userInfo.getUserName());
+                setResult(RESULT_OK,intent);
                 finish();
                 break;
 
@@ -278,6 +306,7 @@ public class ChattingActivity extends BaseActivity implements View.OnTouchListen
     @Override
     public void initData() {
 
+        format = new SimpleDateFormat("HH:mm:ss");
         UserInfo userInfo = JMessageClient.getMyInfo();
         myName = userInfo.getUserName();
         Intent intent = getIntent();

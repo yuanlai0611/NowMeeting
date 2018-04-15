@@ -73,6 +73,7 @@ public class MainActivity extends BaseActivity {
     private static final float START_ALPHA = 0.9f;
     private static final float END_ALPHA = 1f;
     private LinearLayout linearLayoutRichScan,linearLayoutAddFriend,linearLayoutSearch,linearLayoutAddMeeting;
+    private ImageButton imageButtonFriendAddList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -115,6 +116,13 @@ public class MainActivity extends BaseActivity {
                     } else if ((position + positionOffset) == 0) {
 //
 
+                    if ((position+positionOffset)<=1&&(position+positionOffset)>=0){
+
+                        imageButtonFriendAddList.setAlpha(1-(position+positionOffset));
+
+                    }
+
+
                     //    Log.d("MainActivity","---->使imageButton可见");
                     }
                     //positionOffset 是百分比
@@ -151,6 +159,7 @@ public class MainActivity extends BaseActivity {
     public void initViews() {
 
         imageButtonAddMenu = (ImageButton)findViewById(R.id.add_menu);
+        imageButtonFriendAddList = (ImageButton)findViewById(R.id.friend_add_list);
         textView = findViewById(R.id.title_name);
         toolbar = (Toolbar) findViewById( R.id.toolbar );
         tabLayout = (TabLayout) findViewById(R.id.tablayout);
@@ -182,6 +191,7 @@ public class MainActivity extends BaseActivity {
     public void initListeners() {
 
        imageButtonAddMenu.setOnClickListener(this);
+       imageButtonFriendAddList.setOnClickListener(this);
 
 
     }
@@ -250,6 +260,9 @@ public class MainActivity extends BaseActivity {
                 popupWindow.dismiss();
                 Intent intent2 = new Intent(MainActivity.this,MeetingEditActivity.class);
                 startActivity(intent2);
+                break;
+            case R.id.friend_add_list:
+
                 break;
 
             default:

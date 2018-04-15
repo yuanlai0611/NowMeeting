@@ -96,25 +96,32 @@ public class FragmentMessage extends BaseFragment{
                 MessageItem messageItem = new MessageItem();
                 messageItem.setConversation(conversationList.get(i));
                 messageItem.setImageId(R.drawable.head1);
+                UserInfo userInfo2 = conversationList.get(i).getLatestMessage().getFromUser();
+                String userName = userInfo2.getUserName();
                 switch (conversationList.get(i).getType()){
                     case single:
                         messageItem.setMessageType(MessageItem.SINGLE);
+                        if (userName.equals(myName)){
+                            messageItem.setMessage("我："+textContent.getText());
+                        }else {
+                            messageItem.setMessage(textContent.getText());
+                        }
                         break;
                     case group:
                         messageItem.setMessageType(MessageItem.GROUP);
+                        if (userName.equals(myName)){
+                            messageItem.setMessage("我："+textContent.getText());
+                        }else {
+                            messageItem.setMessage(userName+"："+textContent.getText());
+                        }
                         break;
                     default:
                         break;
                 }
 
-                UserInfo userInfo2 = conversationList.get(i).getLatestMessage().getFromUser();
-                String userName = userInfo2.getUserName();
 
-                if (userName.equals(myName)){
-                    messageItem.setMessage("我："+textContent.getText());
-                }else {
-                    messageItem.setMessage(userName+"："+textContent.getText());
-                }
+
+
 
                 messageItem.setDate(format.format(conversationList.get(i).getLatestMessage().getCreateTime()));
                 messageItem.setUserName(conversationList.get(i).getTitle());
@@ -171,12 +178,12 @@ public class FragmentMessage extends BaseFragment{
                 if (messageItemList.get(position).getMessageType()==MessageItem.SINGLE){
                     Intent intent = new Intent(getActivity(), ChattingActivity.class);
                     intent.putExtra("userName",userName);
-                    startActivity(intent);
+                    startActivityForResult(intent,1);
                 }else{
                     Intent intent = new Intent(getActivity(), GroupChattingActivity.class);
                     intent.putExtra("groupNumber",messageItemList.get(position).getConversation().getTargetId());
                     Log.d(Tag,"---->"+messageItemList.get(position).getConversation().getTargetId());
-                    startActivity(intent);
+                    startActivityForResult(intent,2);
                 }
 
             }
@@ -293,11 +300,9 @@ public class FragmentMessage extends BaseFragment{
 
                         messageRecyclerViewAdapter.notifyDataSetChanged();
 
-
                         break;
 
                     default:
-
                         break;
 
                 }
@@ -341,5 +346,73 @@ public class FragmentMessage extends BaseFragment{
     }
 
 
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
 
+
+
+         if (resultCode==getActivity().RESULT_OK){
+
+             Log.d(Tag,"---->调用了回调");
+
+             switch (requestCode){
+
+                 case 1:
+
+                     Log.d(Tag,"---->调用了单人聊天的回调");
+                     String title = data.getStringExtra("title");
+                     String message = data.getStringExtra("message");
+                     String time = data.getStringExtra("time");
+                     String userName = data.getStringExtra("userName");
+                     MessageItem messageItem = messageItemList.get(getPlaceOfUser(title));
+                     messageItem.setDate(time);
+                     messageItem.setMessageType(MessageItem.SINGLE);
+                     messageItem.setConversation(JMessageClient.getSingleConversation(title));
+                     messageItem.setImageId(R.drawable.head1);
+                     if (userName.equals(myName)){
+                         messageItem.setMessage("我："+message);
+                     }else {
+                         messageItem.setMessage(message);
+                     }
+                     messageItem.setUserName(title);
+                     messageItemList.remove(getPlaceOfUser(title));
+                     messageItemList.add(0,messageItem);
+                     messageRecyclerViewAdapter.notifyDataSetChanged();
+
+
+                     break;
+
+                 case 2:
+
+                     String name1 = data.getStringExtra("userName");
+                     String message1 = data.getStringExtra("message");
+                     String time1 = data.getStringExtra("time");
+                     String groupId = data.getStringExtra("groupId");
+                     Conversation conversation = JMessageClient.getGroupConversation(Long.parseLong(groupId));
+                     MessageItem messageItem1 = messageItemList.get(getPlaceOfUser(conversation.getTitle()));
+                     messageItem1.setDate(time1);
+                     messageItem1.setMessageType(MessageItem.GROUP);
+                     messageItem1.setConversation(conversation);
+                     messageItem1.setImageId(R.drawable.head1);
+                     if (name1.equals(myName)){
+                         messageItem1.setMessage("我："+message1);
+                     }else {
+                         messageItem1.setMessage(name1+"："+message1);
+                     }
+                     messageItem1.setUserName(conversation.getTitle());
+                     messageItemList.remove(getPlaceOfUser(conversation.getTitle()));
+                     messageItemList.add(0,messageItem1);
+                     messageRecyclerViewAdapter.notifyDataSetChanged();
+
+
+                     break;
+
+                 default:
+                     break;
+
+             }
+
+         }
+
+    }
 }

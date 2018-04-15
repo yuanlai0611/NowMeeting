@@ -30,9 +30,12 @@ import com.gongyunhao.nowmeeting.deal.MeasureLinearLayout;
 import com.gongyunhao.nowmeeting.deal.SharePrefenceUtils;
 import com.gongyunhao.nowmeeting.test.ChattingItem;
 import com.gongyunhao.nowmeeting.util.KeyBoardUtils;
+
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 import cn.jpush.im.android.api.JMessageClient;
+import cn.jpush.im.android.api.content.EventNotificationContent;
 import cn.jpush.im.android.api.content.TextContent;
 import cn.jpush.im.android.api.event.MessageEvent;
 import cn.jpush.im.android.api.model.Conversation;
@@ -76,6 +79,8 @@ public class GroupChattingActivity extends BaseActivity implements View.OnTouchL
     public final static int ALBUM_REQUEST_CODE = 1;
     public final static int CROP_REQUEST = 2;
     public final static int CAMERA_REQUEST_CODE = 3;
+    private String Tag = "GroupChattingActivity";
+    private SimpleDateFormat format;
 
 
 
@@ -142,9 +147,25 @@ public class GroupChattingActivity extends BaseActivity implements View.OnTouchL
         options.setRetainOffline(true);
         JMessageClient.sendMessage(message,options);
 
+
     }
 
 
+    @Override
+    public void onBackPressed() {
+
+        Message message = conversation.getLatestMessage();
+        UserInfo userInfo = message.getFromUser();
+        TextContent textContent = (TextContent)message.getContent();
+        Intent intent = new Intent();
+        intent.putExtra("userName",userInfo.getUserName());
+        intent.putExtra("message",textContent.getText());
+        intent.putExtra("time",format.format(message.getCreateTime()));
+        intent.putExtra("groupId",groupId);
+        setResult(RESULT_OK,intent);
+        finish();
+
+    }
 
     //EmojiconsFragment表情显示的fragment
     private void setEmojiconFragment(boolean useSystemDefault) {
@@ -163,8 +184,6 @@ public class GroupChattingActivity extends BaseActivity implements View.OnTouchL
     @Override
     public void onEmojiconBackspaceClicked(View v) {
         EmojiconsFragment.backspace(mEditEmojicon);
-        JMessageClient.registerEventReceiver(this);
-
     }
 
 
@@ -174,6 +193,15 @@ public class GroupChattingActivity extends BaseActivity implements View.OnTouchL
         switch (v.getId()){
 
             case R.id.chatting_back:
+                Message message = conversation.getLatestMessage();
+                UserInfo userInfo = message.getFromUser();
+                TextContent textContent = (TextContent)message.getContent();
+                Intent intent = new Intent();
+                intent.putExtra("userName",userInfo.getUserName());
+                intent.putExtra("message",textContent.getText());
+                intent.putExtra("time",format.format(message.getCreateTime()));
+                intent.putExtra("groupId",groupId);
+                setResult(RESULT_OK,intent);
                 finish();
                 break;
 
@@ -271,6 +299,7 @@ public class GroupChattingActivity extends BaseActivity implements View.OnTouchL
     @Override
     public void initViews() {
 
+        JMessageClient.registerEventReceiver(this);
         imageButtonBack = findViewById( R.id.chatting_back );
         recyclerView = findViewById(R.id.chatting_recyclerview);
         textViewChattingName = (TextView)findViewById(R.id.chatting_title_name);
@@ -313,31 +342,42 @@ public class GroupChattingActivity extends BaseActivity implements View.OnTouchL
     @Override
     public void initData() {
 
+        format = new SimpleDateFormat("HH:mm:ss");
         Intent intent = getIntent();
         groupId = intent.getStringExtra("groupNumber");
         conversation = JMessageClient.getGroupConversation(Long.parseLong(groupId));
         textViewChattingName.setText(conversation.getTitle());
         List<Message> messageList = conversation.getAllMessage();
 
-        for (int i=1 ; i<messageList.size() ; i++){
-            Log.d( Tag,""+messageList.size() );
-            UserInfo userInfo1 = messageList.get(i).getFromUser();
-            if (userInfo1.getUserName().equals(myName)){
-                ChattingItem chattingItem = new ChattingItem();
-                TextContent textContent = (TextContent)messageList.get(i).getContent();
-                Log.d( Tag,textContent.getText() );
-                chattingItem.setViewType(ChattingItem.RIGHT);
-                chattingItem.setChattingMessage(textContent.getText());
-                chattingItem.setPictureId(R.drawable.head2);
-                chattingItems.add(chattingItem);
-            }else{
-                ChattingItem chattingItem = new ChattingItem();
-                TextContent textContent = (TextContent)messageList.get(i).getContent();
-                Log.d( Tag,textContent.getText() );
-                chattingItem.setViewType(ChattingItem.LEFT);
-                chattingItem.setChattingMessage(textContent.getText());
-                chattingItem.setPictureId(R.drawable.head1);
-                chattingItems.add(chattingItem);
+        myName = JMessageClient.getMyInfo().getUserName();
+
+        Log.d(Tag,"---->"+myName);
+
+        for (int i=0 ; i<messageList.size() ; i++){
+
+            if (!(messageList.get(i).getContent() instanceof EventNotificationContent)) {
+
+                Log.d(Tag, "" + messageList.size());
+                UserInfo userInfo1 = messageList.get(i).getFromUser();
+
+                Log.d(Tag, "---->" + userInfo1.getUserName());
+                if (userInfo1.getUserName().equals(myName)) {
+                    ChattingItem chattingItem = new ChattingItem();
+                    TextContent textContent = (TextContent) messageList.get(i).getContent();
+                    Log.d(Tag, textContent.getText());
+                    chattingItem.setViewType(ChattingItem.RIGHT);
+                    chattingItem.setChattingMessage(textContent.getText());
+                    chattingItem.setPictureId(R.drawable.head2);
+                    chattingItems.add(chattingItem);
+                } else {
+                    ChattingItem chattingItem = new ChattingItem();
+                    TextContent textContent = (TextContent) messageList.get(i).getContent();
+                    Log.d(Tag, textContent.getText());
+                    chattingItem.setViewType(ChattingItem.LEFT);
+                    chattingItem.setChattingMessage(textContent.getText());
+                    chattingItem.setPictureId(R.drawable.head1);
+                    chattingItems.add(chattingItem);
+                }
             }
         }
 
@@ -347,6 +387,7 @@ public class GroupChattingActivity extends BaseActivity implements View.OnTouchL
 
     public void onEventMainThread(MessageEvent event){
         //do your own business
+        Log.d(Tag,"---->收到消息");
         Message msg = event.getMessage();
         switch (msg.getContentType()){
 
@@ -356,6 +397,7 @@ public class GroupChattingActivity extends BaseActivity implements View.OnTouchL
                 ChattingItem chattingItem = new ChattingItem();
                 chattingItem.setViewType(ChattingItem.LEFT);
                 chattingItem.setChattingMessage(textContent.getText());
+                Log.d(Tag,textContent.getText());
                 chattingItem.setPictureId(R.drawable.head1);
                 chattingItems.add(chattingItem);
                 chattingRecyclerviewAdapter.notifyDataSetChanged();
