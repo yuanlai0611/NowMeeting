@@ -85,6 +85,7 @@ public class MainActivity extends BaseActivity {
     private SharedPreferences sharedPreferences;
     private SharedPreferences.Editor editor;
     private LinearLayout linearLayoutRichScan,linearLayoutAddFriend,linearLayoutSearch,linearLayoutAddMeeting;
+    private ImageButton imageButtonFriendAddList;
 
     @SuppressLint("HandlerLeak")
     Handler handler=new Handler(  ){
@@ -144,6 +145,13 @@ public class MainActivity extends BaseActivity {
                         imageButtonAddMenu.setVisibility(View.GONE);
                     } else if ((position + positionOffset) == 0) {
 //
+
+                    if ((position+positionOffset)<=1&&(position+positionOffset)>=0){
+
+                        imageButtonFriendAddList.setAlpha(1-(position+positionOffset));
+
+                    }
+
 
                     //    Log.d("MainActivity","---->使imageButton可见");
                     }
@@ -211,6 +219,7 @@ public class MainActivity extends BaseActivity {
     public void initViews() {
 
         imageButtonAddMenu = (ImageButton)findViewById(R.id.add_menu);
+        imageButtonFriendAddList = (ImageButton)findViewById(R.id.friend_add_list);
         textView = findViewById(R.id.title_name);
         is_friend_add_dot=findViewById( R.id.is_friend_add_dot );
         toolbar = (Toolbar) findViewById( R.id.toolbar );
@@ -243,6 +252,7 @@ public class MainActivity extends BaseActivity {
     public void initListeners() {
 
        imageButtonAddMenu.setOnClickListener(this);
+       imageButtonFriendAddList.setOnClickListener(this);
 
 
     }
@@ -311,6 +321,9 @@ public class MainActivity extends BaseActivity {
                 popupWindow.dismiss();
                 Intent intent2 = new Intent(MainActivity.this,MeetingEditActivity.class);
                 startActivity(intent2);
+                break;
+            case R.id.friend_add_list:
+
                 break;
 
             default:

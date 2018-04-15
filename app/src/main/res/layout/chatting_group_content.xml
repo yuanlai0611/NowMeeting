@@ -58,6 +58,7 @@
                 android:paddingBottom="6dp"
                 android:singleLine="true"
                 android:paddingTop="6dp"
+                android:imeOptions="actionSend"
                 android:background="@drawable/edit_text"
                 android:layout_width="match_parent"
                 android:minHeight="36dp"
@@ -100,7 +101,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:orientation="horizontal"
-                android:visibility="visible">
+                android:visibility="gone">
 
                 <LinearLayout
                     android:layout_marginTop="8dp"
