@@ -40,7 +40,7 @@
                     android:src="@drawable/head7" />
 
                 <TextView
-                    android:id="@+id/user_name"
+                    android:id="@+id/tv_user_name_detail"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="20dp"
@@ -51,10 +51,10 @@
                     android:textSize="16sp" />
 
                 <TextView
-                    android:id="@+id/user_city"
+                    android:id="@+id/tv_user_city_detail"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_below="@+id/user_name"
+                    android:layout_below="@+id/tv_user_name_detail"
                     android:layout_marginLeft="5dp"
                     android:layout_marginTop="5dp"
                     android:layout_toRightOf="@+id/user_city_symbol"
@@ -65,7 +65,7 @@
                     android:id="@+id/user_city_symbol"
                     android:layout_width="18dp"
                     android:layout_height="18dp"
-                    android:layout_below="@+id/user_name"
+                    android:layout_below="@+id/tv_user_name_detail"
                     android:layout_marginLeft="15dp"
                     android:layout_marginTop="5dp"
                     android:layout_toRightOf="@+id/user_picture"
@@ -111,6 +111,7 @@
                 </LinearLayout>
 
                 <TextView
+                    android:id="@+id/tv_signature_detail"
                     android:layout_width="match_parent"
                     android:layout_height="0dp"
                     android:layout_weight="1"
@@ -172,6 +173,7 @@
                     android:src="@drawable/telephone" />
 
                 <TextView
+                    android:id="@+id/tv_telephone_detail"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
@@ -201,6 +203,7 @@
                     android:src="@drawable/e_mail" />
 
                 <TextView
+                    android:id="@+id/tv_email_detail"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
@@ -230,6 +233,7 @@
                     android:src="@drawable/company" />
 
                 <TextView
+                    android:id="@+id/tv_workplace_detail"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
@@ -259,6 +263,7 @@
                     android:src="@drawable/school" />
 
                 <TextView
+                    android:id="@+id/tv_school_detail"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
@@ -281,6 +286,7 @@
             android:layout_height="match_parent">
 
             <Button
+                android:id="@+id/btn_add_friend_detail"
                 android:layout_alignParentBottom="true"
                 android:layout_width="match_parent"
                 android:layout_height="45dp"
