@@ -175,6 +175,7 @@ public class FragmentMessage extends BaseFragment{
                 }else{
                     Intent intent = new Intent(getActivity(), GroupChattingActivity.class);
                     intent.putExtra("groupNumber",messageItemList.get(position).getConversation().getTargetId());
+                    Log.d(Tag,"---->"+messageItemList.get(position).getConversation().getTargetId());
                     startActivity(intent);
                 }
 

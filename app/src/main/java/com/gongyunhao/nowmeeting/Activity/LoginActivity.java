@@ -22,7 +22,12 @@ import com.gongyunhao.nowmeeting.JsonBean.Root;
 import com.gongyunhao.nowmeeting.R;
 import com.gongyunhao.nowmeeting.util.OkHttpUtil;
 import com.google.gson.Gson;
+
+import org.litepal.crud.DataSupport;
+
 import java.io.IOException;
+import java.util.List;
+
 import cn.jpush.im.android.api.JMessageClient;
 import cn.jpush.im.android.api.model.DeviceInfo;
 import cn.jpush.im.api.BasicCallback;
@@ -186,8 +191,13 @@ public class LoginActivity extends BaseActivity {
                                 Root root = gson.fromJson(response, Root.class);
                                 Log.d(Tag,"---->"+root.getData().getUsername());
 
+                                List<DataBaseUserInfo> dataBaseUserInfoList = DataSupport.findAll(DataBaseUserInfo.class);
+                                if (!dataBaseUserInfoList.isEmpty()){
+                                    DataSupport.deleteAll(DataBaseUserInfo.class);
+                                }
                                 DataBaseUserInfo dataBaseUserInfo = new DataBaseUserInfo();
                                 dataBaseUserInfo.setUsername(root.getData().getUsername());
+                                dataBaseUserInfo.setUserId(root.getData().getId());
                                 dataBaseUserInfo.setAddress(root.getData().getAddress());
                                 dataBaseUserInfo.setEmail(root.getData().getEmail());
                                 dataBaseUserInfo.setGraduateSchool(root.getData().getGraduateSchool());

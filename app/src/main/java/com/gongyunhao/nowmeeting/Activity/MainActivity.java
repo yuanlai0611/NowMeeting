@@ -69,8 +69,8 @@ public class MainActivity extends BaseActivity {
     private ImageButton imageButtonAddMenu;
     private float bgAlpha = 1f;
     private boolean bright = false;
-    private static final long DURATION = 50;
-    private static final float START_ALPHA = 0.8f;
+    private static final long DURATION = 400;
+    private static final float START_ALPHA = 0.9f;
     private static final float END_ALPHA = 1f;
     private LinearLayout linearLayoutRichScan,linearLayoutAddFriend,linearLayoutSearch,linearLayoutAddMeeting;
 
@@ -109,9 +109,9 @@ public class MainActivity extends BaseActivity {
 
                     if ((position + positionOffset) >= 1) {
 //                        Log.d("MainActivity", "---->开始设置imageButton透明");
-//                        imageButtonMenu.setAlpha(2 - (position + positionOffset));
+                        imageButtonAddMenu.setAlpha(2 - (position + positionOffset));
                     } else if ((position + positionOffset) == 2) {
-//                        imageButtonMenu.setVisibility(View.GONE);
+                        imageButtonAddMenu.setVisibility(View.GONE);
                     } else if ((position + positionOffset) == 0) {
 //
 
@@ -157,7 +157,6 @@ public class MainActivity extends BaseActivity {
         viewPager = (NoScrollViewpager) findViewById(R.id.view_pager);
         popupWindow = new PopupWindow(this);
         animUtil = new AnimUtil();
-
         datas = new ArrayList<>();
         datas.add(new FragmentMessage());
         datas.add(new FragmentMeeting());
@@ -249,6 +248,8 @@ public class MainActivity extends BaseActivity {
                 break;
             case R.id.add_meeting:
                 popupWindow.dismiss();
+                Intent intent2 = new Intent(MainActivity.this,MeetingEditActivity.class);
+                startActivity(intent2);
                 break;
 
             default:

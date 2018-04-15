@@ -24,4 +24,23 @@
         android:layout_marginRight="12dp"/>
 
 
+    <ImageButton
+        android:id="@+id/friend_add_list"
+        android:layout_marginLeft="5dp"
+        android:layout_alignParentLeft="true"
+        android:layout_marginTop="10dp"
+        android:background="@drawable/friend_list"
+        android:layout_width="30dp"
+        android:layout_height="40dp" />
+
+    <View
+        android:visibility="gone"
+        android:id="@+id/is_friend_add_dot"
+        android:layout_marginTop="15dp"
+        android:layout_marginLeft="30dp"
+        android:background="@drawable/dot"
+        android:layout_width="8dp"
+        android:layout_height="8dp"/>
+
+
 </RelativeLayout>

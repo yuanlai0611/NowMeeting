@@ -22,6 +22,26 @@ public class DataBaseUserInfo extends DataSupport{
 
     private String workingPlace;
 
+    private int userId;
+
+    public int getUserId() {
+        return userId;
+    }
+
+    public void setUserId(int userId) {
+        this.userId = userId;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    private int id;
+
     public String getUsername() {
         return username;
     }
