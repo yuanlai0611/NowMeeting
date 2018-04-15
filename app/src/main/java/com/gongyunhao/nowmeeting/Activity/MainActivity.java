@@ -1,14 +1,18 @@
 package com.gongyunhao.nowmeeting.Activity;
 
 import android.animation.Animator;
+import android.annotation.SuppressLint;
 import android.app.ActivityOptions;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Build;
 
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -47,6 +51,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import cn.jpush.im.android.api.JMessageClient;
+import cn.jpush.im.android.api.event.ContactNotifyEvent;
 
 
 public class MainActivity extends BaseActivity {
@@ -62,6 +67,11 @@ public class MainActivity extends BaseActivity {
     private NoScrollViewpager viewPager;
     private MyPageAdapter myPageAdapter;
     private Context mContext;
+    //添加好友信息
+    private List<String> mFromUserName;
+    private List<String> mReason;
+
+    private View is_friend_add_dot;
     private Toolbar toolbar;
     private long lastClickTime = 0;
     private PopupWindow popupWindow;
@@ -72,19 +82,39 @@ public class MainActivity extends BaseActivity {
     private static final long DURATION = 400;
     private static final float START_ALPHA = 0.9f;
     private static final float END_ALPHA = 1f;
+    private SharedPreferences sharedPreferences;
+    private SharedPreferences.Editor editor;
     private LinearLayout linearLayoutRichScan,linearLayoutAddFriend,linearLayoutSearch,linearLayoutAddMeeting;
     private ImageButton imageButtonFriendAddList;
+
+    @SuppressLint("HandlerLeak")
+    Handler handler=new Handler(  ){
+        @Override
+        public void handleMessage(Message msg) {
+            super.handleMessage( msg );
+            switch (msg.what){
+                case 1:
+                    //收到了好友请求
+                    Log.d( "MainActivity","执行了setVisibility" );
+                    is_friend_add_dot.setVisibility( View.VISIBLE );
+                    break;
+
+            }
+        }
+    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate( savedInstanceState );
+
+        sharedPreferences=getSharedPreferences( "addfriend",MODE_PRIVATE );
 
         mContext = this;
         setSupportActionBar( toolbar );
             //设置字体
         TypeFaceUtil.setTypeFace(textView, TypeFaceUtil.HARD_POINT, mContext);
 
-        //JMessageClient.registerEventReceiver(this);
+        JMessageClient.registerEventReceiver(this);
 
             viewPager.addOnPageChangeListener(new NoScrollViewpager.OnPageChangeListener() {
                 @Override
@@ -147,7 +177,37 @@ public class MainActivity extends BaseActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        JMessageClient.unRegisterEventReceiver( this );
         JMessageClient.logout();
+    }
+
+    public void onEvent(ContactNotifyEvent event) {
+        String reason = event.getReason();
+        String fromUsername = event.getFromUsername();
+        String appkey = event.getfromUserAppKey();
+
+        switch (event.getType()) {
+            case invite_received://收到好友邀请
+                Log.d( "FriendRequest","好友邀请来自"+fromUsername );
+                mFromUserName.add( fromUsername );
+                mReason.add( reason );
+                Message message=new Message();
+                message.what=1;
+                handler.sendMessage( message );
+                //...
+                break;
+            case invite_accepted://对方接收了你的好友邀请
+                //...
+                break;
+            case invite_declined://对方拒绝了你的好友邀请
+                //...
+                break;
+            case contact_deleted://对方将你从好友中删除
+                //...
+                break;
+            default:
+                break;
+        }
     }
 
     @Override
@@ -161,6 +221,7 @@ public class MainActivity extends BaseActivity {
         imageButtonAddMenu = (ImageButton)findViewById(R.id.add_menu);
         imageButtonFriendAddList = (ImageButton)findViewById(R.id.friend_add_list);
         textView = findViewById(R.id.title_name);
+        is_friend_add_dot=findViewById( R.id.is_friend_add_dot );
         toolbar = (Toolbar) findViewById( R.id.toolbar );
         tabLayout = (TabLayout) findViewById(R.id.tablayout);
         viewPager = (NoScrollViewpager) findViewById(R.id.view_pager);

@@ -1,9 +1,10 @@
 package com.gongyunhao.nowmeeting.Fragment;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
+import android.os.Handler;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -11,6 +12,8 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
+
 import com.gongyunhao.nowmeeting.Activity.ChattingActivity;
 import com.gongyunhao.nowmeeting.Activity.GroupChattingActivity;
 import com.gongyunhao.nowmeeting.Adapter.MessageRecyclerViewAdapter;
@@ -20,14 +23,18 @@ import com.gongyunhao.nowmeeting.bean.MessageItem;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
+
+import cn.jpush.im.android.api.ContactManager;
 import cn.jpush.im.android.api.JMessageClient;
 import cn.jpush.im.android.api.content.EventNotificationContent;
 import cn.jpush.im.android.api.content.MessageContent;
 import cn.jpush.im.android.api.content.TextContent;
+import cn.jpush.im.android.api.event.ContactNotifyEvent;
 import cn.jpush.im.android.api.event.MessageEvent;
 import cn.jpush.im.android.api.model.Conversation;
 import cn.jpush.im.android.api.model.Message;
 import cn.jpush.im.android.api.model.UserInfo;
+import cn.jpush.im.api.BasicCallback;
 
 //    ┏┓　   ┏┓
 // ┏━━┛┻━━━━━┛┻ ┓ 
@@ -72,7 +79,7 @@ public class FragmentMessage extends BaseFragment{
     }
 
     @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
+    public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         messageItemList = new ArrayList<>();
         JMessageClient.registerEventReceiver(this);
@@ -80,7 +87,6 @@ public class FragmentMessage extends BaseFragment{
         myName = userInfo1.getUserName();
 
         List<Conversation> conversationList = JMessageClient.getConversationList();
-
 
         for (int i=0 ; i<conversationList.size() ; i++){
 
@@ -126,19 +132,12 @@ public class FragmentMessage extends BaseFragment{
                 messageItem.setDate(format.format(conversationList.get(i).getLatestMessage().getCreateTime()));
                 messageItem.setUserName(conversationList.get(i).getTitle());
                 messageItemList.add(messageItem);
-
-
             }
-
         }
-
-
     }
 
-
-    @Nullable
     @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_message,container,false);
         Log.d(Tag,"---->onCreateView");
 
@@ -158,7 +157,6 @@ public class FragmentMessage extends BaseFragment{
     protected void requestData() {
 
     }
-
 
     //避免了每次都要请求网络
     @Override
@@ -199,7 +197,6 @@ public class FragmentMessage extends BaseFragment{
     protected void setListener(){
 
     }
-
 
     public void onEventMainThread(MessageEvent event){
         //do your own business
@@ -311,7 +308,6 @@ public class FragmentMessage extends BaseFragment{
                 default:
                 break;
         }
-
 
         }
 
