@@ -4,11 +4,18 @@ import android.annotation.SuppressLint;
 import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.widget.Toast;
 
+import com.gongyunhao.nowmeeting.Adapter.QuNiMaDeFriendAdapter;
+import com.gongyunhao.nowmeeting.JsonBean.Root;
 import com.gongyunhao.nowmeeting.R;
+import com.gongyunhao.nowmeeting.util.OkHttpUtil;
+import com.google.gson.Gson;
+
+import java.io.IOException;
 
 import cn.jpush.im.android.api.ContactManager;
 import cn.jpush.im.android.api.event.ContactNotifyEvent;
@@ -21,36 +28,51 @@ public class AddActivity extends AppCompatActivity {
     private static final int DELETE_ME=4;
     private String mFromUserName;
     private String mReason;
+    private String response;
+    private String inforUrl = "http://39.106.47.27:8080/conference/api/user/dogetInfo";
+    private QuNiMaDeFriendAdapter quNiMaDeFriendAdapter;
 
     RecyclerView recyclerViewAddFriend;
-
-    @SuppressLint("HandlerLeak")
-    Handler handler=new Handler(  ){
-        @Override
-        public void handleMessage(android.os.Message msg) {
-            super.handleMessage( msg );
-            switch (msg.what){
-                case RECIVICE_FRIEND_REQUEST:
-                    //收到了好友请求
-                    break;
-                case ACCEPTED_MY_INVITATION:
-                    break;
-                case REFUSE_MY_INVITATION:
-                    break;
-                case DELETE_ME:
-                    break;
-            }
-        }
-    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add);
+        mFromUserName=getIntent().getStringExtra( "qunimadejiahaoyou" );
+        mReason=getIntent().getStringExtra( "qunimadejiahaoyoureason" );
         recyclerViewAddFriend = (RecyclerView)findViewById(R.id.recyclerview_add_friend);
-
+        LinearLayoutManager linearLayoutManager=new LinearLayoutManager( this );
+        recyclerViewAddFriend.setLayoutManager( linearLayoutManager );
+        quNiMaDeFriendAdapter=new QuNiMaDeFriendAdapter( mFromUserName,mReason,AddActivity.this );
+        recyclerViewAddFriend.setAdapter( quNiMaDeFriendAdapter );
     }
 
+//    private void loadUserData(){
+//        new Thread( new Runnable( ) {
+//            @Override
+//            public void run() {
+//                try {
+//                    response = OkHttpUtil.getInstance().getInfo(mFromUserName,inforUrl);
+//                } catch (IOException e) {
+//                    e.printStackTrace( );
+//                }
+//                Gson gson=new Gson();
+//                final Root root = gson.fromJson(response, Root.class);
+//                runOnUiThread( new Runnable( ) {
+//                    @Override
+//                    public void run() {
+//                        if (!root.getSuccess()){
+//                            Toast.makeText( AddActivity.this,root.getMessage(),Toast.LENGTH_SHORT ).show();
+//                            finish();
+//                        }else {
+//                            userdata=root.getData();
+//                            loadViews();
+//                        }
+//                    }
+//                } );
+//            }
+//        } ).start();
+//    }
 
     private void AcceptInvitation(String username){
         ContactManager.acceptInvitation(username, "", new BasicCallback() {

@@ -4,7 +4,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -13,15 +12,22 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
+import android.widget.Toast;
 
+import com.gongyunhao.nowmeeting.Activity.ChattingActivity;
 import com.gongyunhao.nowmeeting.Activity.LoginActivity;
 import com.gongyunhao.nowmeeting.Adapter.UserRecyclerviewAdapter;
 import com.gongyunhao.nowmeeting.Base.BaseFragment;
 import com.gongyunhao.nowmeeting.R;
+import com.gongyunhao.nowmeeting.bean.MessageItem;
 import com.gongyunhao.nowmeeting.bean.UserItem;
 import java.util.ArrayList;
 import java.util.List;
+
+import cn.jpush.im.android.api.ContactManager;
 import cn.jpush.im.android.api.JMessageClient;
+import cn.jpush.im.android.api.callback.GetUserInfoListCallback;
+import cn.jpush.im.android.api.model.UserInfo;
 
 
 //    ┏┓　   ┏┓
@@ -56,11 +62,11 @@ public class FragmentMy extends BaseFragment{
     String Tag = "FragmentMy";
     private RecyclerView recyclerViewUser;
     private UserRecyclerviewAdapter userRecyclerviewAdapter;
-    private List<UserItem> userItems;
+    private List<UserInfo> userItems;
     private LinearLayout linearLayoutLogOut;
 
     @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
+    public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         userItems = new ArrayList<>();
     }
@@ -71,9 +77,8 @@ public class FragmentMy extends BaseFragment{
         mContext = context;
     }
 
-    @Nullable
     @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_my,container,false);
         Log.d(Tag,"---->onCreateView");
         initViews(view);
@@ -90,26 +95,25 @@ public class FragmentMy extends BaseFragment{
                 getActivity().finish();
             }
         });
+        ContactManager.getFriendList( new GetUserInfoListCallback() {
+            @Override
+            public void gotResult(int responseCode, String responseMessage, List<UserInfo> userInfoList) {
+                if (0 == responseCode) {
+                    //获取好友列表成功
+                    userItems.clear();
+                    userItems.addAll( userInfoList );
+                    userRecyclerviewAdapter.notifyDataSetChanged();
+                } else {
+                    //获取好友列表失败
+                    Toast.makeText( getActivity(),"获取好友列表失败",Toast.LENGTH_SHORT ).show();
+                }
+            }
+        });
         return view;
     }
 
     @Override
     protected void requestData() {
-        for (int i=0 ; i<2 ;i++){
-            UserItem userItem = new UserItem();
-            userItem.setUserName("袁大来");
-            userItem.setUserPictureId(R.drawable.head1);
-            userItems.add(userItem);
-            UserItem userItem1 = new UserItem();
-            userItem1.setUserName("程文喆");
-            userItem1.setUserPictureId(R.drawable.head2);
-            userItems.add(userItem1);
-            UserItem userItem2 = new UserItem();
-            userItem2.setUserName("袁程程");
-            userItem2.setUserPictureId(R.drawable.head3);
-            userItems.add(userItem2);
-        }
-        userRecyclerviewAdapter.notifyDataSetChanged();
     }
 
     @Override
@@ -123,6 +127,16 @@ public class FragmentMy extends BaseFragment{
         recyclerViewUser.setLayoutManager(linearLayoutManager);
         userRecyclerviewAdapter = new UserRecyclerviewAdapter(mContext,userItems);
         recyclerViewUser.setAdapter(userRecyclerviewAdapter);
+
+        userRecyclerviewAdapter.setmOnItemClickListener( new UserRecyclerviewAdapter.OnItemClickListener( ) {
+            @Override
+            public void onItemClick(View view, int position) {
+                String userName = userItems.get(position).getUserName();
+                Intent intent = new Intent(getActivity(), ChattingActivity.class);
+                intent.putExtra("userName",userName);
+                startActivityForResult(intent,1);
+            }
+        } );
 
     }
 

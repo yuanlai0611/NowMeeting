@@ -57,7 +57,7 @@ public class MeetingDetailActivity extends BaseActivity implements View.OnClickL
     private String QR_CODE_CONTENT="Extra_Qr_Content";
     private List<LotteryItem> lotteryItemList;
     private List<Voteitem> voteitemList;
-    private List<UserItem> userItems;
+    private List<UserInfo> userItems;
     private String getMeetingUrl = "http://39.106.47.27:8080/conference//api/conference/dogetConferenceInfo";
     private int groupId;
     private Typeface typeface;

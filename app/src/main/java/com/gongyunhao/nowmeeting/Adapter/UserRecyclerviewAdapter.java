@@ -16,6 +16,8 @@ import com.gongyunhao.nowmeeting.bean.UserItem;
 
 import java.util.List;
 
+import cn.jpush.im.android.api.model.UserInfo;
+
 /**
  * _oo0oo_
  * 08888888o
@@ -29,12 +31,27 @@ import java.util.List;
  * Created by yuanlai on 2018/3/15.
  */
 
-public class UserRecyclerviewAdapter extends RecyclerView.Adapter<UserRecyclerviewAdapter.UserViewHolder> {
-
-    private List<UserItem> userItems;
+public class UserRecyclerviewAdapter extends RecyclerView.Adapter<UserRecyclerviewAdapter.UserViewHolder> implements View.OnClickListener{
+    private OnItemClickListener onItemClickListener = null;
+    private List<UserInfo> userItems;
     private Context mContext;
 
-    public UserRecyclerviewAdapter(Context context,List<UserItem> userItems){
+    @Override
+    public void onClick(View view) {
+        if (onItemClickListener != null){
+            onItemClickListener.onItemClick(view,(int)view.getTag());
+        }
+    }
+
+    public void setmOnItemClickListener(OnItemClickListener listener){
+        this.onItemClickListener = listener;
+    }
+
+    public interface OnItemClickListener{
+        void onItemClick(View view,int position);
+    }
+
+    public UserRecyclerviewAdapter(Context context,List<UserInfo> userItems){
         mContext = context;
         this.userItems = userItems;
     }
@@ -42,21 +59,21 @@ public class UserRecyclerviewAdapter extends RecyclerView.Adapter<UserRecyclervi
     @Override
     public void onBindViewHolder(UserViewHolder holder, int position) {
 
-        Glide.with(mContext).load(userItems.get(position).getUserPictureId()).apply(RequestOptions.bitmapTransform(new CircleCrop())).into(holder.imageViewUserPicture);
+        Glide.with(mContext).load(R.drawable.head3).apply(RequestOptions.bitmapTransform(new CircleCrop())).into(holder.imageViewUserPicture);
         holder.textViewUserName.setText(userItems.get(position).getUserName());
-
+        holder.userView.setTag( position );
     }
 
     class UserViewHolder extends RecyclerView.ViewHolder{
-
+        View userView;
         ImageView imageViewUserPicture;
         TextView textViewUserName;
 
         public UserViewHolder(View view){
             super(view);
+            userView=view;
             imageViewUserPicture = (ImageView)view.findViewById(R.id.user_picture_about_me);
             textViewUserName = (TextView)view.findViewById(R.id.user_name_about_me);
-
         }
 
     }
@@ -66,6 +83,7 @@ public class UserRecyclerviewAdapter extends RecyclerView.Adapter<UserRecyclervi
     public UserViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
 
         View view = LayoutInflater.from(mContext).inflate(R.layout.item_recyclerview_user,parent,false);
+        view.setOnClickListener( this );
         return new UserViewHolder(view);
 
     }

@@ -68,8 +68,8 @@ public class MainActivity extends BaseActivity {
     private MyPageAdapter myPageAdapter;
     private Context mContext;
     //添加好友信息
-    private List<String> mFromUserName;
-    private List<String> mReason;
+    private String mFromUserName;
+    private String mReason;
 
     private View is_friend_add_dot;
     private Toolbar toolbar;
@@ -87,27 +87,12 @@ public class MainActivity extends BaseActivity {
     private LinearLayout linearLayoutRichScan,linearLayoutAddFriend,linearLayoutSearch,linearLayoutAddMeeting;
     private ImageButton imageButtonFriendAddList;
 
-    @SuppressLint("HandlerLeak")
-    Handler handler=new Handler(  ){
-        @Override
-        public void handleMessage(Message msg) {
-            super.handleMessage( msg );
-            switch (msg.what){
-                case 1:
-                    //收到了好友请求
-                    Log.d( "MainActivity","执行了setVisibility" );
-                    is_friend_add_dot.setVisibility( View.VISIBLE );
-                    break;
-
-            }
-        }
-    };
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate( savedInstanceState );
 
         sharedPreferences=getSharedPreferences( "addfriend",MODE_PRIVATE );
+        editor=sharedPreferences.edit();
 
         mContext = this;
         setSupportActionBar( toolbar );
@@ -188,13 +173,9 @@ public class MainActivity extends BaseActivity {
 
         switch (event.getType()) {
             case invite_received://收到好友邀请
-                Log.d( "FriendRequest","好友邀请来自"+fromUsername );
-                mFromUserName.add( fromUsername );
-                mReason.add( reason );
-                Message message=new Message();
-                message.what=1;
-                handler.sendMessage( message );
-                //...
+                mFromUserName=fromUsername;
+                mReason=reason;
+                is_friend_add_dot.setVisibility( View.VISIBLE );
                 break;
             case invite_accepted://对方接收了你的好友邀请
                 //...
@@ -253,7 +234,6 @@ public class MainActivity extends BaseActivity {
 
        imageButtonAddMenu.setOnClickListener(this);
        imageButtonFriendAddList.setOnClickListener(this);
-
 
     }
 
@@ -323,7 +303,11 @@ public class MainActivity extends BaseActivity {
                 startActivity(intent2);
                 break;
             case R.id.friend_add_list:
-
+                Intent intent1=new Intent( MainActivity.this,AddActivity.class );
+                intent1.putExtra( "qunimadejiahaoyou",mFromUserName );
+                intent1.putExtra( "qunimadejiahaoyoureason",mReason );
+                startActivity( intent1 );
+                is_friend_add_dot.setVisibility( View.GONE );
                 break;
 
             default:
