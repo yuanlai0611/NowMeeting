@@ -78,7 +78,7 @@ public class AddFriendRecyclerviewAdpater extends RecyclerView.Adapter<RecyclerV
 
         AddFriendViewHolder addFriendViewHolder = (AddFriendViewHolder) holder;
 
-        Glide.with(context).load(R.drawable.head9).into(addFriendViewHolder.imageViewPicture);
+        Glide.with(context).load(R.drawable.head7).into(addFriendViewHolder.imageViewPicture);
 
         addFriendViewHolder.textViewName.setText(newFriendItemList.get(position).getFriendName());
 

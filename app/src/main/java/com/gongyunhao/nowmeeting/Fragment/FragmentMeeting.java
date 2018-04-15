@@ -158,7 +158,6 @@ public class FragmentMeeting extends BaseFragment{
             meetingItem1.setViewType(MEETING);
             meetingItem1.setMeetingCity( "武汉" );
             meetingItem1.setMeetingDate( "2017-10-21" );
-            meetingItem1.setMeetingPictureId(R.drawable.meeting_test);
             meetingItem1.setMeetingName("GDG Wuhan");
             meetingItem1.setMeetingPictureId(R.drawable.meeting_test_1);
             meetingItem1.setMeetingType(MeetingItem.HOT);

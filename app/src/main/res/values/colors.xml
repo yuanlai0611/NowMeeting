@@ -53,5 +53,7 @@
     <color name="friend_participate">#fac92d</color>
     <color name="participate">#1c7cdc</color>
 
+    <color name="input">#f7f6f6</color>
+
 
 </resources>

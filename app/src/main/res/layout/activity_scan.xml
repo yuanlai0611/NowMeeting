@@ -14,7 +14,6 @@
     <cn.bingoogolapple.qrcode.zxing.ZXingView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-
         android:id="@+id/zxingview"
         app:qrcv_animTime="800"
         app:qrcv_barCodeTipText="将条码放入框内，即可自动扫描"

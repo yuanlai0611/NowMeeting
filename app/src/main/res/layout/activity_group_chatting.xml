@@ -1,85 +1,12 @@
-<?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
-    android:orientation="vertical"
+<com.gongyunhao.nowmeeting.deal.MeasureLinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/root_layout"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    tools:context="com.gongyunhao.nowmeeting.Activity.ChattingActivity"
+    android:orientation="vertical">
 
-    <include
-        android:id="@+id/title_chatting"
-        layout="@layout/title_chatting"/>
+    <include layout="@layout/chatting_group_content"/>
 
-    <android.support.v7.widget.RecyclerView
-        android:background="@color/about_me_background"
-        android:layout_below="@+id/title_chatting"
-        android:id="@+id/chatting_recyclerview"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_marginBottom="50dp"/>
-
-    <ScrollView
-        android:layout_alignParentBottom="true"
-        android:fillViewport="true"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content">
-
-        <android.support.v7.widget.CardView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content">
-
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:minHeight="45dp"
-                android:layout_height="wrap_content">
-                <View
-                    android:layout_alignParentTop="true"
-                    android:background="#c9c8c8"
-                    android:layout_width="match_parent"
-                    android:layout_height="0.25dp"/>
-
-                <FrameLayout
-                    android:layout_marginBottom="5dp"
-                    android:layout_marginTop="7dp"
-                    android:layout_marginLeft="15dp"
-                    android:layout_marginRight="50dp"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
-
-                    <EditText
-                        android:id="@+id/edit_content"
-                        android:paddingLeft="12dp"
-                        android:paddingRight="12dp"
-                        android:paddingBottom="6dp"
-                        android:paddingTop="6dp"
-                        android:background="@drawable/edit_text"
-                        android:layout_width="match_parent"
-                        android:minHeight="40dp"
-                        android:textSize="16sp"
-                        android:maxHeight="100dp"
-                        android:layout_height="wrap_content" />
-
-                    <LinearLayout
-                        android:id="@+id/layout_edit"
-                        android:orientation="vertical"
-                        android:layout_width="match_parent"
-                        android:layout_height="40dp">
-
-                    </LinearLayout>
-
-                </FrameLayout>
-
-                <ImageButton
-                    android:id="@+id/send"
-                    android:layout_marginRight="12dp"
-                    android:layout_centerVertical="true"
-                    android:padding="10dp"
-                    android:background="@drawable/send"
-                    android:layout_alignParentRight="true"
-                    android:layout_width="28dp"
-                    android:layout_height="28dp" />
-            </RelativeLayout>
-        </android.support.v7.widget.CardView>
-    </ScrollView>
-
-</RelativeLayout>
+</com.gongyunhao.nowmeeting.deal.MeasureLinearLayout>
