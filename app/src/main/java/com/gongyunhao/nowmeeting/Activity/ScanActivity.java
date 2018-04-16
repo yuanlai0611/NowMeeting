@@ -48,6 +48,7 @@ public class ScanActivity extends PermissionActivity implements QRCodeView.Deleg
 
     @Override
     public void onScanQRCodeSuccess(String result) {
+
         Toast.makeText(this, result, Toast.LENGTH_SHORT).show();
     }
 

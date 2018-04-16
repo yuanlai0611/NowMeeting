@@ -96,9 +96,10 @@ public class OkHttpUtil {
 
     }
 
-    public String doSearchUserByName(String name)throws IOException{
+    public String doSearchByName(String name,String url)throws IOException{
         Request request=new Request.Builder()
-                .url("http://39.106.47.27:8080/conference//api/user/dosearchUsersByName"+"?name="+name)
+//                .url("http://39.106.47.27:8080/conference//api/user/dosearchUsersByName"+"?name="+name)
+                .url( url+"?name="+name )
                 .get()
                 .build();
         Response response=mClient.newCall(request).execute();

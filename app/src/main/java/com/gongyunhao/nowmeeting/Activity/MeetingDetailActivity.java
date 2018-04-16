@@ -91,9 +91,6 @@ public class MeetingDetailActivity extends BaseActivity implements View.OnClickL
         lotteryItemList = new ArrayList<>();
         imageView_meeting_detail = findViewById( R.id.imageView_collapsing );
         collapsingToolbarLayout = findViewById( R.id.collapsing_toolbar_meeting_detail );
-//        typeface = Typeface.createFromAsset(getAssets(),"fonts/upright_foursquare_hard_point.ttf");
-//        collapsingToolbarLayout.setExpandedTitleTypeface(typeface);
-//        collapsingToolbarLayout.setCollapsedTitleTypeface(typeface);
         recycler_rough = findViewById(R.id.detail_user_recycler_rough);
         tv_detail_meeting_place = findViewById( R.id.detail_meeting_place );
         tv_detail_meeting_date = findViewById( R.id.detail_meeting_date );
@@ -195,7 +192,6 @@ public class MeetingDetailActivity extends BaseActivity implements View.OnClickL
 
                     }
 
-
                 } catch (IOException e) {
                     e.printStackTrace();
                     subscriber.onError(e);
@@ -242,15 +238,9 @@ public class MeetingDetailActivity extends BaseActivity implements View.OnClickL
                                         if (i==0){
                                             Log.d(Tag,"---->获取用户信息成功");
 
-                                            for (int j=0 ; j<list.size() ;i++){
-
-                                                UserInfo userInfo = list.get(i);
-                                                UserItem userItem = new UserItem();
-                                                userItem.setUserName(userInfo.getUserName());
-                                                userItem.setUserPictureId(R.drawable.head7);
-
-                                            }
-
+                                            userItems.clear();
+                                            userItems.addAll( list );
+                                            userRecyclerviewAdapter.notifyDataSetChanged();
 
                                         }else{
                                             Log.d(Tag,"---->获取用户信息失败");

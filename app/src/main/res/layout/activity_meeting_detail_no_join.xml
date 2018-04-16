@@ -32,6 +32,7 @@
                 android:transitionName="iv_meeting_share"/>
 
             <TextView
+                android:id="@+id/tv_meeting_name_no_join"
                 android:layout_width="match_parent"
                 android:layout_height="45dp"
                 android:textColor="@color/accent_black"
@@ -62,9 +63,10 @@
                     android:layout_gravity="center"/>
 
                 <TextView
+                    android:id="@+id/tv_meeting_date_no_join"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:text="2018/04/01 8:30-2018/04/01 11:30"
+                    android:text="2018/04/01"
                     android:textSize="14sp"
                     android:gravity="center|start"
                     android:layout_marginLeft="@dimen/corner"/>
@@ -91,6 +93,7 @@
                     android:layout_gravity="center"/>
 
                 <TextView
+                    android:id="@+id/tv_location_no_join"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:text="北京朝阳北京国际会议中心"
@@ -156,6 +159,7 @@
                     android:src="@drawable/head4"/>
 
                 <TextView
+                    android:id="@+id/meeting_sponsor_name"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignTop="@+id/img_detail_no_join_user"
@@ -191,12 +195,13 @@
     </ScrollView>
 
     <Button
+        android:id="@+id/btn_join_meeting"
         android:layout_width="match_parent"
         android:layout_height="45dp"
         android:layout_alignParentBottom="true"
         android:layout_margin="@dimen/corner"
         android:background="@color/accent_blue"
-        android:text="立即报名"
+        android:text="申请加入"
         android:textColor="@color/accent_white" />
 
 </RelativeLayout>
