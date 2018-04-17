@@ -2,10 +2,15 @@ package com.gongyunhao.nowmeeting.Activity;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
+import android.content.ContentUris;
 import android.content.Context;
 import android.content.Intent;
+import android.database.Cursor;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
+import android.provider.DocumentsContract;
+import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.DefaultItemAnimator;
@@ -30,12 +35,14 @@ import com.gongyunhao.nowmeeting.deal.MeasureLinearLayout;
 import com.gongyunhao.nowmeeting.deal.SharePrefenceUtils;
 import com.gongyunhao.nowmeeting.test.ChattingItem;
 import com.gongyunhao.nowmeeting.util.KeyBoardUtils;
-
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 import cn.jpush.im.android.api.JMessageClient;
 import cn.jpush.im.android.api.content.EventNotificationContent;
+import cn.jpush.im.android.api.content.ImageContent;
 import cn.jpush.im.android.api.content.TextContent;
 import cn.jpush.im.android.api.event.MessageEvent;
 import cn.jpush.im.android.api.model.Conversation;
@@ -69,20 +76,21 @@ public class GroupChattingActivity extends BaseActivity implements View.OnTouchL
     private MeasureLinearLayout rootLayout;
     private SwipeRefreshLayout swipeLayout;
     private FrameLayout pannel,emojiframe;
-    private EmojiconEditText mEditEmojicon;
     private LinearLayout linear_more_function;
     private RelativeLayout relativeLayoutLottery,relativeLayoutStatistics,relativeLayoutChooseAlbum,relativeLayoutCamera;
     private boolean isEmoji=false;
+    private boolean isMore = false;
     private static final int  RC_CAMERA = 1000;
     private static final int RC_ALBUM = 1001;
-    public static String SAVED_IMAGE_DIR_PATH = Environment.getExternalStorageDirectory().getPath()+"/AppName/camera/";// 拍照路径
+    public static String SAVED_IMAGE_DIR_PATH = Environment.getExternalStorageDirectory().getPath()+"/NowMeeting/camera/";// 拍照路径
     public final static int ALBUM_REQUEST_CODE = 1;
     public final static int CROP_REQUEST = 2;
     public final static int CAMERA_REQUEST_CODE = 3;
     private String Tag = "GroupChattingActivity";
     private SimpleDateFormat format;
-
-
+    private String cameraPath;
+    private String picturePath;
+    private Message message;
 
 
     @SuppressLint("ClickableViewAccessibility")
@@ -90,10 +98,11 @@ public class GroupChattingActivity extends BaseActivity implements View.OnTouchL
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        setEmojiconFragment(false);
         //初始化高度，和软键盘一致，初值为手机高度一半
         pannel.getLayoutParams().height = SharePrefenceUtils.getKeyBoardHeight(this);
         rootLayout.getKeyBoardObservable().register(this);
+        setEmojiconFragment(false);
+
         swipeLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
@@ -147,6 +156,42 @@ public class GroupChattingActivity extends BaseActivity implements View.OnTouchL
         options.setRetainOffline(true);
         JMessageClient.sendMessage(message,options);
 
+    }
+
+    public void sendPicture(){
+
+        File file = new File(picturePath);
+        try{
+            message = conversation.createSendMessage(new ImageContent(file));
+        }catch (FileNotFoundException e){
+            e.printStackTrace();
+        }
+        message.setOnSendCompleteCallback(new BasicCallback() {
+            @Override
+            public void gotResult(int i, String s) {
+
+                if (i==0){
+
+                    ChattingItem chattingItem = new ChattingItem();
+                    chattingItem.setViewType(ChattingItem.RIGHT_PHOTO);
+                    chattingItem.setPhotoPath(picturePath);
+                    chattingItem.setPictureId(R.drawable.head2);
+                    chattingItems.add(chattingItem);
+                    chattingRecyclerviewAdapter.notifyDataSetChanged();
+                    Log.d(Tag,"---->图片发送成功");
+
+                }else {
+
+                    Log.d(Tag,"---->图片发送失败");
+
+                }
+
+            }
+        });
+        MessageSendingOptions messageSendingOptions = new MessageSendingOptions();
+        messageSendingOptions.setRetainOffline(true);
+        JMessageClient.sendMessage(message,messageSendingOptions);
+
 
     }
 
@@ -156,36 +201,54 @@ public class GroupChattingActivity extends BaseActivity implements View.OnTouchL
 
         Message message = conversation.getLatestMessage();
         UserInfo userInfo = message.getFromUser();
-        TextContent textContent = (TextContent)message.getContent();
-        Intent intent = new Intent();
-        intent.putExtra("userName",userInfo.getUserName());
-        intent.putExtra("message",textContent.getText());
-        intent.putExtra("time",format.format(message.getCreateTime()));
-        intent.putExtra("groupId",groupId);
-        setResult(RESULT_OK,intent);
-        finish();
+        if (message.getContent() instanceof  ImageContent){
+
+           Intent intent = new Intent();
+           intent.putExtra("type","image");
+           intent.putExtra("userName",userInfo.getUserName());
+           intent.putExtra("time",format.format(message.getCreateTime()));
+           intent.putExtra("groupId",groupId);
+           setResult(RESULT_OK,intent);
+           finish();
+
+        }else if (message.getContent() instanceof  TextContent){
+
+            TextContent textContent = (TextContent)message.getContent();
+            Intent intent = new Intent();
+            intent.putExtra("type","text");
+            intent.putExtra("userName",userInfo.getUserName());
+            intent.putExtra("message",textContent.getText());
+            intent.putExtra("time",format.format(message.getCreateTime()));
+            intent.putExtra("groupId",groupId);
+            setResult(RESULT_OK,intent);
+            finish();
+
+        }
+
 
     }
 
     //EmojiconsFragment表情显示的fragment
     private void setEmojiconFragment(boolean useSystemDefault) {
+
         getSupportFragmentManager()
                 .beginTransaction()
                 .replace(R.id.emojicons, EmojiconsFragment.newInstance(useSystemDefault))
                 .commit();
+
     }
 
     //表情点击回调
     @Override
     public void onEmojiconClicked(Emojicon emojicon) {
-        EmojiconsFragment.input(mEditEmojicon, emojicon);
+        EmojiconsFragment.input(emojiconEditText, emojicon);
     }
+
     //删除表情点击回调
     @Override
     public void onEmojiconBackspaceClicked(View v) {
-        EmojiconsFragment.backspace(mEditEmojicon);
+        EmojiconsFragment.backspace(emojiconEditText);
     }
-
 
     @Override
     public void onClick(View v) {
@@ -195,62 +258,214 @@ public class GroupChattingActivity extends BaseActivity implements View.OnTouchL
             case R.id.chatting_back:
                 Message message = conversation.getLatestMessage();
                 UserInfo userInfo = message.getFromUser();
-                TextContent textContent = (TextContent)message.getContent();
-                Intent intent = new Intent();
-                intent.putExtra("userName",userInfo.getUserName());
-                intent.putExtra("message",textContent.getText());
-                intent.putExtra("time",format.format(message.getCreateTime()));
-                intent.putExtra("groupId",groupId);
-                setResult(RESULT_OK,intent);
-                finish();
-                break;
+                if (message.getContent() instanceof  ImageContent){
 
-            case R.id.ib_chatting_more_function:
-                if (isEmoji) {
-                    //想要显示面板
-                    if (rootLayout.getKeyBoardObservable().isKeyBoardVisibile()) {
-                        //当前软键盘为 挂起状态
-                        //隐藏软键盘并显示面板
-                        mEditEmojicon.clearFocus();
-                        KeyBoardUtils.hideKeyboard(mEditEmojicon);
-                    } else {
-                        //显示面板
-                        pannel.setVisibility(View.VISIBLE);
-                        linear_more_function.setVisibility( View.VISIBLE );
-                        emojiframe.setVisibility( View.GONE );
-                    }
-                    isEmoji=!isEmoji;
-                } else {
-                    //想要关闭面板
-                    //挂起软键盘，并隐藏面板
-                    mEditEmojicon.requestFocus();
-                    KeyBoardUtils.showKeyboard(mEditEmojicon);
-                    isEmoji=!isEmoji;
+                    Intent intent = new Intent();
+                    intent.putExtra("type","image");
+                    intent.putExtra("userName",userInfo.getUserName());
+                    intent.putExtra("time",format.format(message.getCreateTime()));
+                    intent.putExtra("groupId",groupId);
+                    setResult(RESULT_OK,intent);
+                    finish();
+
+                }else if (message.getContent() instanceof  TextContent){
+
+                    TextContent textContent = (TextContent)message.getContent();
+                    Intent intent = new Intent();
+                    intent.putExtra("type","text");
+                    intent.putExtra("userName",userInfo.getUserName());
+                    intent.putExtra("message",textContent.getText());
+                    intent.putExtra("time",format.format(message.getCreateTime()));
+                    intent.putExtra("groupId",groupId);
+                    setResult(RESULT_OK,intent);
+                    finish();
 
                 }
+                break;
+
+            case R.id.et_chatting:
+                break;
+            case R.id.lottery:
+                break;
+            case R.id.statistics:
+                break;
+            case R.id.choose_album:
+                askForAlbum();
+                break;
+            case R.id.camera:
+                askForCamera();
+                break;
+            case R.id.ib_chatting_more_function:
+
+                if (isMore){
+
+                    if (rootLayout.getKeyBoardObservable().isKeyBoardVisibile()){
+
+                        if (isEmoji){
+
+                            //不存在的
+
+                        }else {
+
+                            //更多面板和键盘可见
+                            emojiconEditText.clearFocus();
+                            KeyBoardUtils.hideKeyboard(emojiconEditText);
+                            isEmoji = false;
+                            isMore = true;
+
+                        }
+
+                    }else {
+
+                        if (isEmoji){
+
+                            //也是不存在的
+
+                        }else {
+
+                        pannel.setVisibility(View.GONE);
+                        linear_more_function.setVisibility(View.GONE);
+                        isMore =false;
+                        isEmoji =false;
+
+                        }
+
+                    }
+
+                }else{
+
+                    if (rootLayout.getKeyBoardObservable().isKeyBoardVisibile()){
+
+                        if (isEmoji){
+
+                            emojiconEditText.clearFocus();
+                            KeyBoardUtils.hideKeyboard(emojiconEditText);
+                            emojiframe.setVisibility(View.GONE);
+                            linear_more_function.setVisibility(View.VISIBLE);
+                            isMore = true;
+                            isEmoji = false;
+
+                        }else {
+
+                            emojiconEditText.clearFocus();
+                            KeyBoardUtils.hideKeyboard(emojiconEditText);
+                            pannel.setVisibility(View.VISIBLE);
+                            linear_more_function.setVisibility(View.VISIBLE);
+                            isMore = true;
+                            isEmoji = false;
+
+                        }
+
+                    }else {
+
+                        if (isEmoji){
+
+                            emojiframe.setVisibility(View.GONE);
+                            linear_more_function.setVisibility(View.VISIBLE);
+                            isMore = true;
+                            isEmoji = false;
+
+                        }else {
+
+                            pannel.setVisibility(View.VISIBLE);
+                            linear_more_function.setVisibility(View.VISIBLE);
+                            Toast.makeText(GroupChattingActivity.this,"调用了更多的点击事件",Toast.LENGTH_SHORT).show();
+                            isMore = true;
+                            isEmoji =false;
+
+                        }
+
+                    }
+
+                }
+
                 break;
 
             case R.id.ib_chatting_more_emoji:
-                isEmoji=!isEmoji;
-                if (isEmoji) {
-                    //想要显示面板
-                    if (rootLayout.getKeyBoardObservable().isKeyBoardVisibile()) {
-                        //当前软键盘为 挂起状态
-                        //隐藏软键盘并显示面板
-                        mEditEmojicon.clearFocus();
-                        KeyBoardUtils.hideKeyboard(mEditEmojicon);
-                    } else {
-                        //显示面板
-                        pannel.setVisibility(View.VISIBLE);
-                        linear_more_function.setVisibility( View.GONE );
-                        emojiframe.setVisibility( View.VISIBLE );
+
+
+                if (isEmoji){
+
+                    if(rootLayout.getKeyBoardObservable().isKeyBoardVisibile()){
+
+                        if (isMore){
+
+
+
+                        }else{
+
+                            linear_more_function.setVisibility(View.GONE);
+                            emojiconEditText.clearFocus();
+                            KeyBoardUtils.hideKeyboard(emojiconEditText);
+                            emojiframe.setVisibility(View.VISIBLE);
+                            isEmoji = true;
+                            isMore = false;
+
+                        }
+
+                    }else {
+
+                        if (isMore){
+
+
+
+                        }else{
+
+                           emojiframe.setVisibility(View.GONE);
+                           pannel.setVisibility(View.GONE);
+                           isEmoji = false;
+                           isMore = false;
+
+                        }
+
                     }
-                } else {
-                    //想要关闭面板
-                    //挂起软键盘，并隐藏面板
-                    mEditEmojicon.requestFocus();
-                    KeyBoardUtils.showKeyboard(mEditEmojicon);
+
+                }else {
+
+                    if(rootLayout.getKeyBoardObservable().isKeyBoardVisibile()){
+
+                        if (isMore){
+
+                          linear_more_function.setVisibility(View.GONE);
+                          emojiframe.setVisibility(View.VISIBLE);
+                          isEmoji = true;
+                          isMore = false;
+
+                        }else{
+
+                          KeyBoardUtils.hideKeyboard(emojiconEditText);
+                          emojiconEditText.clearFocus();
+                          emojiframe.setVisibility(View.VISIBLE);
+                          pannel.setVisibility(View.VISIBLE);
+                          isEmoji = true;
+                          isMore =false;
+
+                        }
+
+                    }else {
+
+                        if (isMore){
+
+
+                            linear_more_function.setVisibility(View.GONE);
+                            emojiframe.setVisibility(View.VISIBLE);
+                            isEmoji = true;
+                            isMore =false;
+
+
+                        }else{
+
+                            pannel.setVisibility(View.VISIBLE);
+                            emojiframe.setVisibility(View.VISIBLE);
+                            isEmoji = true;
+                            isMore = false;
+
+                        }
+
+                    }
+
                 }
+
                 break;
 
             default:
@@ -269,20 +484,16 @@ public class GroupChattingActivity extends BaseActivity implements View.OnTouchL
                         pannel.setVisibility(View.GONE);
                         isEmoji=false;
                     } else {
-                        mEditEmojicon.clearFocus();
-                        KeyBoardUtils.hideKeyboard(mEditEmojicon);
+                        emojiconEditText.clearFocus();
+                        KeyBoardUtils.hideKeyboard(emojiconEditText);
                     }
                 }
                 break;
-            case R.id.lottery:
-                break;
-            case R.id.statistics:
-                break;
-            case R.id.choose_album:
-                askForAlbum();
-                break;
-            case R.id.camera:
-                askForCamera();
+            case R.id.et_chatting:
+
+
+                Log.d(Tag,"---->触摸了输入框");
+
                 break;
             default:
                 break;
@@ -320,7 +531,6 @@ public class GroupChattingActivity extends BaseActivity implements View.OnTouchL
         emojiframe=findViewById( R.id.emojicons );
         pannel =findViewById(R.id.pannel);
         ib_more_emoji=findViewById( R.id.ib_chatting_more_emoji );
-        mEditEmojicon=findViewById( R.id.et_chatting );
         emojiconEditText = (EmojiconEditText)findViewById(R.id.et_chatting);
 
     }
@@ -336,6 +546,8 @@ public class GroupChattingActivity extends BaseActivity implements View.OnTouchL
         relativeLayoutStatistics.setOnClickListener(this);
         relativeLayoutChooseAlbum.setOnClickListener(this);
         relativeLayoutCamera.setOnClickListener(this);
+        emojiconEditText.setOnClickListener(this);
+        emojiconEditText.setOnTouchListener(this);
 
     }
 
@@ -357,27 +569,57 @@ public class GroupChattingActivity extends BaseActivity implements View.OnTouchL
 
             if (!(messageList.get(i).getContent() instanceof EventNotificationContent)) {
 
-                Log.d(Tag, "" + messageList.size());
-                UserInfo userInfo1 = messageList.get(i).getFromUser();
+                if (messageList.get(i).getContent() instanceof ImageContent){
 
-                Log.d(Tag, "---->" + userInfo1.getUserName());
-                if (userInfo1.getUserName().equals(myName)) {
-                    ChattingItem chattingItem = new ChattingItem();
-                    TextContent textContent = (TextContent) messageList.get(i).getContent();
-                    Log.d(Tag, textContent.getText());
-                    chattingItem.setViewType(ChattingItem.RIGHT);
-                    chattingItem.setChattingMessage(textContent.getText());
-                    chattingItem.setPictureId(R.drawable.head2);
-                    chattingItems.add(chattingItem);
-                } else {
-                    ChattingItem chattingItem = new ChattingItem();
-                    TextContent textContent = (TextContent) messageList.get(i).getContent();
-                    Log.d(Tag, textContent.getText());
-                    chattingItem.setViewType(ChattingItem.LEFT);
-                    chattingItem.setChattingMessage(textContent.getText());
-                    chattingItem.setPictureId(R.drawable.head1);
-                    chattingItems.add(chattingItem);
+                    UserInfo userInfo = messageList.get(i).getFromUser();
+                    if (userInfo.getUserName().equals(myName)){
+
+                        ImageContent imageContent = (ImageContent) messageList.get(i).getContent();
+                        ChattingItem chattingItem = new ChattingItem();
+                        chattingItem.setViewType(ChattingItem.RIGHT_PHOTO);
+                        chattingItem.setPhotoPath(imageContent.getLocalThumbnailPath());
+                        chattingItem.setPictureId(R.drawable.head1);
+                        chattingItems.add(chattingItem);
+
+                    }else {
+
+                        ImageContent imageContent = (ImageContent) messageList.get(i).getContent();
+                        ChattingItem chattingItem = new ChattingItem();
+                        chattingItem.setViewType(ChattingItem.LEFT_PHOTO);
+                        chattingItem.setPhotoPath(imageContent.getLocalThumbnailPath());
+                        chattingItem.setPictureId(R.drawable.head1);
+                        chattingItems.add(chattingItem);
+
+                    }
+
+                }else if (messageList.get(i).getContent() instanceof TextContent){
+
+                    Log.d(Tag, "" + messageList.size());
+                    UserInfo userInfo1 = messageList.get(i).getFromUser();
+
+                    Log.d(Tag, "---->" + userInfo1.getUserName());
+                    if (userInfo1.getUserName().equals(myName)) {
+                        ChattingItem chattingItem = new ChattingItem();
+                        TextContent textContent = (TextContent) messageList.get(i).getContent();
+                        Log.d(Tag, textContent.getText());
+                        chattingItem.setViewType(ChattingItem.RIGHT);
+                        chattingItem.setChattingMessage(textContent.getText());
+                        chattingItem.setPictureId(R.drawable.head2);
+                        chattingItems.add(chattingItem);
+                    } else {
+                        ChattingItem chattingItem = new ChattingItem();
+                        TextContent textContent = (TextContent) messageList.get(i).getContent();
+                        Log.d(Tag, textContent.getText());
+                        chattingItem.setViewType(ChattingItem.LEFT);
+                        chattingItem.setChattingMessage(textContent.getText());
+                        chattingItem.setPictureId(R.drawable.head1);
+                        chattingItems.add(chattingItem);
+                    }
+
                 }
+
+
+
             }
         }
 
@@ -401,7 +643,21 @@ public class GroupChattingActivity extends BaseActivity implements View.OnTouchL
                 chattingItem.setPictureId(R.drawable.head1);
                 chattingItems.add(chattingItem);
                 chattingRecyclerviewAdapter.notifyDataSetChanged();
+                break;
 
+            case image:
+
+                ImageContent imageContent = (ImageContent)msg.getContent();
+                String imagePath = imageContent.getLocalThumbnailPath();
+                ChattingItem chattingItem1 = new ChattingItem();
+                chattingItem1.setViewType(ChattingItem.LEFT_PHOTO);
+                chattingItem1.setPhotoPath(imagePath);
+                chattingItem1.setPictureId(R.drawable.head1);
+                chattingItems.add(chattingItem1);
+                chattingRecyclerviewAdapter.notifyDataSetChanged();
+                break;
+
+            default:
                 break;
 
         }
@@ -434,13 +690,78 @@ public class GroupChattingActivity extends BaseActivity implements View.OnTouchL
 
     public void openAlbum(){
 
-
+        Intent intent = new Intent("android.intent.action.GET_CONTENT");
+        intent.setType("image/*");
+        startActivityForResult(intent, ALBUM_REQUEST_CODE); // 打开相册
 
     }
 
+
+    private String getImagePath(Intent data) {
+
+        String imagePath = null;
+        Uri uri = data.getData();
+        Log.d("TAG", "handleImageOnKitKat: uri is " + uri);
+        if (DocumentsContract.isDocumentUri(this, uri)) {
+            // 如果是document类型的Uri，则通过document id处理
+            String docId = DocumentsContract.getDocumentId(uri);
+            if("com.android.providers.media.documents".equals(uri.getAuthority())) {
+                String id = docId.split(":")[1]; // 解析出数字格式的id
+                String selection = MediaStore.Images.Media._ID + "=" + id;
+                imagePath = getImagePath(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, selection);
+            } else if ("com.android.providers.downloads.documents".equals(uri.getAuthority())) {
+                Uri contentUri = ContentUris.withAppendedId(Uri.parse("content://downloads/public_downloads"), Long.valueOf(docId));
+                imagePath = getImagePath(contentUri, null);
+            }
+        } else if ("content".equalsIgnoreCase(uri.getScheme())) {
+            // 如果是content类型的Uri，则使用普通方式处理
+            imagePath = getImagePath(uri, null);
+        } else if ("file".equalsIgnoreCase(uri.getScheme())) {
+            // 如果是file类型的Uri，直接获取图片路径即可
+            imagePath = uri.getPath();
+        }
+        return imagePath;
+
+    }
+
+
+
+    private String getImagePath(Uri uri, String selection) {
+        String path = null;
+        // 通过Uri和selection来获取真实的图片路径
+        Cursor cursor = getContentResolver().query(uri, null, selection, null, null);
+        if (cursor != null) {
+            if (cursor.moveToFirst()) {
+                path = cursor.getString(cursor.getColumnIndex(MediaStore.Images.Media.DATA));
+            }
+            cursor.close();
+        }
+        return path;
+    }
+
+
     public void openCamera(){
 
+        String state = Environment.getExternalStorageState();
 
+        if (state.equals(Environment.MEDIA_MOUNTED)) {
+            cameraPath = SAVED_IMAGE_DIR_PATH + System.currentTimeMillis() + ".png";
+            Intent intent = new Intent();
+            // 指定开启系统相机的Action
+            intent.setAction(MediaStore.ACTION_IMAGE_CAPTURE);
+            String out_file_path = SAVED_IMAGE_DIR_PATH;
+            File dir = new File(out_file_path);
+            if (!dir.exists()) {
+                dir.mkdirs();
+            } // 把文件地址转换成Uri格式
+            Uri uri = Uri.fromFile(new File(cameraPath));
+            // 设置系统相机拍摄照片完成后图片文件的存放地址
+            intent.putExtra(MediaStore.EXTRA_OUTPUT, uri);
+            startActivityForResult(intent, CAMERA_REQUEST_CODE);
+        } else {
+            Toast.makeText(GroupChattingActivity.this, "请确认已经插入SD卡",
+                    Toast.LENGTH_LONG).show();
+        }
 
     }
 
@@ -503,12 +824,69 @@ public class GroupChattingActivity extends BaseActivity implements View.OnTouchL
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
 
         if (requestCode == AppSettingsDialog.DEFAULT_SETTINGS_REQ_CODE) {
             // Do something after user returned from app settings screen, like showing a Toast.
 
         }
+
+        if (resultCode == getActivity().RESULT_OK) {
+            if (requestCode == ALBUM_REQUEST_CODE) {
+                try {
+                    picturePath = getImagePath(data);
+                    sendPicture();
+                    Log.d(Tag,"---->"+getImagePath(data));
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }else if (requestCode == CAMERA_REQUEST_CODE){
+
+                    picturePath = cameraPath;
+                    sendPicture();
+                Log.d(Tag,"---->"+cameraPath);
+
+            }
+        }
+
     }
+
+    public String[] getEveryName(String name){
+
+        String nameList[] = new String[100];
+
+        int index = 0;
+
+        if (name.startsWith("lottery")){
+
+            name = name.replaceFirst("lottery","");
+
+            StringBuilder stringBuilder;
+
+            stringBuilder = new StringBuilder();
+
+            for (int i=0 ; i<name.length() ; i++){
+
+                if (name.charAt(i)=='/'){
+
+                    nameList[index++] = stringBuilder.toString();
+                    stringBuilder = new StringBuilder();
+
+                }else{
+
+                    stringBuilder.append(name.charAt(i));
+
+                }
+
+            }
+
+        }else{
+
+            Log.d(Tag,"发送的消息格式有问题");
+
+        }
+        return nameList;
+
+    }
+
 
 }

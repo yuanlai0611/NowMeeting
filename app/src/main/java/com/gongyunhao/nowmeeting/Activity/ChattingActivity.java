@@ -1,7 +1,15 @@
 package com.gongyunhao.nowmeeting.Activity;
 
+import android.Manifest;
 import android.annotation.SuppressLint;
+import android.content.ContentUris;
 import android.content.Context;
+import android.database.Cursor;
+import android.net.Uri;
+import android.os.Environment;
+import android.provider.DocumentsContract;
+import android.provider.MediaStore;
+import android.support.annotation.NonNull;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.content.Intent;
 import android.os.Bundle;
@@ -16,6 +24,7 @@ import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.util.Log;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 import com.gongyunhao.nowmeeting.Adapter.ChattingRecyclerviewAdapter;
@@ -26,11 +35,15 @@ import com.gongyunhao.nowmeeting.deal.MeasureLinearLayout;
 import com.gongyunhao.nowmeeting.deal.SharePrefenceUtils;
 import com.gongyunhao.nowmeeting.test.ChattingItem;
 import com.gongyunhao.nowmeeting.util.KeyBoardUtils;
-
+import com.zxy.tiny.Tiny;
+import com.zxy.tiny.callback.FileCallback;
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 import cn.jpush.im.android.api.JMessageClient;
+import cn.jpush.im.android.api.content.ImageContent;
 import cn.jpush.im.android.api.content.TextContent;
 import cn.jpush.im.android.api.event.MessageEvent;
 import cn.jpush.im.android.api.model.Conversation;
@@ -42,9 +55,12 @@ import io.github.rockerhieu.emojicon.EmojiconEditText;
 import io.github.rockerhieu.emojicon.EmojiconGridFragment;
 import io.github.rockerhieu.emojicon.EmojiconsFragment;
 import io.github.rockerhieu.emojicon.emoji.Emojicon;
+import pub.devrel.easypermissions.AfterPermissionGranted;
+import pub.devrel.easypermissions.AppSettingsDialog;
+import pub.devrel.easypermissions.EasyPermissions;
+import pub.devrel.easypermissions.PermissionRequest;
 
-
-public class ChattingActivity extends BaseActivity implements View.OnTouchListener,KeyBoardObserver,EmojiconGridFragment.OnEmojiconClickedListener, EmojiconsFragment.OnEmojiconBackspaceClickedListener{
+public class ChattingActivity extends BaseActivity implements View.OnTouchListener,KeyBoardObserver,EmojiconGridFragment.OnEmojiconClickedListener, EmojiconsFragment.OnEmojiconBackspaceClickedListener,EasyPermissions.PermissionCallbacks{
 
     private ImageButton ib_more_emoji,ib_more_function;
     private ImageButton imageButtonBack;
@@ -65,6 +81,17 @@ public class ChattingActivity extends BaseActivity implements View.OnTouchListen
     private LinearLayout linear_more_function;
     private boolean isEmoji=false;
     private SimpleDateFormat format;
+    private static final int  RC_CAMERA = 1000;
+    private static final int RC_ALBUM = 1001;
+    public static String SAVED_IMAGE_DIR_PATH = Environment.getExternalStorageDirectory().getPath()+"/NowMeeting/camera/";// 拍照路径
+    public final static int ALBUM_REQUEST_CODE = 1;
+    public final static int CROP_REQUEST = 2;
+    public final static int CAMERA_REQUEST_CODE = 3;
+    private String cameraPath;
+    private String picturePath;
+    private Message message;
+    private RelativeLayout relativeLayoutChooseAlbum;
+    private RelativeLayout relativeLayoutCamera;
 
     @SuppressLint("ClickableViewAccessibility")
     @Override
@@ -132,6 +159,45 @@ public class ChattingActivity extends BaseActivity implements View.OnTouchListen
     }
 
 
+    public void sendPicture(){
+
+        File file = new File(picturePath);
+        try{
+            message = conversation.createSendMessage(new ImageContent(file));
+        }catch (FileNotFoundException e){
+            e.printStackTrace();
+        }
+        message.setOnSendCompleteCallback(new BasicCallback() {
+            @Override
+            public void gotResult(int i, String s) {
+
+                if (i==0){
+
+                    ChattingItem chattingItem = new ChattingItem();
+                    chattingItem.setViewType(ChattingItem.RIGHT_PHOTO);
+                    chattingItem.setPhotoPath(picturePath);
+                    chattingItem.setPictureId(R.drawable.head2);
+                    chattingItems.add(chattingItem);
+                    chattingRecyclerviewAdapter.notifyDataSetChanged();
+                    Log.d(Tag,"---->图片发送成功");
+
+                }else {
+
+                    Log.d(Tag,"---->图片发送失败");
+
+                }
+
+            }
+        });
+        MessageSendingOptions messageSendingOptions = new MessageSendingOptions();
+        messageSendingOptions.setRetainOffline(true);
+        JMessageClient.sendMessage(message,messageSendingOptions);
+
+
+        }
+
+
+
 
     //EmojiconsFragment表情显示的fragment
     private void setEmojiconFragment(boolean useSystemDefault) {
@@ -159,14 +225,32 @@ public class ChattingActivity extends BaseActivity implements View.OnTouchListen
 
         Message message = conversation.getLatestMessage();
         UserInfo userInfo = message.getFromUser();
-        TextContent textContent = (TextContent)message.getContent();
-        Intent intent = new Intent();
-        intent.putExtra("title",conversation.getTitle());
-        intent.putExtra("message",textContent.getText());
-        intent.putExtra("time",format.format(message.getCreateTime()));
-        intent.putExtra("userName",userInfo.getUserName());
-        setResult(RESULT_OK,intent);
-        finish();
+
+        if (message.getContent() instanceof TextContent){
+
+            TextContent textContent = (TextContent)message.getContent();
+            Intent intent = new Intent();
+            intent.putExtra("type","text");
+            intent.putExtra("title",conversation.getTitle());
+            intent.putExtra("message",textContent.getText());
+            intent.putExtra("time",format.format(message.getCreateTime()));
+            intent.putExtra("userName",userInfo.getUserName());
+            setResult(RESULT_OK,intent);
+            finish();
+
+
+        }else {
+
+            Intent intent = new Intent();
+            intent.putExtra("type","image");
+            intent.putExtra("title",conversation.getTitle());
+            intent.putExtra("time",format.format(message.getCreateTime()));
+            intent.putExtra("userName",userInfo.getUserName());
+            setResult(RESULT_OK,intent);
+            finish();
+
+
+        }
 
     }
 
@@ -175,17 +259,43 @@ public class ChattingActivity extends BaseActivity implements View.OnTouchListen
         super.onClick(v);
         switch (v.getId()){
 
+            case R.id.choose_album:
+                askForAlbum();
+                break;
+
+            case R.id.camera:
+                askForCamera();
+                break;
+
             case R.id.chatting_back:
                 Message message = conversation.getLatestMessage();
-                TextContent textContent = (TextContent)message.getContent();
                 UserInfo userInfo = message.getFromUser();
-                Intent intent = new Intent();
-                intent.putExtra("title",conversation.getTitle());
-                intent.putExtra("message",textContent.getText());
-                intent.putExtra("time",format.format(message.getCreateTime()));
-                intent.putExtra("userName",userInfo.getUserName());
-                setResult(RESULT_OK,intent);
-                finish();
+
+                if (message.getContent() instanceof TextContent){
+
+                    TextContent textContent = (TextContent)message.getContent();
+                    Intent intent = new Intent();
+                    intent.putExtra("type","text");
+                    intent.putExtra("title",conversation.getTitle());
+                    intent.putExtra("message",textContent.getText());
+                    intent.putExtra("time",format.format(message.getCreateTime()));
+                    intent.putExtra("userName",userInfo.getUserName());
+                    setResult(RESULT_OK,intent);
+                    finish();
+
+
+                }else {
+
+                    Intent intent = new Intent();
+                    intent.putExtra("type","image");
+                    intent.putExtra("title",conversation.getTitle());
+                    intent.putExtra("time",format.format(message.getCreateTime()));
+                    intent.putExtra("userName",userInfo.getUserName());
+                    setResult(RESULT_OK,intent);
+                    finish();
+
+
+                }
                 break;
 
             case R.id.ib_chatting_more_function:
@@ -290,6 +400,8 @@ public class ChattingActivity extends BaseActivity implements View.OnTouchListen
         ib_more_emoji=findViewById( R.id.ib_chatting_more_emoji );
         mEditEmojicon=findViewById( R.id.et_chatting );
         emojiconEditText = (EmojiconEditText)findViewById(R.id.et_chatting);
+        relativeLayoutChooseAlbum = (RelativeLayout)findViewById(R.id.choose_album);
+        relativeLayoutCamera = (RelativeLayout)findViewById(R.id.camera);
 
     }
 
@@ -300,6 +412,8 @@ public class ChattingActivity extends BaseActivity implements View.OnTouchListen
         ib_more_function.setOnClickListener(this);
         ib_more_emoji.setOnClickListener(this);
         recyclerView.setOnTouchListener(this);
+        relativeLayoutChooseAlbum.setOnClickListener(this);
+        relativeLayoutCamera.setOnClickListener(this);
 
     }
 
@@ -315,25 +429,52 @@ public class ChattingActivity extends BaseActivity implements View.OnTouchListen
         conversation = JMessageClient.getSingleConversation(userName);
         List<Message> messageList = conversation.getAllMessage();
         for (int i=0 ; i<messageList.size() ; i++){
-            Log.d( Tag,""+messageList.size() );
-            UserInfo userInfo1 = messageList.get(i).getFromUser();
-            if (userInfo1.getUserName().equals(myName)){
-                ChattingItem chattingItem = new ChattingItem();
-                TextContent textContent = (TextContent)messageList.get(i).getContent();
-                Log.d( Tag,textContent.getText() );
-                chattingItem.setViewType(ChattingItem.RIGHT);
-                chattingItem.setChattingMessage(textContent.getText());
-                chattingItem.setPictureId(R.drawable.head2);
-                chattingItems.add(chattingItem);
-            }else{
-                ChattingItem chattingItem = new ChattingItem();
-                TextContent textContent = (TextContent)messageList.get(i).getContent();
-                Log.d( Tag,textContent.getText() );
-                chattingItem.setViewType(ChattingItem.LEFT);
-                chattingItem.setChattingMessage(textContent.getText());
-                chattingItem.setPictureId(R.drawable.head1);
-                chattingItems.add(chattingItem);
+
+            if (messageList.get(i).getContent() instanceof TextContent){
+
+                Log.d( Tag,""+messageList.size() );
+                UserInfo userInfo1 = messageList.get(i).getFromUser();
+                if (userInfo1.getUserName().equals(myName)){
+                    ChattingItem chattingItem = new ChattingItem();
+                    TextContent textContent = (TextContent)messageList.get(i).getContent();
+                    Log.d( Tag,textContent.getText() );
+                    chattingItem.setViewType(ChattingItem.RIGHT);
+                    chattingItem.setChattingMessage(textContent.getText());
+                    chattingItem.setPictureId(R.drawable.head2);
+                    chattingItems.add(chattingItem);
+                }else{
+                    ChattingItem chattingItem = new ChattingItem();
+                    TextContent textContent = (TextContent)messageList.get(i).getContent();
+                    Log.d( Tag,textContent.getText() );
+                    chattingItem.setViewType(ChattingItem.LEFT);
+                    chattingItem.setChattingMessage(textContent.getText());
+                    chattingItem.setPictureId(R.drawable.head1);
+                    chattingItems.add(chattingItem);
+                }
+
+            }else {
+
+                Log.d( Tag,""+messageList.size() );
+                UserInfo userInfo1 = messageList.get(i).getFromUser();
+                if (userInfo1.getUserName().equals(myName)){
+                    ImageContent imageContent = (ImageContent) messageList.get(i).getContent();
+                    ChattingItem chattingItem = new ChattingItem();
+                    chattingItem.setPhotoPath(imageContent.getLocalThumbnailPath());
+                    chattingItem.setViewType(ChattingItem.RIGHT_PHOTO);
+                    chattingItem.setPictureId(R.drawable.head2);
+                    chattingItems.add(chattingItem);
+                }else{
+                    ImageContent imageContent = (ImageContent) messageList.get(i).getContent();
+                    ChattingItem chattingItem = new ChattingItem();
+                    chattingItem.setPhotoPath(imageContent.getLocalThumbnailPath());
+                    chattingItem.setViewType(ChattingItem.LEFT_PHOTO);
+                    chattingItem.setPictureId(R.drawable.head1);
+                    chattingItems.add(chattingItem);
+                }
+
             }
+
+
         }
 
         chattingRecyclerviewAdapter.notifyDataSetChanged();
@@ -356,6 +497,22 @@ public class ChattingActivity extends BaseActivity implements View.OnTouchListen
                     chattingRecyclerviewAdapter.notifyDataSetChanged();
 
                 break;
+
+            case image:
+
+                ImageContent imageContent = (ImageContent)msg.getContent();
+                String imagePath = imageContent.getLocalThumbnailPath();
+                ChattingItem chattingItem1 = new ChattingItem();
+                chattingItem1.setViewType(ChattingItem.LEFT_PHOTO);
+                chattingItem1.setPhotoPath(imagePath);
+                chattingItem1.setPictureId(R.drawable.head1);
+                chattingItems.add(chattingItem1);
+                chattingRecyclerviewAdapter.notifyDataSetChanged();
+
+                break;
+            default:
+                break;
+
 
         }
 
@@ -383,6 +540,168 @@ public class ChattingActivity extends BaseActivity implements View.OnTouchListen
         super.onDestroy( );
         JMessageClient.unRegisterEventReceiver(this);
         rootLayout.getKeyBoardObservable( ).unRegister( this );
+    }
+
+    public void openAlbum(){
+
+        Intent intent = new Intent("android.intent.action.GET_CONTENT");
+        intent.setType("image/*");
+        startActivityForResult(intent, ALBUM_REQUEST_CODE); // 打开相册
+
+    }
+
+
+    private String getImagePath(Intent data) {
+
+        String imagePath = null;
+        Uri uri = data.getData();
+        Log.d("TAG", "handleImageOnKitKat: uri is " + uri);
+        if (DocumentsContract.isDocumentUri(this, uri)) {
+            // 如果是document类型的Uri，则通过document id处理
+            String docId = DocumentsContract.getDocumentId(uri);
+            if("com.android.providers.media.documents".equals(uri.getAuthority())) {
+                String id = docId.split(":")[1]; // 解析出数字格式的id
+                String selection = MediaStore.Images.Media._ID + "=" + id;
+                imagePath = getImagePath(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, selection);
+            } else if ("com.android.providers.downloads.documents".equals(uri.getAuthority())) {
+                Uri contentUri = ContentUris.withAppendedId(Uri.parse("content://downloads/public_downloads"), Long.valueOf(docId));
+                imagePath = getImagePath(contentUri, null);
+            }
+        } else if ("content".equalsIgnoreCase(uri.getScheme())) {
+            // 如果是content类型的Uri，则使用普通方式处理
+            imagePath = getImagePath(uri, null);
+        } else if ("file".equalsIgnoreCase(uri.getScheme())) {
+            // 如果是file类型的Uri，直接获取图片路径即可
+            imagePath = uri.getPath();
+        }
+        return imagePath;
+
+    }
+
+
+
+    private String getImagePath(Uri uri, String selection) {
+        String path = null;
+        // 通过Uri和selection来获取真实的图片路径
+        Cursor cursor = getContentResolver().query(uri, null, selection, null, null);
+        if (cursor != null) {
+            if (cursor.moveToFirst()) {
+                path = cursor.getString(cursor.getColumnIndex(MediaStore.Images.Media.DATA));
+            }
+            cursor.close();
+        }
+        return path;
+    }
+
+
+    public void openCamera(){
+
+        String state = Environment.getExternalStorageState();
+
+        if (state.equals(Environment.MEDIA_MOUNTED)) {
+            cameraPath = SAVED_IMAGE_DIR_PATH + System.currentTimeMillis() + ".png";
+            Intent intent = new Intent();
+            // 指定开启系统相机的Action
+            intent.setAction(MediaStore.ACTION_IMAGE_CAPTURE);
+            String out_file_path = SAVED_IMAGE_DIR_PATH;
+            File dir = new File(out_file_path);
+            if (!dir.exists()) {
+                dir.mkdirs();
+            } // 把文件地址转换成Uri格式
+            Uri uri = Uri.fromFile(new File(cameraPath));
+            // 设置系统相机拍摄照片完成后图片文件的存放地址
+            intent.putExtra(MediaStore.EXTRA_OUTPUT, uri);
+            startActivityForResult(intent, CAMERA_REQUEST_CODE);
+        } else {
+            Toast.makeText(ChattingActivity.this, "请确认已经插入SD卡",
+                    Toast.LENGTH_LONG).show();
+        }
+
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        EasyPermissions.onRequestPermissionsResult(requestCode,permissions,grantResults,this);
+    }
+
+    @Override
+    public void onPermissionsGranted(int requestCode, List<String> list) {
+
+        if (requestCode==RC_CAMERA){
+            Toast.makeText(ChattingActivity.this,"照相机权限同意",Toast.LENGTH_SHORT).show();
+        }else if(requestCode==RC_ALBUM){
+            Toast.makeText(ChattingActivity.this,"相册权限同意",Toast.LENGTH_SHORT).show();
+        }
+
+    }
+
+    @Override
+    public void onPermissionsDenied(int requestCode, List<String> list) {
+
+        if (requestCode==RC_CAMERA){
+            Toast.makeText(ChattingActivity.this,"照相机权限拒绝",Toast.LENGTH_SHORT).show();
+        }else if(requestCode==RC_ALBUM){
+            Toast.makeText(ChattingActivity.this,"相册权限拒绝",Toast.LENGTH_SHORT).show();
+        }
+        if (EasyPermissions.somePermissionPermanentlyDenied(this, list)) {
+            new AppSettingsDialog.Builder(this).build().show();
+        }
+
+    }
+
+
+    @AfterPermissionGranted(RC_CAMERA)
+    public void askForCamera(){
+
+        if (EasyPermissions.hasPermissions(ChattingActivity.this, Manifest.permission.CAMERA)){
+            openCamera();
+        }else{
+            PermissionRequest request = new PermissionRequest.Builder(ChattingActivity.this,RC_CAMERA,Manifest.permission.CAMERA).build();
+            EasyPermissions.requestPermissions(request);
+        }
+
+    }
+
+    @AfterPermissionGranted(RC_ALBUM)
+    public void askForAlbum(){
+
+        if (EasyPermissions.hasPermissions(ChattingActivity.this,Manifest.permission.WRITE_EXTERNAL_STORAGE)){
+            openAlbum();
+        }else{
+            PermissionRequest request = new PermissionRequest.Builder(ChattingActivity.this,RC_ALBUM,Manifest.permission.WRITE_EXTERNAL_STORAGE).build();
+            EasyPermissions.requestPermissions(request);
+        }
+
+    }
+
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+
+        if (requestCode == AppSettingsDialog.DEFAULT_SETTINGS_REQ_CODE) {
+            // Do something after user returned from app settings screen, like showing a Toast.
+
+        }
+
+        if (resultCode == getActivity().RESULT_OK) {
+            if (requestCode == ALBUM_REQUEST_CODE) {
+                try {
+                    picturePath = getImagePath(data);
+                    sendPicture();
+                    Log.d(Tag, "---->" + getImagePath(data));
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            } else if (requestCode == CAMERA_REQUEST_CODE) {
+
+                picturePath = cameraPath;
+                sendPicture();
+                Log.d(Tag, "---->" + cameraPath);
+
+            }
+        }
+
     }
 
 

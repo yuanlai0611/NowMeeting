@@ -26,8 +26,6 @@
 
     </android.support.v4.widget.SwipeRefreshLayout>
 
-
-
     <LinearLayout
         android:background="@color/input"
         android:layout_width="match_parent"
@@ -237,7 +235,7 @@
                         android:gravity="center"
                         android:layout_marginTop="3dp"
                         android:layout_gravity="center"
-                        android:text="投票"/>
+                        android:text="相机"/>
 
                 </LinearLayout>
 
@@ -245,6 +243,7 @@
 
             <FrameLayout
                 android:id="@+id/emojicons"
+                android:visibility="gone"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
 

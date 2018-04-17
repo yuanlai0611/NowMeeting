@@ -176,6 +176,7 @@ public class MainActivity extends BaseActivity {
                 mFromUserName=fromUsername;
                 mReason=reason;
                 is_friend_add_dot.setVisibility( View.VISIBLE );
+
                 break;
             case invite_accepted://对方接收了你的好友邀请
                 //...
@@ -341,7 +342,6 @@ public class MainActivity extends BaseActivity {
                 toggleBright();
             }
         });
-
         linearLayoutRichScan = (LinearLayout)popupWindow.getContentView().findViewById(R.id.rich_scan);
         linearLayoutAddFriend = (LinearLayout)popupWindow.getContentView().findViewById(R.id.add_friend);
         linearLayoutSearch = (LinearLayout)popupWindow.getContentView().findViewById(R.id.search);
