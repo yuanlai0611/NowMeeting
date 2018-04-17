@@ -112,9 +112,26 @@ public class OkHttpUtil {
                 .get()
                 .build();
         Response response = mClient.newCall(request).execute();
-
         return response;
+    }
 
+    public void doSignInConference(String userID,String conferenceId,String url,okhttp3.Callback callback){
+        //?userId=36&conferenceId=33
+        Request request=new Request.Builder()
+                .url( url+"?userId="+userID+"&conferenceId="+conferenceId )
+                .get()
+                .build();
+        mClient.newCall( request ).enqueue( callback );
+    }
+
+    //http://39.106.47.27:8080/conference/api/userEntry/dogetAllConference?userId=34
+    public void dogetAllConference(String userID,String url,okhttp3.Callback callback){
+        //?userId=36&conferenceId=33
+        Request request=new Request.Builder()
+                .url( url+"?userId="+userID )
+                .get()
+                .build();
+        mClient.newCall( request ).enqueue( callback );
     }
 
 }

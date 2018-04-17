@@ -60,6 +60,7 @@ public class MeetingDetailActivity extends BaseActivity implements View.OnClickL
     private List<UserInfo> userItems;
     private String getMeetingUrl = "http://39.106.47.27:8080/conference//api/conference/dogetConferenceInfo";
     private int groupId;
+    private String meetingID;
     private Typeface typeface;
 
     @Override
@@ -128,20 +129,11 @@ public class MeetingDetailActivity extends BaseActivity implements View.OnClickL
     public void initData() {
 
         Intent intent = getIntent();
-        int meetingId = intent.getIntExtra("meetingId",0);
-        getMeetingInfo(String.valueOf(meetingId));
+        meetingID= String.valueOf( intent.getIntExtra("meetingId",0) );
+        getMeetingInfo(String.valueOf(meetingID));
 
 //        for (int i=0;i<3;i++){
 //            voteitemList.add( new Voteitem( "天气","2018","龚云浩" ) );
-//        }
-
-
-
-
-//        for (int i=0 ; i<4 ; i++){
-//            LotteryItem lotteryItem = new LotteryItem();
-//            lotteryItem.setLotteryName(" ");
-//            lotteryItemList.add(lotteryItem);
 //        }
 
 
@@ -158,13 +150,12 @@ public class MeetingDetailActivity extends BaseActivity implements View.OnClickL
         super.onClick( v );
         switch (v.getId()){
             case R.id.iv_meeting_detail_qr_code:
-//                /**
-//                 * 在这里放会议的识别信息进去
-//                 */
-//                Intent intent=new Intent( MeetingDetailActivity.this,QrCodeActivity.class );
-//                intent.putExtra( QR_CODE_CONTENT,"棒棒小糖测试,中文测试试用\nQR Code Content" );
-//                startActivity( intent );
-                startIntent( CreateVoteActivity.class );
+                /**
+                 * 在这里放会议的识别ID信息进去
+                 */
+                Intent intent=new Intent( MeetingDetailActivity.this,QrCodeActivity.class );
+                intent.putExtra( QR_CODE_CONTENT, "Now_Meeting,"+meetingID );
+                startActivity( intent );
                 break;
             case R.id.relativate_vote:
                 startIntent( PieChartActivity.class );
@@ -212,7 +203,7 @@ public class MeetingDetailActivity extends BaseActivity implements View.OnClickL
                             JSONObject jsonObject = new JSONObject(response);
                             JSONObject jsonObject1 = jsonObject.getJSONObject("data");
                             groupId = jsonObject1.getInt("chatroomId");
-
+                            meetingID=jsonObject1.getString( "id" );
                             String meetingDate = jsonObject1.getString("time");
                             String meetingPlace = jsonObject1.getString("location");
                             String meetingTitle = jsonObject1.getString("name");

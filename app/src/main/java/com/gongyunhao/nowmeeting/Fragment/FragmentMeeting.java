@@ -3,13 +3,11 @@ package com.gongyunhao.nowmeeting.Fragment;
 import android.app.ActivityOptions;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
-import android.support.v4.util.Pair;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,14 +15,22 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 
 import com.gongyunhao.nowmeeting.Activity.MeetingDetailActivity;
-import com.gongyunhao.nowmeeting.Activity.MeetingDetailNoJoinActivity;
 import com.gongyunhao.nowmeeting.Adapter.MeetingRecyclerviewAdapter;
 import com.gongyunhao.nowmeeting.Base.BaseFragment;
+import com.gongyunhao.nowmeeting.JsonBean.MeetingInformation;
 import com.gongyunhao.nowmeeting.R;
-import com.gongyunhao.nowmeeting.bean.MeetingItem;
+import com.gongyunhao.nowmeeting.util.OkHttpUtil;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+
+import okhttp3.Call;
+import okhttp3.Response;
 
 //    ┏┓　   ┏┓
 // ┏━━┛┻━━━━━┛┻ ┓ 
@@ -56,10 +62,14 @@ public class FragmentMeeting extends BaseFragment{
 
     private Context mContext;
     String Tag = "FragmentMeeting";
-    private List<MeetingItem> meetingItemList;
     private RecyclerView recyclerViewMeeting;
     private MeetingRecyclerviewAdapter meetingRecyclerviewAdapter;
     private ImageView imageView_meeting;
+    private SharedPreferences sharedPreferences;
+    private String userID;
+    private String mUrl="http://39.106.47.27:8080/conference/api/userEntry/dogetAllConference";
+    private JSONArray jsonArray;
+    private List<MeetingInformation> usermeetingList;
 
     private final int TITLE = 1;
     private final int MEETING = 2;
@@ -72,14 +82,15 @@ public class FragmentMeeting extends BaseFragment{
     }
 
     @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
+    public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        meetingItemList = new ArrayList<>();
+        usermeetingList = new ArrayList<>();
+        sharedPreferences=mContext.getSharedPreferences( "isLogin",Context.MODE_PRIVATE );
+        userID=sharedPreferences.getString( "userID","" );
     }
 
-    @Nullable
     @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_meeting,container,false);
         Log.d(Tag,"---->onCre1ateView");
         initViews(view);
@@ -92,30 +103,23 @@ public class FragmentMeeting extends BaseFragment{
         recyclerViewMeeting = (RecyclerView)view.findViewById(R.id.recyclerview_meeting);
         recyclerViewMeeting.setLayoutManager(new LinearLayoutManager(mContext));
         recyclerViewMeeting.setItemAnimator(new DefaultItemAnimator());
-        meetingRecyclerviewAdapter = new MeetingRecyclerviewAdapter(mContext,meetingItemList);
+        meetingRecyclerviewAdapter = new MeetingRecyclerviewAdapter(mContext,usermeetingList);
         recyclerViewMeeting.setAdapter(meetingRecyclerviewAdapter);
         imageView_meeting=view.findViewById( R.id.meeting_picture );
-
 
         meetingRecyclerviewAdapter.setmOnItemClickListener( new MeetingRecyclerviewAdapter.OnItemClickListener( ) {
             @Override
             public void onItemClick(View view, int position) {
-                MeetingItem meetingItem=meetingItemList.get( position );
+                MeetingInformation meetingItem=usermeetingList.get( position );
 
                 Intent intent=new Intent( getActivity(), MeetingDetailActivity.class );
                 intent.putExtra( "Extra_meeting_posithon",position );
-                intent.putExtra( "Extra_meeting_name" ,meetingItem.getMeetingName());
-                intent.putExtra( "Extra_meeting_picture",meetingItem.getMeetingPictureId() );
-                intent.putExtra( "Extra_meeting_city",meetingItem.getMeetingCity() );
-                intent.putExtra( "Extra_meeting_date",meetingItem.getMeetingDate() );
+                intent.putExtra( "meetingId",meetingItem.getId() );
                 int firstVisiblePosition = ((LinearLayoutManager)recyclerViewMeeting.getLayoutManager()).findFirstVisibleItemPosition();
 
                 View itemView = recyclerViewMeeting.getChildAt(position - firstVisiblePosition);
                 View meeting_p = itemView.findViewById(R.id.meeting_picture);
 
-                //模拟判断用户是否参加了此会议
-
-                //参加了在这里
                 //实现了share动画在recyclerview中传递的效果
                 startActivity(intent, ActivityOptions.makeSceneTransitionAnimation(getActivity(),
                         android.util.Pair.create(meeting_p, "iv_meeting_share"))
@@ -137,90 +141,69 @@ public class FragmentMeeting extends BaseFragment{
 
     private void initMeetingParticipate(){
 
+        OkHttpUtil.getInstance().dogetAllConference( userID,mUrl, new okhttp3.Callback( ) {
+            @Override
+            public void onFailure(Call call, IOException e) {
 
-//        MeetingItem meetingItem = new MeetingItem();
-//        meetingItem.setViewType(TITLE);
-//        meetingItem.setMeetingPictureId(R.drawable.meeting_participate);
-//        meetingItemList.add(meetingItem);
+            }
 
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+                String responsedata=response.body().string();
+                usermeetingList.clear();
+                try {
+                    JSONObject jsonObject=new JSONObject( responsedata );
+                    jsonArray=jsonObject.getJSONArray( "data" );
+                    for (int i=0;i<jsonArray.length();i++){
+                        JSONObject jsonObject1=jsonArray.getJSONObject( i );
+                        MeetingInformation meeting=new MeetingInformation();
+                        meeting.setId( jsonObject1.getInt( "id" ) );
+                        meeting.setCategoryId( jsonObject1.getInt( "categoryId" ) );
+                        meeting.setSponsorName( jsonObject1.getString( "sponsorName" ) );
+                        meeting.setName( jsonObject1.getString( "name" ) );
+                        meeting.setChatroomId( jsonObject1.getInt( "chatroomId" ) );
+                        meeting.setSponsorId( jsonObject1.getInt( "sponsorId" ) );
+                        meeting.setStatus( jsonObject1.getInt( "status" ) );
+                        meeting.setIntroduction( jsonObject1.getString( "introduction" ) );
+                        meeting.setCity( jsonObject1.getString( "city" ) );
+                        meeting.setLocation( jsonObject1.getString( "location" ) );
+                        meeting.setTime( jsonObject1.getString( "time" ) );
+                        meeting.setSignedNumber( jsonObject1.getInt( "signedNumber" ) );
+                        meeting.setParticipatedNumber( jsonObject1.getInt( "participatedNumber" ) );
+                        meeting.setPhoto( jsonObject1.getString( "photo" ) );
+                        meeting.setMeetingPictureId(R.drawable.meeting_test_2);
+                        meeting.setMeetingType(MeetingInformation.PARTICIPATE);
+                        meeting.setViewType(MEETING);
+                        usermeetingList.add( meeting );
+                    }
+                    getActivity().runOnUiThread( new Runnable( ) {
+                        @Override
+                        public void run() {
+                            meetingRecyclerviewAdapter.notifyDataSetChanged();
+                        }
+                    } );
+                } catch (JSONException e) {
+                    e.printStackTrace( );
+                }
+            }
+        } );
 
-
-            MeetingItem meetingItem1 = new MeetingItem();
-            meetingItem1.setViewType(MEETING);
-            meetingItem1.setMeetingCity( "武汉" );
-            meetingItem1.setMeetingDate( "2017-10-21" );
-            meetingItem1.setMeetingName("GDG Wuhan");
-            meetingItem1.setMeetingPictureId(R.drawable.meeting_test_1);
-            meetingItem1.setMeetingType(MeetingItem.HOT);
-            meetingItemList.add(meetingItem1);
-
-            MeetingItem meetingItem2 = new MeetingItem();
-            meetingItem2.setViewType(MEETING);
-            meetingItem2.setMeetingName("GDG Wuhan");
-            meetingItem2.setMeetingPictureId(R.drawable.meeting_test_2);
-            meetingItem2.setMeetingType(MeetingItem.FRIEND_PARTICIPATE);
-            meetingItemList.add(meetingItem2);
-
-            MeetingItem meetingItem3 = new MeetingItem();
-            meetingItem3.setViewType(MEETING);
-            meetingItem3.setMeetingName("GDG Wuhan");
-            meetingItem3.setMeetingPictureId(R.drawable.meeting_test_3);
-            meetingItem3.setMeetingType(MeetingItem.PARTICIPATE);
-            meetingItemList.add(meetingItem3);
-
-            MeetingItem meetingItem4 = new MeetingItem();
-            meetingItem4.setViewType(MEETING);
-            meetingItem4.setMeetingName("GDG Wuhan");
-            meetingItem4.setMeetingPictureId(R.drawable.meeting_test_1);
-            meetingItem4.setMeetingType(MeetingItem.PARTICIPATE);
-            meetingItemList.add(meetingItem4);
-
-            MeetingItem meetingItem5 = new MeetingItem();
-            meetingItem5.setViewType(MEETING);
-            meetingItem5.setMeetingName("GDG Wuhan");
-            meetingItem5.setMeetingPictureId(R.drawable.meeting_test_2);
-            meetingItem5.setMeetingType(MeetingItem.FRIEND_PARTICIPATE);
-            meetingItemList.add(meetingItem5);
-
-            MeetingItem meetingItem6 = new MeetingItem();
-            meetingItem6.setViewType(MEETING);
-            meetingItem6.setMeetingName("GDG Wuhan");
-            meetingItem6.setMeetingPictureId(R.drawable.meeting_test_3);
-            meetingItem6.setMeetingType(MeetingItem.HOT);
-            meetingItemList.add(meetingItem6);
-
-
+//        MeetingInformation meetingItem5 = new MeetingInformation();
+//        meetingItem5.setViewType(MEETING);
+//        meetingItem5.setName("GDG Wuhan");
+//        meetingItem5.setMeetingPictureId(R.drawable.meeting_test_2);
+//        meetingItem5.setMeetingType(MeetingInformation.FRIEND_PARTICIPATE);
+//        usermeetingList.add(meetingItem5);
+//
+//        MeetingInformation meetingItem6 = new MeetingInformation();
+//        meetingItem6.setViewType(MEETING);
+//        meetingItem6.setName("GDG Wuhan");
+//        meetingItem6.setMeetingPictureId(R.drawable.meeting_test_3);
+//        meetingItem6.setMeetingType(MeetingInformation.HOT);
+//        usermeetingList.add(meetingItem6);
 
         //设置参加的会议的具体会议
     }
-
-//    private void initMeetingFriendParticipate(){
-//        MeetingItem meetingItem = new MeetingItem();
-//        meetingItem.setViewType(TITLE);
-//        meetingItem.setMeetingPictureId(R.drawable.meeting_friend_participate);
-//        meetingItemList.add(meetingItem);
-//        for (int i=0;i<3;i++){
-//            MeetingItem meetingItem1 = new MeetingItem();
-//            meetingItem1.setViewType(MEETING);
-//            meetingItem1.setMeetingName("GDG Wuhan");
-//            meetingItemList.add(meetingItem1);
-//        }
-//        //设置朋友参加的具体会议
-//    }
-//
-//    private void initMeetingHot(){
-//        MeetingItem meetingItem = new MeetingItem();
-//        meetingItem.setViewType(TITLE);
-//        meetingItem.setMeetingPictureId(R.drawable.meeting_hot);
-//        meetingItemList.add(meetingItem);
-//        for (int i=0;i<3;i++){
-//            MeetingItem meetingItem1 = new MeetingItem();
-//            meetingItem1.setViewType(MEETING);
-//            meetingItem1.setMeetingName("GDG Wuhan");
-//            meetingItemList.add(meetingItem1);
-//        }
-//        //设置热门会议
-//    }
 
 
     @Override

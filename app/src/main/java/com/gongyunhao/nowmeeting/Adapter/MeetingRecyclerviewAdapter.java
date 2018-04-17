@@ -1,7 +1,6 @@
 package com.gongyunhao.nowmeeting.Adapter;
 
 import android.content.Context;
-import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,8 +11,8 @@ import android.widget.TextView;
 
 
 import com.bumptech.glide.Glide;
+import com.gongyunhao.nowmeeting.JsonBean.MeetingInformation;
 import com.gongyunhao.nowmeeting.R;
-import com.gongyunhao.nowmeeting.bean.MeetingItem;
 
 import java.util.List;
 
@@ -32,12 +31,12 @@ import java.util.List;
 
 public class MeetingRecyclerviewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> implements View.OnClickListener{
 
-    private List<MeetingItem> meetingItemList;
+    private List<MeetingInformation> meetingItemList;
     private Context mContext;
     private final int MEETING = 2;
     private OnItemClickListener onItemClickListener;
 
-    public MeetingRecyclerviewAdapter(Context mContext,List<MeetingItem> meetingItemList){
+    public MeetingRecyclerviewAdapter(Context mContext,List<MeetingInformation> meetingItemList){
         this.mContext = mContext;
         this.meetingItemList = meetingItemList;
     }
@@ -112,16 +111,16 @@ public class MeetingRecyclerviewAdapter extends RecyclerView.Adapter<RecyclerVie
 
         if (holder instanceof MeetingViewHolder){
             MeetingViewHolder meetingViewHolder = (MeetingViewHolder) holder;
-            if (meetingItemList.get(position).getMeetingType()==MeetingItem.FRIEND_PARTICIPATE){
+            if (meetingItemList.get(position).getMeetingType()== MeetingInformation.FRIEND_PARTICIPATE){
                  meetingViewHolder.linearLayoutMeetingType.setBackground(mContext.getResources().getDrawable(R.drawable.meeting_type_friend_participate));
                 Glide.with(mContext).load(R.drawable.friend_participate).into(meetingViewHolder.imageViewMeetingType);
                 meetingViewHolder.textViewMeetingTypeName.setText("朋友参与的会议");
-            }else if (meetingItemList.get(position).getMeetingType()==MeetingItem.PARTICIPATE){
+            }else if (meetingItemList.get(position).getMeetingType()==MeetingInformation.PARTICIPATE){
                 meetingViewHolder.linearLayoutMeetingType.setBackground(mContext.getResources().getDrawable(R.drawable.meeting_type_participate));
                 Glide.with(mContext).load(R.drawable.participate).into(meetingViewHolder.imageViewMeetingType);
                 meetingViewHolder.textViewMeetingTypeName.setText("参与的会议");
             }
-            meetingViewHolder.textViewMeetingName.setText(meetingItemList.get(position).getMeetingName());
+            meetingViewHolder.textViewMeetingName.setText(meetingItemList.get(position).getName());
             Glide.with(mContext).load(meetingItemList.get(position).getMeetingPictureId()).into(meetingViewHolder.imageViewMeetingPicture);
             meetingViewHolder.meetingView.setTag(position);
 
