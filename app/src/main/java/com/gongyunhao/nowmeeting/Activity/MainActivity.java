@@ -108,7 +108,6 @@ public class MainActivity extends BaseActivity {
         super.onCreate( savedInstanceState );
 
         sharedPreferences=getSharedPreferences( "addfriend",MODE_PRIVATE );
-
         mContext = this;
         setSupportActionBar( toolbar );
             //设置字体
@@ -187,14 +186,13 @@ public class MainActivity extends BaseActivity {
         String appkey = event.getfromUserAppKey();
 
         switch (event.getType()) {
-            case invite_received://收到好友邀请
-                Log.d( "FriendRequest","好友邀请来自"+fromUsername );
-                mFromUserName.add( fromUsername );
-                mReason.add( reason );
-                Message message=new Message();
-                message.what=1;
-                handler.sendMessage( message );
-                //...
+            case invite_received:
+                is_friend_add_dot.setVisibility(View.VISIBLE);
+                Log.d(Tag, "---->" + reason);
+                Log.d(Tag, "---->" + fromUsername);
+                mFromUserName.add(fromUsername);
+                mReason.add(reason);
+
                 break;
             case invite_accepted://对方接收了你的好友邀请
                 //...
@@ -357,7 +355,6 @@ public class MainActivity extends BaseActivity {
                 toggleBright();
             }
         });
-
         linearLayoutRichScan = (LinearLayout)popupWindow.getContentView().findViewById(R.id.rich_scan);
         linearLayoutAddFriend = (LinearLayout)popupWindow.getContentView().findViewById(R.id.add_friend);
         linearLayoutSearch = (LinearLayout)popupWindow.getContentView().findViewById(R.id.search);

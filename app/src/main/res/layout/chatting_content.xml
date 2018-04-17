@@ -113,6 +113,7 @@
                     android:orientation="vertical">
 
                     <RelativeLayout
+                        android:id="@+id/choose_album"
                         android:background="@drawable/chat_activity"
                         android:layout_gravity="center_horizontal"
                         android:layout_width="60dp"
@@ -147,6 +148,7 @@
                     android:orientation="vertical">
 
                     <RelativeLayout
+                        android:id="@+id/camera"
                         android:background="@drawable/chat_activity"
                         android:layout_gravity="center_horizontal"
                         android:layout_width="60dp"
@@ -198,6 +200,7 @@
             </LinearLayout>
 
             <FrameLayout
+                android:visibility="gone"
                 android:id="@+id/emojicons"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">

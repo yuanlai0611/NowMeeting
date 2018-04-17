@@ -27,6 +27,7 @@ import java.util.List;
 import cn.jpush.im.android.api.ContactManager;
 import cn.jpush.im.android.api.JMessageClient;
 import cn.jpush.im.android.api.content.EventNotificationContent;
+import cn.jpush.im.android.api.content.ImageContent;
 import cn.jpush.im.android.api.content.MessageContent;
 import cn.jpush.im.android.api.content.TextContent;
 import cn.jpush.im.android.api.event.ContactNotifyEvent;
@@ -90,12 +91,7 @@ public class FragmentMessage extends BaseFragment{
 
         for (int i=0 ; i<conversationList.size() ; i++){
 
-            if (!(conversationList.get(i).getLatestMessage().getContent() instanceof EventNotificationContent)){
 
-                MessageContent messageContent =  conversationList.get(i).getLatestMessage().getContent();
-                TextContent textContent = (TextContent)messageContent;
-                Log.d(Tag,"---->"+messageContent.toJson());
-                Log.d(Tag,"---->"+textContent.getText());
                 UserInfo userInfo = conversationList.get(i).getLatestMessage().getFromUser();
                 SimpleDateFormat format = new SimpleDateFormat("HH:mm:ss");
                 Log.d(Tag,"---->"+userInfo);
@@ -106,35 +102,56 @@ public class FragmentMessage extends BaseFragment{
                 String userName = userInfo2.getUserName();
                 switch (conversationList.get(i).getType()){
                     case single:
-                        messageItem.setMessageType(MessageItem.SINGLE);
-                        if (userName.equals(myName)){
-                            messageItem.setMessage("我："+textContent.getText());
-                        }else {
-                            messageItem.setMessage(textContent.getText());
+                        if (conversationList.get(i).getLatestMessage().getContent() instanceof TextContent){
+
+                            TextContent textContent = (TextContent) conversationList.get(i).getLatestMessage().getContent();
+                            if (userName.equals(myName)){
+                                messageItem.setMessage("我："+textContent.getText());
+                            }else {
+                                messageItem.setMessage(textContent.getText());
+                            }
+                        }else if(conversationList.get(i).getLatestMessage().getContent() instanceof ImageContent){
+
+                            if (userName.equals(myName)){
+                                messageItem.setMessage("我：[图片]");
+                            }else {
+                                messageItem.setMessage("[图片]");
+                            }
+
                         }
+                        messageItem.setMessageType(MessageItem.SINGLE);
+
                         break;
                     case group:
-                        messageItem.setMessageType(MessageItem.GROUP);
-                        if (userName.equals(myName)){
-                            messageItem.setMessage("我："+textContent.getText());
-                        }else {
-                            messageItem.setMessage(userName+"："+textContent.getText());
+
+                        if (conversationList.get(i).getLatestMessage().getContent() instanceof TextContent){
+
+                            TextContent textContent = (TextContent) conversationList.get(i).getLatestMessage().getContent();
+                            if (userName.equals(myName)){
+                                messageItem.setMessage("我："+textContent.getText());
+                            }else {
+                                messageItem.setMessage(userName+"："+textContent.getText());
+                            }
+                        }else if (conversationList.get(i).getLatestMessage().getContent() instanceof ImageContent) {
+
+                            if (userName.equals(myName)) {
+                                messageItem.setMessage("我：[图片]");
+                            } else {
+                                messageItem.setMessage(userName+"："+"[图片]");
+                            }
+
                         }
+                            messageItem.setMessageType(MessageItem.GROUP);
                         break;
                     default:
                         break;
                 }
-
-
-
-
 
                 messageItem.setDate(format.format(conversationList.get(i).getLatestMessage().getCreateTime()));
                 messageItem.setUserName(conversationList.get(i).getTitle());
                 messageItemList.add(messageItem);
             }
         }
-    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -143,7 +160,6 @@ public class FragmentMessage extends BaseFragment{
 
         initViews(view);
         setListener();
-
         return view;
     }
 
@@ -220,6 +236,11 @@ public class FragmentMessage extends BaseFragment{
                             MessageItem messageItem = new MessageItem();
                             messageItem.setUserName(userInfo.getUserName());
                             messageItem.setDate(format.format(msg.getCreateTime()));
+                            if (fromName.equals(myName)){
+                                messageItem.setMessage("我："+textContent.getText());
+                            }else {
+                                messageItem.setMessage(fromName+"："+textContent.getText());
+                            }
                             messageItem.setMessage(textContent.getText());
                             messageItem.setImageId(R.drawable.head1);
                             messageItem.setMessageType(MessageItem.SINGLE);
@@ -233,7 +254,11 @@ public class FragmentMessage extends BaseFragment{
                             MessageItem messageItem = new MessageItem();
                             messageItem.setUserName(userInfo.getUserName());
                             messageItem.setDate(format.format(msg.getCreateTime()));
-                            messageItem.setMessage(textContent.getText());
+                            if (fromName.equals(myName)){
+                                messageItem.setMessage("我："+textContent.getText());
+                            }else {
+                                messageItem.setMessage(fromName+"："+textContent.getText());
+                            }
                             messageItem.setImageId(R.drawable.head1);
                             messageItem.setMessageType(MessageItem.SINGLE);
                             Conversation conversation = Conversation.createSingleConversation(userInfo.getUserName());
@@ -356,6 +381,7 @@ public class FragmentMessage extends BaseFragment{
                  case 1:
 
                      Log.d(Tag,"---->调用了单人聊天的回调");
+                     String type = data.getStringExtra("type");
                      String title = data.getStringExtra("title");
                      String message = data.getStringExtra("message");
                      String time = data.getStringExtra("time");
@@ -365,14 +391,31 @@ public class FragmentMessage extends BaseFragment{
                      messageItem.setMessageType(MessageItem.SINGLE);
                      messageItem.setConversation(JMessageClient.getSingleConversation(title));
                      messageItem.setImageId(R.drawable.head1);
-                     if (userName.equals(myName)){
-                         messageItem.setMessage("我："+message);
+
+                     if (type.equals("text")){
+
+                         if (userName.equals(myName)){
+                             messageItem.setMessage("我："+message);
+                         }else {
+                             messageItem.setMessage(message);
+                         }
+                         messageItem.setUserName(title);
+                         messageItemList.remove(getPlaceOfUser(title));
+                         messageItemList.add(0,messageItem);
+
                      }else {
-                         messageItem.setMessage(message);
+
+                         if (userName.equals(myName)){
+                             messageItem.setMessage("我：[图片]");
+                         }else {
+                             messageItem.setMessage("[图片]");
+                         }
+                         messageItem.setUserName(title);
+                         messageItemList.remove(getPlaceOfUser(title));
+                         messageItemList.add(0,messageItem);
+
                      }
-                     messageItem.setUserName(title);
-                     messageItemList.remove(getPlaceOfUser(title));
-                     messageItemList.add(0,messageItem);
+
                      messageRecyclerViewAdapter.notifyDataSetChanged();
 
 
@@ -380,6 +423,7 @@ public class FragmentMessage extends BaseFragment{
 
                  case 2:
 
+                     String type1 = data.getStringExtra("type");
                      String name1 = data.getStringExtra("userName");
                      String message1 = data.getStringExtra("message");
                      String time1 = data.getStringExtra("time");
@@ -390,11 +434,21 @@ public class FragmentMessage extends BaseFragment{
                      messageItem1.setMessageType(MessageItem.GROUP);
                      messageItem1.setConversation(conversation);
                      messageItem1.setImageId(R.drawable.head1);
-                     if (name1.equals(myName)){
-                         messageItem1.setMessage("我："+message1);
-                     }else {
-                         messageItem1.setMessage(name1+"："+message1);
+
+                     if (type1.equals("text")){
+                         if (name1.equals(myName)){
+                             messageItem1.setMessage("我："+message1);
+                         }else {
+                             messageItem1.setMessage(name1+"："+message1);
+                         }
+                     }else{
+                         if (name1.equals(myName)){
+                             messageItem1.setMessage("我：[图片]");
+                         }else {
+                             messageItem1.setMessage(name1+"：[图片]");
+                         }
                      }
+
                      messageItem1.setUserName(conversation.getTitle());
                      messageItemList.remove(getPlaceOfUser(conversation.getTitle()));
                      messageItemList.add(0,messageItem1);

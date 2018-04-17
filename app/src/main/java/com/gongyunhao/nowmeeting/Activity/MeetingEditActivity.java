@@ -9,19 +9,14 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import com.gongyunhao.nowmeeting.Base.BaseActivity;
 import com.gongyunhao.nowmeeting.DataBaseBean.DataBaseUserInfo;
 import com.gongyunhao.nowmeeting.JsonBean.MeetingCreate;
-import com.gongyunhao.nowmeeting.JsonBean.Root;
 import com.gongyunhao.nowmeeting.R;
 import com.gongyunhao.nowmeeting.util.OkHttpUtil;
 import com.google.gson.Gson;
-
 import org.litepal.crud.DataSupport;
-
 import java.io.IOException;
-
 import okhttp3.Response;
 import rx.Observable;
 import rx.Observer;

@@ -1,17 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    android:orientation="vertical"
+<LinearLayout android:orientation="vertical"
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <LinearLayout
+        android:visibility="gone"
         android:layout_marginBottom="10dp"
         android:id="@+id/left_layout"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="left"
         android:orientation="horizontal">
+
         <ImageView
             android:src="@drawable/head3"
             android:layout_marginLeft="10dp"
@@ -44,6 +46,7 @@
     </LinearLayout>
 
     <LinearLayout
+        android:visibility="gone"
         android:layout_marginBottom="10dp"
         android:id="@+id/right_layout"
         android:layout_width="wrap_content"
@@ -83,5 +86,435 @@
             android:layout_height="40dp" />
 
     </LinearLayout>
+
+
+    <LinearLayout
+        android:visibility="gone"
+        android:layout_marginBottom="10dp"
+        android:id="@+id/left_layout_picture"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="left"
+        android:orientation="horizontal">
+
+        <ImageView
+            android:src="@drawable/head3"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="10dp"
+            android:id="@+id/left_user_image_picture"
+            android:layout_width="40dp"
+            android:layout_height="40dp" />
+
+        <org.raphets.roundimageview.RoundImageView
+            android:layout_marginTop="10dp"
+            android:layout_marginLeft="15dp"
+            android:id="@+id/left_picture"
+            android:layout_width="150dp"
+            android:layout_height="40dp"
+            android:scaleType="fitXY"
+            app:corner_radius="5dp"
+            app:type="round"/>
+
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:visibility="gone"
+        android:layout_marginBottom="10dp"
+        android:id="@+id/right_layout_picture"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="right"
+        android:orientation="horizontal">
+
+
+        <org.raphets.roundimageview.RoundImageView
+            android:layout_marginTop="10dp"
+            android:layout_marginRight="15dp"
+            android:id="@+id/right_picture"
+            android:layout_width="150dp"
+            android:layout_height="40dp"
+            android:scaleType="fitXY"
+            app:corner_radius="5dp"
+            app:type="round"/>
+
+        <ImageView
+            android:src="@drawable/head4"
+            android:layout_marginTop="10dp"
+            android:layout_marginRight="10dp"
+            android:id="@+id/right_user_image_picture"
+            android:layout_width="40dp"
+            android:layout_height="40dp" />
+
+    </LinearLayout>
+
+
+    <LinearLayout
+        android:visibility="gone"
+        android:layout_marginBottom="10dp"
+        android:id="@+id/left_layout_vote"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="left"
+        android:orientation="horizontal">
+
+        <ImageView
+            android:src="@drawable/head3"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="10dp"
+            android:id="@+id/left_user_image_vote"
+            android:layout_width="40dp"
+            android:layout_height="40dp" />
+
+        <RelativeLayout
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="22dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/msg_left">
+
+
+            <ImageView
+                android:id="@+id/vote_sign_left"
+                android:src="@drawable/vote_sign"
+                android:layout_marginBottom="10dp"
+                android:layout_width="80dp"
+                android:layout_height="80dp" />
+
+            <LinearLayout
+                android:layout_toRightOf="@+id/vote_sign_left"
+                android:orientation="vertical"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="40dp">
+
+                <TextView
+                    android:id="@+id/left_vote_name"
+                    android:textColor="@color/accent_black"
+                    android:layout_marginLeft="15dp"
+                    android:textSize="15sp"
+                    android:text="优秀团员推荐"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+
+
+                <LinearLayout
+                    android:id="@+id/left_vote_first_line"
+                    android:layout_marginTop="5dp"
+                    android:orientation="horizontal"
+                    android:layout_marginLeft="15dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content">
+
+                    <View
+                        android:layout_gravity="center_vertical"
+                        android:background="@drawable/vote_circle"
+                        android:layout_width="14dp"
+                        android:layout_height="14dp"/>
+
+                    <TextView
+                        android:id="@+id/left_vote_first_choice"
+                        android:textSize="13sp"
+                        android:layout_marginLeft="10dp"
+                        android:text="龚云浩同学"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/left_vote_second_line"
+                    android:layout_marginTop="5dp"
+                    android:orientation="horizontal"
+                    android:layout_marginLeft="15dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content">
+
+                    <View
+                        android:layout_gravity="center_vertical"
+                        android:background="@drawable/vote_circle"
+                        android:layout_width="14dp"
+                        android:layout_height="14dp"/>
+
+                    <TextView
+                        android:id="@+id/left_vote_second_choice"
+                        android:textSize="13sp"
+                        android:layout_marginLeft="10dp"
+                        android:text="杨琪同学"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"/>
+
+                </LinearLayout>
+
+
+
+            </LinearLayout>
+
+        </RelativeLayout>
+
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:visibility="gone"
+        android:layout_marginBottom="10dp"
+        android:id="@+id/right_layout_vote"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="right"
+        android:orientation="horizontal">
+
+        <RelativeLayout
+            android:layout_marginRight="10dp"
+            android:layout_marginTop="22dp"
+            android:background="@drawable/msg_right"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+            <ImageView
+                android:layout_toRightOf="@+id/linearLayout_vote"
+                android:id="@+id/vote_sign_right"
+                android:src="@drawable/vote_sign"
+                android:layout_marginBottom="10dp"
+                android:layout_width="80dp"
+                android:layout_height="80dp" />
+
+            <LinearLayout
+                android:id="@+id/linearLayout_vote"
+                android:orientation="vertical"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="40dp">
+
+            <TextView
+                android:id="@+id/right_vote_name"
+                android:textColor="@color/accent_white"
+                android:layout_marginLeft="15dp"
+                android:textStyle="bold"
+                android:textSize="15sp"
+                android:text="优秀团员推荐"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+
+            <LinearLayout
+                android:id="@+id/right_vote_first_line"
+                android:layout_marginTop="5dp"
+                android:orientation="horizontal"
+                android:layout_marginLeft="15dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+
+                <View
+                    android:layout_gravity="center_vertical"
+                    android:background="@drawable/vote_circle_white"
+                    android:layout_width="14dp"
+                    android:layout_height="14dp"/>
+
+                <TextView
+                    android:id="@+id/right_vote_first_choice"
+                    android:textColor="@color/accent_white"
+                    android:textSize="13sp"
+                    android:layout_marginLeft="10dp"
+                    android:text="龚云浩同学"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/right_vote_second_line"
+                android:layout_marginTop="5dp"
+                android:orientation="horizontal"
+                android:layout_marginLeft="15dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+
+                <View
+                    android:layout_gravity="center_vertical"
+                    android:background="@drawable/vote_circle_white"
+                    android:layout_width="14dp"
+                    android:layout_height="14dp"/>
+
+                <TextView
+                    android:id="@+id/right_vote_second_choice"
+                    android:textColor="@color/accent_white"
+                    android:textSize="13sp"
+                    android:layout_marginLeft="10dp"
+                    android:text="杨琪同学"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"/>
+
+            </LinearLayout>
+
+            </LinearLayout>
+
+
+        </RelativeLayout>
+
+        <ImageView
+            android:src="@drawable/head4"
+            android:layout_marginTop="10dp"
+            android:layout_marginRight="10dp"
+            android:id="@+id/right_user_image_vote"
+            android:layout_width="40dp"
+            android:layout_height="40dp" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:visibility="gone"
+        android:layout_marginBottom="10dp"
+        android:id="@+id/left_layout_lottery"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="left"
+        android:orientation="horizontal">
+
+        <ImageView
+            android:src="@drawable/head3"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="10dp"
+            android:id="@+id/left_user_image_lottery"
+            android:layout_width="40dp"
+            android:layout_height="40dp" />
+
+        <RelativeLayout
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="22dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/msg_left">
+
+
+            <ImageView
+                android:id="@+id/lottery_sign_left"
+                android:src="@drawable/lottery_sign"
+                android:layout_marginBottom="10dp"
+                android:layout_width="80dp"
+                android:layout_height="80dp" />
+
+            <LinearLayout
+                android:layout_toRightOf="@+id/lottery_sign_left"
+                android:orientation="vertical"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="40dp">
+
+                <TextView
+                    android:id="@+id/left_lottery_name"
+                    android:textColor="@color/accent_black"
+                    android:layout_marginLeft="15dp"
+                    android:textSize="15sp"
+                    android:text="优秀团员推荐"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+
+
+                <LinearLayout
+                    android:layout_marginTop="5dp"
+                    android:orientation="horizontal"
+                    android:layout_marginLeft="15dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content">
+
+                    <TextView
+                        android:id="@+id/left_lottery_number"
+                        android:textSize="12sp"
+                        android:layout_marginLeft="10dp"
+                        android:text="今晚会诞生8位幸运儿"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"/>
+
+                </LinearLayout>
+
+
+
+            </LinearLayout>
+
+        </RelativeLayout>
+
+
+    </LinearLayout>
+
+
+    <LinearLayout
+        android:visibility="gone"
+        android:layout_marginBottom="10dp"
+        android:id="@+id/right_layout_lottery"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="right"
+        android:orientation="horizontal">
+
+        <RelativeLayout
+            android:layout_marginRight="10dp"
+            android:layout_marginTop="22dp"
+            android:background="@drawable/msg_right"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+            <ImageView
+                android:layout_toRightOf="@+id/linearLayout_lottery"
+                android:id="@+id/lottery_sign_right"
+                android:src="@drawable/lottery_sign"
+                android:layout_marginBottom="10dp"
+                android:layout_width="80dp"
+                android:layout_height="80dp" />
+
+            <LinearLayout
+                android:id="@+id/linearLayout_lottery"
+                android:orientation="vertical"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="40dp">
+
+                <TextView
+                    android:id="@+id/right_lottery_name"
+                    android:textStyle="bold"
+                    android:textColor="@color/accent_white"
+                    android:layout_marginLeft="15dp"
+                    android:textSize="15sp"
+                    android:text="抽取今晚的幸运观众"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+
+
+
+                <LinearLayout
+                    android:layout_marginTop="5dp"
+                    android:orientation="horizontal"
+                    android:layout_marginLeft="15dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content">
+
+
+                    <TextView
+                        android:id="@+id/right_lottery_number"
+                        android:textColor="@color/accent_white"
+                        android:textSize="12sp"
+                        android:layout_marginLeft="10dp"
+                        android:text="今晚一共会诞生8位幸运儿"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"/>
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+
+        </RelativeLayout>
+
+        <ImageView
+            android:src="@drawable/head4"
+            android:layout_marginTop="10dp"
+            android:layout_marginRight="10dp"
+            android:id="@+id/right_user_image_lottery"
+            android:layout_width="40dp"
+            android:layout_height="40dp" />
+
+    </LinearLayout>
+
+
 
 </LinearLayout>
