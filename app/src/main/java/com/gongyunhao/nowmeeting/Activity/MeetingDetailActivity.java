@@ -57,9 +57,10 @@ public class MeetingDetailActivity extends BaseActivity implements View.OnClickL
     private String QR_CODE_CONTENT="Extra_Qr_Content";
     private List<LotteryItem> lotteryItemList;
     private List<Voteitem> voteitemList;
-    private List<UserItem> userItems;
+    private List<UserInfo> userItems;
     private String getMeetingUrl = "http://39.106.47.27:8080/conference//api/conference/dogetConferenceInfo";
     private int groupId;
+    private String meetingID;
     private Typeface typeface;
 
     @Override
@@ -91,9 +92,6 @@ public class MeetingDetailActivity extends BaseActivity implements View.OnClickL
         lotteryItemList = new ArrayList<>();
         imageView_meeting_detail = findViewById( R.id.imageView_collapsing );
         collapsingToolbarLayout = findViewById( R.id.collapsing_toolbar_meeting_detail );
-//        typeface = Typeface.createFromAsset(getAssets(),"fonts/upright_foursquare_hard_point.ttf");
-//        collapsingToolbarLayout.setExpandedTitleTypeface(typeface);
-//        collapsingToolbarLayout.setCollapsedTitleTypeface(typeface);
         recycler_rough = findViewById(R.id.detail_user_recycler_rough);
         tv_detail_meeting_place = findViewById( R.id.detail_meeting_place );
         tv_detail_meeting_date = findViewById( R.id.detail_meeting_date );
@@ -131,20 +129,11 @@ public class MeetingDetailActivity extends BaseActivity implements View.OnClickL
     public void initData() {
 
         Intent intent = getIntent();
-        int meetingId = intent.getIntExtra("meetingId",0);
-        getMeetingInfo(String.valueOf(meetingId));
+        meetingID= String.valueOf( intent.getIntExtra("meetingId",0) );
+        getMeetingInfo(String.valueOf(meetingID));
 
 //        for (int i=0;i<3;i++){
 //            voteitemList.add( new Voteitem( "天气","2018","龚云浩" ) );
-//        }
-
-
-
-
-//        for (int i=0 ; i<4 ; i++){
-//            LotteryItem lotteryItem = new LotteryItem();
-//            lotteryItem.setLotteryName(" ");
-//            lotteryItemList.add(lotteryItem);
 //        }
 
 
@@ -161,13 +150,12 @@ public class MeetingDetailActivity extends BaseActivity implements View.OnClickL
         super.onClick( v );
         switch (v.getId()){
             case R.id.iv_meeting_detail_qr_code:
-//                /**
-//                 * 在这里放会议的识别信息进去
-//                 */
-//                Intent intent=new Intent( MeetingDetailActivity.this,QrCodeActivity.class );
-//                intent.putExtra( QR_CODE_CONTENT,"棒棒小糖测试,中文测试试用\nQR Code Content" );
-//                startActivity( intent );
-                startIntent( CreateVoteActivity.class );
+                /**
+                 * 在这里放会议的识别ID信息进去
+                 */
+                Intent intent=new Intent( MeetingDetailActivity.this,QrCodeActivity.class );
+                intent.putExtra( QR_CODE_CONTENT, "Now_Meeting,"+meetingID );
+                startActivity( intent );
                 break;
             case R.id.relativate_vote:
                 startIntent( PieChartActivity.class );
@@ -195,7 +183,6 @@ public class MeetingDetailActivity extends BaseActivity implements View.OnClickL
 
                     }
 
-
                 } catch (IOException e) {
                     e.printStackTrace();
                     subscriber.onError(e);
@@ -216,7 +203,7 @@ public class MeetingDetailActivity extends BaseActivity implements View.OnClickL
                             JSONObject jsonObject = new JSONObject(response);
                             JSONObject jsonObject1 = jsonObject.getJSONObject("data");
                             groupId = jsonObject1.getInt("chatroomId");
-
+                            meetingID=jsonObject1.getString( "id" );
                             String meetingDate = jsonObject1.getString("time");
                             String meetingPlace = jsonObject1.getString("location");
                             String meetingTitle = jsonObject1.getString("name");
@@ -242,15 +229,9 @@ public class MeetingDetailActivity extends BaseActivity implements View.OnClickL
                                         if (i==0){
                                             Log.d(Tag,"---->获取用户信息成功");
 
-                                            for (int j=0 ; j<list.size() ;i++){
-
-                                                UserInfo userInfo = list.get(i);
-                                                UserItem userItem = new UserItem();
-                                                userItem.setUserName(userInfo.getUserName());
-                                                userItem.setUserPictureId(R.drawable.head7);
-
-                                            }
-
+                                            userItems.clear();
+                                            userItems.addAll( list );
+                                            userRecyclerviewAdapter.notifyDataSetChanged();
 
                                         }else{
                                             Log.d(Tag,"---->获取用户信息失败");

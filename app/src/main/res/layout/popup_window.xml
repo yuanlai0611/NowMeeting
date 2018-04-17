@@ -96,7 +96,7 @@
             android:textSize="16sp"
             android:layout_gravity="center_vertical"
             android:textColor="#707070"
-            android:text="添加会议"
+            android:text="创建会议"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
 

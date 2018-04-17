@@ -91,7 +91,7 @@ public class SearchFriendActivity extends BaseActivity {
                         @Override
                         public void run() {
                             try {
-                                friendlistdata= OkHttpUtil.getInstance().doSearchUserByName( et_search.getText().toString() );
+                                friendlistdata= OkHttpUtil.getInstance().doSearchByName( et_search.getText().toString(),inforUrl );
                             } catch (IOException e) {
                                 e.printStackTrace( );
                             }

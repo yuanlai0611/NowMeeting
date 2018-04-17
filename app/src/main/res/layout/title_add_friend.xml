@@ -12,7 +12,7 @@
         android:textSize="@dimen/s_sub_big_text"
         android:layout_centerInParent="true"
         android:textColor="@color/accent_white"
-        tools:text="新朋友"
+        android:text="新朋友"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" />
 

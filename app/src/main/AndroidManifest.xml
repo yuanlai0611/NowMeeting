@@ -122,6 +122,8 @@
         <activity android:name=".Activity.GroupChattingActivity"/>
         <activity android:name=".Activity.SearchFriendActivity">
         </activity>
+        <activity android:name=".Activity.CheckInActivity">
+        </activity>
     </application>
 
 </manifest>

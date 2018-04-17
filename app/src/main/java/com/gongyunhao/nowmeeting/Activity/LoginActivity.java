@@ -48,6 +48,7 @@ public class LoginActivity extends BaseActivity {
     private String inforUrl = "http://39.106.47.27:8080/conference/api/user/dogetInfo";
     private AlertDialog loadingDialog;
     private Boolean isLogin;
+    private int userID;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -205,7 +206,7 @@ public class LoginActivity extends BaseActivity {
                                 dataBaseUserInfo.setPhone(root.getData().getPhone());
                                 dataBaseUserInfo.setSignature(root.getData().getSignature());
                                 dataBaseUserInfo.setWorkingPlace(root.getData().getWorkingPlace());
-
+                                userID=root.getData().getId();
                                 if (dataBaseUserInfo.save()){
                                     Log.d(Tag,"---->用户信息储存成功");
                                 }else{
@@ -245,6 +246,7 @@ public class LoginActivity extends BaseActivity {
                                     editor.putBoolean("isLogin",true);
                                     editor.putString("userName",name);
                                     editor.putString("passWord",passWord);
+                                    editor.putString( "userID",String.valueOf( userID ) );
                                     editor.apply();
                                     finish();
                                 }
