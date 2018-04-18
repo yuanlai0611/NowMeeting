@@ -26,6 +26,7 @@ import java.io.IOException;
 
 import cn.jpush.im.android.api.JMessageClient;
 import cn.jpush.im.api.BasicCallback;
+import okhttp3.Call;
 import okhttp3.Response;
 
 public class MeetingDetailNoJoinActivity extends BaseActivity implements View.OnClickListener{
@@ -35,7 +36,7 @@ public class MeetingDetailNoJoinActivity extends BaseActivity implements View.On
     private int meeting_ID;
     private String MEETING_ID_EXTRA="nojoin_meeting_id";
     private String ADD_FRIEND_EXTRA="AddFriendActivity_AddFriend";
-    private String meetingUrl="http://39.106.47.27:8080/conference/api/conference/dogetConferenceInfo";
+    private String meetingUrl="http://39.106.47.27:8080/conference/api/conference/dogetConferenceInfoById";
     private Response response;
     private MeetingInformation meeting;
     private String responsestr;
@@ -70,40 +71,44 @@ public class MeetingDetailNoJoinActivity extends BaseActivity implements View.On
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate( savedInstanceState );
+
         meeting_ID=getIntent(  ).getIntExtra( MEETING_ID_EXTRA,0 );
         if (meeting_ID==0){
             finish();
             showToast( "出错了！" );
         }else {
-            new Thread( new Runnable( ) {
-                @Override
-                public void run() {
-                    try {
-                        response= OkHttpUtil.getInstance().getMeetingInfoResponse( String.valueOf( meeting_ID ),meetingUrl );
-                        responsestr=response.body().string();
-                    } catch (IOException e) {
-                        e.printStackTrace( );
-                    }
-                    JSONObject jsonObject= null;
-                    try {
-                        jsonObject = new JSONObject( responsestr );
-                        issuccess=jsonObject.getBoolean( "success" );
-                    } catch (JSONException e) {
-                        e.printStackTrace( );
-                    }
-                    if (!issuccess){//没有找到
-                        Message message_fail=new Message();
-                        message_fail.what=REQUEST_FAILED;
-                        handler.sendMessage( message_fail );
-                    }else {//找到了
-                        parseDataWithJSON(responsestr);//username的数组
-                        Message message_success=new Message();
-                        message_success.what=REQUEST_SUCCESS;
-                        handler.sendMessage( message_success );
-                    }
+            try {
+                OkHttpUtil.getInstance().getMeetingInfoResponse( String.valueOf( meeting_ID ),meetingUrl, new okhttp3.Callback( ) {
+                    @Override
+                    public void onFailure(Call call, IOException e) {
 
-                }
-            } ).start();
+                        }
+
+                        @Override
+                        public void onResponse(Call call, Response response) throws IOException {
+                        responsestr=response.body().string();
+                        JSONObject jsonObject= null;
+                        try {
+                            jsonObject = new JSONObject( responsestr );
+                            issuccess=jsonObject.getBoolean( "success" );
+                            } catch (JSONException e) {
+                            e.printStackTrace( );
+                            }
+                            if (!issuccess){//没有找到
+                                Message message_fail=new Message();
+                                message_fail.what=REQUEST_FAILED;
+                                handler.sendMessage( message_fail );
+                                }else {//找到了
+                                parseDataWithJSON(responsestr);//username的数组
+                                Message message_success=new Message();
+                                message_success.what=REQUEST_SUCCESS;
+                                handler.sendMessage( message_success );
+                        }
+                    }
+                } );
+            } catch (IOException e) {
+                e.printStackTrace( );
+            }
         }
     }
     private void parseDataWithJSON(String responsestr2) {

@@ -31,7 +31,7 @@
                 android:background="@drawable/about_me_background">
 
                 <org.raphets.roundimageview.RoundImageView
-                    android:id="@+id/user_picture"
+                    android:id="@+id/user_detail_user_picture"
                     android:layout_width="60dp"
                     android:layout_height="60dp"
                     android:layout_alignParentLeft="true"

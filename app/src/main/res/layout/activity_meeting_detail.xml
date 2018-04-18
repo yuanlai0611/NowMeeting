@@ -97,6 +97,23 @@
                 app:contentInsetLeft="0dp"
                 app:contentInsetStart="0dp">
 
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                    <TextView
+                        android:id="@+id/check_in"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:text="签到表"
+                        android:gravity="center"
+                        android:textSize="16sp"
+                        android:paddingRight="12dp"
+                        android:layout_alignParentEnd="true"/>
+
+                </RelativeLayout>
+
+
             </android.support.v7.widget.Toolbar>
 
         </android.support.design.widget.CollapsingToolbarLayout>

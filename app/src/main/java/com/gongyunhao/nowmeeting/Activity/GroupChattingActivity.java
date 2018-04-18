@@ -1026,9 +1026,4 @@ public class GroupChattingActivity extends BaseActivity implements View.OnTouchL
     }
 
 
-
-
-
-
-
 }

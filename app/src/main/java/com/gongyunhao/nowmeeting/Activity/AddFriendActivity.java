@@ -40,7 +40,7 @@ public class AddFriendActivity extends AppCompatActivity {
         et_add_friend_reason=findViewById( R.id.et_add_friend_reason );
         TextView textView=findViewById( R.id.chatting_title_name );
         SharedPreferences sharedPreferences = getSharedPreferences("isLogin",MODE_PRIVATE);
-        userID=sharedPreferences.getString( userID,"" );
+        userID=sharedPreferences.getString( "userID","" );
 
         final String friendName=getIntent().getStringExtra( ADD_FRIEND_EXTRA );
         final int meetingID=getIntent().getIntExtra( "joinmeeting",0 );

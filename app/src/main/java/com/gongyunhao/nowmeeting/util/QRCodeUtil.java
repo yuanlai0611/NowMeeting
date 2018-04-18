@@ -85,7 +85,7 @@ public class QRCodeUtil {
         canvas.drawBitmap(qrBitmap, 0, 0, null);
         canvas.save( Canvas.ALL_SAVE_FLAG);
         float scaleSize = 1.0f;
-        while ((logoBitmapWidth / scaleSize) > (qrBitmapWidth / 5) || (logoBitmapHeight / scaleSize) > (qrBitmapHeight / 5)) {
+        while ((logoBitmapWidth / scaleSize) > (qrBitmapWidth / 6) || (logoBitmapHeight / scaleSize) > (qrBitmapHeight / 6)) {
             scaleSize *= 2;
         }
         float sx = 1.0f / scaleSize;

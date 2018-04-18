@@ -35,7 +35,6 @@
                     android:gravity="center"
                     android:textSize="20sp"
                     android:hint="邮箱"
-                    android:text="yuanlai"
                     android:layout_marginLeft="82dp"
                     android:layout_marginRight="82dp"
                     android:inputType="textEmailAddress"
@@ -51,8 +50,7 @@
                     android:layout_marginLeft="82dp"
                     android:layout_marginRight="82dp"
                     android:theme="@style/MyLoginEditText"
-                    android:hint="密码"
-                    android:text="123456"/>
+                    android:hint="密码"/>
 
             </LinearLayout>
 
