@@ -37,11 +37,21 @@ import java.util.List;
  * Created by yuanlai on 2018/3/13.
  */
 
-public class ChattingRecyclerviewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
+public class ChattingRecyclerviewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> implements View.OnClickListener{
 
    private List<ChattingItem> chattingItems;
 
    private Context mContext;
+
+   public OnItemClickListener onItemClickListener = null;
+
+   public void setOnItemClickListener(OnItemClickListener listener){
+       this.onItemClickListener = listener;
+   }
+
+   public interface OnItemClickListener{
+        void onItemClick(View view,int position);
+    }
 
    public ChattingRecyclerviewAdapter(Context context,List<ChattingItem> chattingItems){
        mContext = context;
@@ -50,14 +60,25 @@ public class ChattingRecyclerviewAdapter extends RecyclerView.Adapter<RecyclerVi
 
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-           View view;
-           view = LayoutInflater.from(mContext).inflate(R.layout.item_bubble,parent,false);
-           return new ChattingItemViewholder(view);
+           View view = LayoutInflater.from(mContext).inflate(R.layout.item_bubble,parent,false);
+           view.setOnClickListener(this);
+           final ChattingItemViewholder chattingItemViewholder = new ChattingItemViewholder(view);
+           return chattingItemViewholder;
     }
 
+    @Override
+    public void onClick(View v) {
+
+       if (onItemClickListener!=null){
+
+           onItemClickListener.onItemClick(v,(int)v.getTag());
+       }
+
+    }
 
     class ChattingItemViewholder extends RecyclerView.ViewHolder{
 
+       View bubble;
        LinearLayout linearLayoutLeft;
        LinearLayout linearLayoutRight;
        LinearLayout linearLayoutLeftPhoto;
@@ -97,7 +118,7 @@ public class ChattingRecyclerviewAdapter extends RecyclerView.Adapter<RecyclerVi
 
        public ChattingItemViewholder(View view){
             super(view);
-
+            bubble = view;
             textViewMessageLeft = (TextView)view.findViewById(R.id.left_msg);
             linearLayoutLeft = (LinearLayout)view.findViewById(R.id.left_layout);
             imageViewUserLeft = (ImageView)view.findViewById(R.id.left_user_image);
@@ -142,6 +163,7 @@ public class ChattingRecyclerviewAdapter extends RecyclerView.Adapter<RecyclerVi
     public void onBindViewHolder(RecyclerView.ViewHolder holder, final int position) {
 
       final ChattingItemViewholder chattingItemViewholder = (ChattingItemViewholder)holder;
+
 
         if (chattingItems.get(position).getViewType()==ChattingItem.LEFT){
 
@@ -199,7 +221,32 @@ public class ChattingRecyclerviewAdapter extends RecyclerView.Adapter<RecyclerVi
             });
             Glide.with(mContext).load(chattingItems.get(position).getPictureId()).apply(RequestOptions.bitmapTransform(new CircleCrop())).into(chattingItemViewholder.imageViewRightUserPicture);
 
+        }else if (chattingItems.get(position).getViewType()==ChattingItem.LEFT_LOTTERY){
+
+            chattingItemViewholder.linearLayoutLeftLottery.setVisibility(View.VISIBLE);
+            chattingItemViewholder.textViewLeftLotteryName.setText(chattingItems.get(position).getLotteryName());
+            chattingItemViewholder.textViewLeftLotteryNumber.setText(chattingItems.get(position).getLotteryNumber());
+            Glide.with(mContext).load(chattingItems.get(position).getPictureId()).apply(RequestOptions.bitmapTransform(new CircleCrop())).into(chattingItemViewholder.imageViewLeftLottery);
+
+
+        }else if (chattingItems.get(position).getViewType()==ChattingItem.RIGHT_LOTTERY){
+
+            chattingItemViewholder.linearLayoutRightLottery.setVisibility(View.VISIBLE);
+            chattingItemViewholder.textViewRightLotteryName.setText(chattingItems.get(position).getLotteryName());
+            Glide.with(mContext).load(chattingItems.get(position).getPictureId()).apply(RequestOptions.bitmapTransform(new CircleCrop())).into(chattingItemViewholder.imageViewRightLottery);
+            chattingItemViewholder.textViewRightLotteryNumber.setText(chattingItems.get(position).getLotteryNumber());
+
+        }else if (chattingItems.get(position).getViewType()==ChattingItem.LEFT_VOTE){
+
+            chattingItemViewholder.linearLayoutLeftVote.setVisibility(View.VISIBLE);
+
+        }else if (chattingItems.get(position).getViewType()==ChattingItem.RIGHT_VOTE){
+
+            chattingItemViewholder.linearLayoutRightVote.setVisibility(View.VISIBLE);
+
         }
+        chattingItemViewholder.bubble.setTag(position);
+
     }
 
     @Override

@@ -1,8 +1,12 @@
 package com.gongyunhao.nowmeeting.util;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.io.IOException;
 import java.net.URL;
 
+import okhttp3.Callback;
 import okhttp3.FormBody;
 import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
@@ -57,16 +61,22 @@ public class OkHttpUtil {
                 .url(url)
                 .post(requestBody)
                 .build();
+
         Response response = mClient.newCall(request).execute();
+
         return  response;
 
     }
 
     public String getInfo(String name,String url) throws IOException{
 
+        RequestBody requestBody = new FormBody.Builder()
+                .add("username",name)
+                .build();
+
         Request request = new Request.Builder()
-                .url(url+"?username="+name)
-                .get()
+                .url(url)
+                .post(requestBody)
                 .build();
         Response response = mClient.newCall(request).execute();
         return response.body().string();
@@ -97,29 +107,83 @@ public class OkHttpUtil {
     }
 
     public String doSearchByName(String name,String url)throws IOException{
+
+        RequestBody requestBody = new FormBody.Builder()
+                .add("name",name)
+                .build();
+
         Request request=new Request.Builder()
 //                .url("http://39.106.47.27:8080/conference//api/user/dosearchUsersByName"+"?name="+name)
-                .url( url+"?name="+name )
-                .get()
+                .url( url )
+                .post(requestBody)
                 .build();
         Response response=mClient.newCall(request).execute();
         return response.body().string();
     }
 
-    public Response getMeetingInfoResponse(String name,String url) throws IOException{
-        Request request = new Request.Builder()
-                .url(url+"?conferenceId="+name)
-                .get()
+    public Response getMeetingInfoResponse(String conferenId,String url) throws IOException{
+
+        RequestBody requestBody = new FormBody.Builder()
+                .add("conferenceId",conferenId)
                 .build();
+
+        Request request = new Request.Builder()
+                .url(url)
+                .post(requestBody)
+                .build();
+
         Response response = mClient.newCall(request).execute();
         return response;
     }
 
+    public void getLotteryPeople(String conferenceId,String name,String number,String url,Callback callback)throws IOException{
+
+        RequestBody requestBody = new FormBody.Builder()
+                .add("conferenceId",conferenceId)
+                .add("name",name)
+                .add("number",number)
+                .build();
+        Request request = new Request.Builder()
+                .url(url)
+                .post(requestBody)
+                .build();
+
+        mClient.newCall(request).enqueue(callback);
+
+    }
+
+    public int getConferenceIdByName(String conferenceName,String url)throws IOException{
+
+        RequestBody requestBody = new FormBody.Builder()
+                .add("conferenceName",conferenceName)
+                .build();
+
+        Request request = new Request.Builder()
+                .url(url)
+                .post(requestBody)
+                .build();
+        Response response = mClient.newCall(request).execute();
+        try {
+            JSONObject jsonObject = new JSONObject(response.body().string());
+            JSONObject jsonObject1 = jsonObject.getJSONObject("data");
+            return jsonObject1.getInt("id");
+        }catch (JSONException e){
+            e.printStackTrace();
+        }
+
+        return 0;
+    }
+
     public void doSignInConference(String userID,String conferenceId,String url,okhttp3.Callback callback){
         //?userId=36&conferenceId=33
-        Request request=new Request.Builder()
-                .url( url+"?userId="+userID+"&conferenceId="+conferenceId )
-                .get()
+        RequestBody requestBody = new FormBody.Builder()
+                .add("userId",userID)
+                .add("conferenceId",conferenceId)
+                .build();
+
+        Request request = new Request.Builder()
+                .url( url )
+                .post(requestBody)
                 .build();
         mClient.newCall( request ).enqueue( callback );
     }
@@ -127,9 +191,13 @@ public class OkHttpUtil {
     //http://39.106.47.27:8080/conference/api/userEntry/dogetAllConference?userId=34
     public void dogetAllConference(String userID,String url,okhttp3.Callback callback){
         //?userId=36&conferenceId=33
-        Request request=new Request.Builder()
-                .url( url+"?userId="+userID )
-                .get()
+        RequestBody requestBody = new FormBody.Builder()
+                .add("userId",userID)
+                .build();
+
+        Request request = new Request.Builder()
+                .url( url )
+                .post(requestBody)
                 .build();
         mClient.newCall( request ).enqueue( callback );
     }

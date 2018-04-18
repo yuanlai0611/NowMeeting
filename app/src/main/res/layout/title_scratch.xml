@@ -12,7 +12,7 @@
         android:textSize="@dimen/sub_big_text"
         android:layout_centerInParent="true"
         android:textColor="@color/accent_white"
-        tools:text="发布抽奖"
+        tools:text="刮刮卡"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" />
 
@@ -24,15 +24,6 @@
         android:layout_width="30dp"
         android:layout_height="30dp" />
 
-    <TextView
-        android:id="@+id/lottery_publish"
-        android:layout_marginRight="5dp"
-        android:layout_alignParentRight="true"
-        android:layout_centerInParent="true"
-        android:textSize="@dimen/sub_big_text"
-        android:textColor="@color/accent_white"
-        android:text="发布"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+
 
 </RelativeLayout>

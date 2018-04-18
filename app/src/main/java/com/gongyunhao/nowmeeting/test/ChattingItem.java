@@ -2,6 +2,8 @@ package com.gongyunhao.nowmeeting.test;
 
 import android.graphics.Bitmap;
 
+import java.util.List;
+
 /**
  * _oo0oo_
  * 08888888o
@@ -39,7 +41,37 @@ public class ChattingItem {
 
     private int pictureId;
 
+    public List<String> getNameList() {
+        return nameList;
+    }
+
+    public void setNameList(List<String> nameList) {
+        this.nameList = nameList;
+    }
+
+    private List<String> nameList;
+
     private Bitmap bitmap;
+
+    public String getLotteryName() {
+        return lotteryName;
+    }
+
+    public void setLotteryName(String lotteryName) {
+        this.lotteryName = lotteryName;
+    }
+
+    private String lotteryName;
+
+    public String getLotteryNumber() {
+        return lotteryNumber;
+    }
+
+    public void setLotteryNumber(String lotteryNumber) {
+        this.lotteryNumber = lotteryNumber;
+    }
+
+    private String lotteryNumber;
 
     public Bitmap getBitmap() {
         return bitmap;

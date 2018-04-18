@@ -18,6 +18,7 @@
             android:background="#bfbfbf"
             android:layout_width="match_parent"
             android:layout_height="0.1dp"/>
+
         <EditText
             android:focusedByDefault="false"
             android:focusableInTouchMode="true"
@@ -28,6 +29,7 @@
             android:background="@color/accent_white"
             android:layout_width="match_parent"
             android:layout_height="100dp" />
+
         <View
             android:background="#bfbfbf"
             android:layout_width="match_parent"
