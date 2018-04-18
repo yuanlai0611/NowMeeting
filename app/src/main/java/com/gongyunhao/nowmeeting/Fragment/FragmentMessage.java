@@ -127,11 +127,25 @@ public class FragmentMessage extends BaseFragment{
                         if (conversationList.get(i).getLatestMessage().getContent() instanceof TextContent){
 
                             TextContent textContent = (TextContent) conversationList.get(i).getLatestMessage().getContent();
-                            if (userName.equals(myName)){
-                                messageItem.setMessage("我："+textContent.getText());
-                            }else {
-                                messageItem.setMessage(userName+"："+textContent.getText());
+
+                            if (textContent.getText().startsWith("lottery")){
+
+                                if (userName.equals(myName)){
+                                    messageItem.setMessage("我：[抽奖活动]");
+                                }else {
+                                    messageItem.setMessage(userName+"：[抽奖活动]");
+                                }
+
+                            }else{
+
+                                if (userName.equals(myName)){
+                                    messageItem.setMessage("我："+textContent.getText());
+                                }else {
+                                    messageItem.setMessage(userName+"："+textContent.getText());
+                                }
                             }
+
+
                         }else if (conversationList.get(i).getLatestMessage().getContent() instanceof ImageContent) {
 
                             if (userName.equals(myName)) {
@@ -423,6 +437,7 @@ public class FragmentMessage extends BaseFragment{
 
                  case 2:
 
+                     Boolean isLottery = data.getBooleanExtra("isLottery",false);
                      String type1 = data.getStringExtra("type");
                      String name1 = data.getStringExtra("userName");
                      String message1 = data.getStringExtra("message");
@@ -435,19 +450,33 @@ public class FragmentMessage extends BaseFragment{
                      messageItem1.setConversation(conversation);
                      messageItem1.setImageId(R.drawable.head1);
 
-                     if (type1.equals("text")){
+                     if (isLottery){
+
                          if (name1.equals(myName)){
-                             messageItem1.setMessage("我："+message1);
+                             messageItem1.setMessage("我：[抽奖活动]");
                          }else {
-                             messageItem1.setMessage(name1+"："+message1);
+                             messageItem1.setMessage(name1+"：[抽奖活动]");
                          }
+
                      }else{
-                         if (name1.equals(myName)){
-                             messageItem1.setMessage("我：[图片]");
-                         }else {
-                             messageItem1.setMessage(name1+"：[图片]");
+
+                         if (type1.equals("text")){
+                             if (name1.equals(myName)){
+                                 messageItem1.setMessage("我："+message1);
+                             }else {
+                                 messageItem1.setMessage(name1+"："+message1);
+                             }
+                         }else{
+                             if (name1.equals(myName)){
+                                 messageItem1.setMessage("我：[图片]");
+                             }else {
+                                 messageItem1.setMessage(name1+"：[图片]");
+                             }
                          }
+
+
                      }
+
 
                      messageItem1.setUserName(conversation.getTitle());
                      messageItemList.remove(getPlaceOfUser(conversation.getTitle()));
