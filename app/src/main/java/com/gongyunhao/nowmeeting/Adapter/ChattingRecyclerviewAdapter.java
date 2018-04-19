@@ -4,6 +4,7 @@ import android.content.Context;
 import android.graphics.drawable.Drawable;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -37,7 +38,7 @@ import java.util.List;
  * Created by yuanlai on 2018/3/13.
  */
 
-public class ChattingRecyclerviewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> implements View.OnClickListener{
+public class ChattingRecyclerviewAdapter extends RecyclerView.Adapter<ChattingRecyclerviewAdapter.ChattingItemViewholder> implements View.OnClickListener{
 
    private List<ChattingItem> chattingItems;
 
@@ -59,11 +60,11 @@ public class ChattingRecyclerviewAdapter extends RecyclerView.Adapter<RecyclerVi
    }
 
     @Override
-    public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public ChattingItemViewholder onCreateViewHolder(ViewGroup parent, int viewType) {
            View view = LayoutInflater.from(mContext).inflate(R.layout.item_bubble,parent,false);
+           Log.d("ChattingRecylcerview","---->创建了新的viewholder");
            view.setOnClickListener(this);
-           final ChattingItemViewholder chattingItemViewholder = new ChattingItemViewholder(view);
-           return chattingItemViewholder;
+           return new ChattingItemViewholder(view);
     }
 
     @Override
@@ -160,26 +161,25 @@ public class ChattingRecyclerviewAdapter extends RecyclerView.Adapter<RecyclerVi
     }
 
     @Override
-    public void onBindViewHolder(RecyclerView.ViewHolder holder, final int position) {
+    public void onBindViewHolder(final ChattingItemViewholder holder, final int position) {
 
-      final ChattingItemViewholder chattingItemViewholder = (ChattingItemViewholder)holder;
 
 
         if (chattingItems.get(position).getViewType()==ChattingItem.LEFT){
 
-            chattingItemViewholder.linearLayoutLeft.setVisibility(View.VISIBLE);
-            Glide.with(mContext).load(chattingItems.get(position).getPictureId()).apply(RequestOptions.bitmapTransform(new CircleCrop())).into(chattingItemViewholder.imageViewUserLeft);
-            chattingItemViewholder.textViewMessageLeft.setText(chattingItems.get(position).getChattingMessage());
+            holder.linearLayoutLeft.setVisibility(View.VISIBLE);
+            Glide.with(mContext).load(chattingItems.get(position).getPictureId()).apply(RequestOptions.bitmapTransform(new CircleCrop())).into(holder.imageViewUserLeft);
+            holder.textViewMessageLeft.setText(chattingItems.get(position).getChattingMessage());
 
         }else if(chattingItems.get(position).getViewType()==ChattingItem.RIGHT){
 
-            chattingItemViewholder.linearLayoutRight.setVisibility(View.VISIBLE);
-            Glide.with(mContext).load(chattingItems.get(position).getPictureId()).apply(RequestOptions.bitmapTransform(new CircleCrop())).into(chattingItemViewholder.imageViewUserRight);
-            chattingItemViewholder.textViewMessageRight.setText(chattingItems.get(position).getChattingMessage());
+            holder.linearLayoutRight.setVisibility(View.VISIBLE);
+            Glide.with(mContext).load(chattingItems.get(position).getPictureId()).apply(RequestOptions.bitmapTransform(new CircleCrop())).into(holder.imageViewUserRight);
+            holder.textViewMessageRight.setText(chattingItems.get(position).getChattingMessage());
 
         }else if(chattingItems.get(position).getViewType()==ChattingItem.LEFT_PHOTO){
 
-            chattingItemViewholder.linearLayoutLeftPhoto.setVisibility(View.VISIBLE);
+            holder.linearLayoutLeftPhoto.setVisibility(View.VISIBLE);
 
             Tiny.FileCompressOptions fileCompressOptions = new Tiny.FileCompressOptions();
             fileCompressOptions.isKeepSampling = true;
@@ -188,21 +188,21 @@ public class ChattingRecyclerviewAdapter extends RecyclerView.Adapter<RecyclerVi
                 public void callback(boolean isSuccess, String outfile, Throwable t) {
                     if (isSuccess){
 
-                    loadPhoto(outfile,chattingItemViewholder.imageViewLeftPhoto);
+                    loadPhoto(outfile,holder.imageViewLeftPhoto);
 
                     }else {
 
-                    loadPhoto(chattingItems.get(position).getPhotoPath(),chattingItemViewholder.imageViewLeftPhoto);
+                    loadPhoto(chattingItems.get(position).getPhotoPath(),holder.imageViewLeftPhoto);
 
                     }
                 }
             });
 
-            Glide.with(mContext).load(chattingItems.get(position).getPictureId()).apply(RequestOptions.bitmapTransform(new CircleCrop())).into(chattingItemViewholder.imageViewLeftUserPicture);
+            Glide.with(mContext).load(chattingItems.get(position).getPictureId()).apply(RequestOptions.bitmapTransform(new CircleCrop())).into(holder.imageViewLeftUserPicture);
 
         }else if(chattingItems.get(position).getViewType()==ChattingItem.RIGHT_PHOTO){
 
-            chattingItemViewholder.linearLayoutRightPhoto.setVisibility(View.VISIBLE);
+            holder.linearLayoutRightPhoto.setVisibility(View.VISIBLE);
             Tiny.FileCompressOptions fileCompressOptions = new Tiny.FileCompressOptions();
             fileCompressOptions.isKeepSampling = true;
             Tiny.getInstance().source(chattingItems.get(position).getPhotoPath()).asFile().withOptions(fileCompressOptions).compress(new FileCallback() {
@@ -210,42 +210,52 @@ public class ChattingRecyclerviewAdapter extends RecyclerView.Adapter<RecyclerVi
                 public void callback(boolean isSuccess, String outfile, Throwable t) {
                     if (isSuccess){
 
-                        loadPhoto(outfile,chattingItemViewholder.imageViewRightPhoto);
+                        loadPhoto(outfile,holder.imageViewRightPhoto);
 
                     }else {
 
-                        loadPhoto(chattingItems.get(position).getPhotoPath(),chattingItemViewholder.imageViewRightPhoto);
+                        loadPhoto(chattingItems.get(position).getPhotoPath(),holder.imageViewRightPhoto);
 
                     }
                 }
             });
-            Glide.with(mContext).load(chattingItems.get(position).getPictureId()).apply(RequestOptions.bitmapTransform(new CircleCrop())).into(chattingItemViewholder.imageViewRightUserPicture);
+            Glide.with(mContext).load(chattingItems.get(position).getPictureId()).apply(RequestOptions.bitmapTransform(new CircleCrop())).into(holder.imageViewRightUserPicture);
 
         }else if (chattingItems.get(position).getViewType()==ChattingItem.LEFT_LOTTERY){
 
-            chattingItemViewholder.linearLayoutLeftLottery.setVisibility(View.VISIBLE);
-            chattingItemViewholder.textViewLeftLotteryName.setText(chattingItems.get(position).getLotteryName());
-            chattingItemViewholder.textViewLeftLotteryNumber.setText(chattingItems.get(position).getLotteryNumber());
-            Glide.with(mContext).load(chattingItems.get(position).getPictureId()).apply(RequestOptions.bitmapTransform(new CircleCrop())).into(chattingItemViewholder.imageViewLeftLottery);
+            holder.linearLayoutLeftLottery.setVisibility(View.VISIBLE);
+            holder.textViewLeftLotteryName.setText(chattingItems.get(position).getLotteryName());
+            holder.textViewLeftLotteryNumber.setText(chattingItems.get(position).getLotteryNumber());
+            Glide.with(mContext).load(chattingItems.get(position).getPictureId()).apply(RequestOptions.bitmapTransform(new CircleCrop())).into(holder.imageViewLeftLottery);
 
 
         }else if (chattingItems.get(position).getViewType()==ChattingItem.RIGHT_LOTTERY){
 
-            chattingItemViewholder.linearLayoutRightLottery.setVisibility(View.VISIBLE);
-            chattingItemViewholder.textViewRightLotteryName.setText(chattingItems.get(position).getLotteryName());
-            Glide.with(mContext).load(chattingItems.get(position).getPictureId()).apply(RequestOptions.bitmapTransform(new CircleCrop())).into(chattingItemViewholder.imageViewRightLottery);
-            chattingItemViewholder.textViewRightLotteryNumber.setText(chattingItems.get(position).getLotteryNumber());
+            holder.linearLayoutRightLottery.setVisibility(View.VISIBLE);
+            holder.textViewRightLotteryName.setText(chattingItems.get(position).getLotteryName());
+            Glide.with(mContext).load(chattingItems.get(position).getPictureId()).apply(RequestOptions.bitmapTransform(new CircleCrop())).into(holder.imageViewRightLottery);
+            holder.textViewRightLotteryNumber.setText(chattingItems.get(position).getLotteryNumber());
 
         }else if (chattingItems.get(position).getViewType()==ChattingItem.LEFT_VOTE){
 
-            chattingItemViewholder.linearLayoutLeftVote.setVisibility(View.VISIBLE);
+            holder.linearLayoutLeftVote.setVisibility(View.VISIBLE);
+            holder.textViewLeftVoteFirstChoice.setText(chattingItems.get(position).getFirstOption());
+            holder.textViewLeftVoteSecondChoice.setText(chattingItems.get(position).getSecondOption());
+            holder.textViewLeftVoteName.setText(chattingItems.get(position).getVoteName());
+            Glide.with(mContext).load(chattingItems.get(position).getPictureId()).apply(RequestOptions.bitmapTransform(new CircleCrop())).into(holder.imageViewLeftVote);
+
 
         }else if (chattingItems.get(position).getViewType()==ChattingItem.RIGHT_VOTE){
 
-            chattingItemViewholder.linearLayoutRightVote.setVisibility(View.VISIBLE);
+            holder.linearLayoutRightVote.setVisibility(View.VISIBLE);
+            holder.textViewRightVoteFirstChoice.setText(chattingItems.get(position).getFirstOption());
+            holder.textViewRightVoteSecondChoice.setText(chattingItems.get(position).getSecondOption());
+            holder.textViewRightVoteName.setText(chattingItems.get(position).getVoteName());
+            Glide.with(mContext).load(chattingItems.get(position).getPictureId()).apply(RequestOptions.bitmapTransform(new CircleCrop())).into(holder.imageViewRightVote);
+
 
         }
-        chattingItemViewholder.bubble.setTag(position);
+        holder.bubble.setTag(position);
 
     }
 

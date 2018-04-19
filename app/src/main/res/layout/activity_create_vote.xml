@@ -142,8 +142,7 @@
         android:layout_height="wrap_content"
         android:layout_marginRight="12dp"
         android:layout_marginLeft="12dp"
-        android:enabled="false"
-        android:textColor="@color/accent_blue"
+        android:textColor="@color/accent_white"
         android:text="发布投票"/>
 
 </LinearLayout>

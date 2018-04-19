@@ -1,12 +1,55 @@
 <?xml version="1.0" encoding="utf-8"?>
-<TextView xmlns:android="http://schemas.android.com/apk/res/android"
-          android:layout_width="wrap_content"
-          android:layout_height="wrap_content"
-          android:layout_margin="@dimen/scroll_bar_size"
-          android:background="@drawable/shape_cavity"
-          android:padding="@dimen/card_spacing"
-          android:text="Helloworld"
-          android:textColor="#3f3e3e"
-          android:textSize="@dimen/sub_medium_spacing">
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_marginTop="5dp"
+    android:layout_width="match_parent"
+    android:layout_height="60dp">
 
-</TextView>
+    <View
+        android:id="@+id/view_test"
+        android:background="#a2dfef"
+        android:layout_width="0dp"
+        android:alpha="0.7"
+        android:layout_height="match_parent"/>
+
+    <RadioButton
+        android:layout_marginLeft="10dp"
+        android:layout_centerInParent="true"
+        android:layout_alignParentLeft="true"
+        android:id="@+id/check"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
+    <TextView
+        android:id="@+id/vote_item_name"
+        android:layout_toRightOf="@+id/check"
+        android:layout_marginLeft="10dp"
+        android:layout_centerInParent="true"
+        android:text="测试一"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
+
+    <TextView
+        android:id="@+id/vote_item_number"
+        android:layout_marginRight="5dp"
+        android:layout_toLeftOf="@+id/label"
+        android:textSize="20sp"
+        android:text="0"
+        android:layout_centerInParent="true"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
+    <TextView
+        android:id="@+id/label"
+        android:layout_marginRight="5dp"
+        android:layout_alignParentRight="true"
+        android:layout_marginTop="24dp"
+        android:text="票"
+        android:textSize="12sp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
+</RelativeLayout>

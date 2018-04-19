@@ -31,7 +31,6 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import com.cooltechworks.views.ScratchTextView;
 import com.gongyunhao.nowmeeting.Adapter.ChattingRecyclerviewAdapter;
 import com.gongyunhao.nowmeeting.Base.BaseActivity;
@@ -54,7 +53,6 @@ import cn.jpush.im.android.api.event.MessageEvent;
 import cn.jpush.im.android.api.model.Conversation;
 import cn.jpush.im.android.api.model.Message;
 import cn.jpush.im.android.api.model.UserInfo;
-import cn.jpush.im.android.api.options.MessageSendingOptions;
 import cn.jpush.im.api.BasicCallback;
 import io.github.rockerhieu.emojicon.EmojiconEditText;
 import io.github.rockerhieu.emojicon.EmojiconGridFragment;
@@ -64,6 +62,7 @@ import pub.devrel.easypermissions.AfterPermissionGranted;
 import pub.devrel.easypermissions.AppSettingsDialog;
 import pub.devrel.easypermissions.EasyPermissions;
 import pub.devrel.easypermissions.PermissionRequest;
+
 
 public class GroupChattingActivity extends BaseActivity implements View.OnTouchListener,KeyBoardObserver,EmojiconGridFragment.OnEmojiconClickedListener, EmojiconsFragment.OnEmojiconBackspaceClickedListener,EasyPermissions.PermissionCallbacks{
 
@@ -93,6 +92,7 @@ public class GroupChattingActivity extends BaseActivity implements View.OnTouchL
     public final static int CROP_REQUEST = 2;
     public final static int CAMERA_REQUEST_CODE = 3;
     public final static int LOTTERYRESULT = 4;
+    public final static int STATISTICS = 5;
     private String Tag = "GroupChattingActivity";
     private SimpleDateFormat format;
     private String cameraPath;
@@ -100,6 +100,7 @@ public class GroupChattingActivity extends BaseActivity implements View.OnTouchL
     private Message message;
     private String lotterryResult;
     private boolean isLottery;
+    private LinearLayoutManager linearLayout;
 
 
     @SuppressLint("ClickableViewAccessibility")
@@ -135,6 +136,7 @@ public class GroupChattingActivity extends BaseActivity implements View.OnTouchL
             }
         });
 
+
         chattingRecyclerviewAdapter.setOnItemClickListener(new ChattingRecyclerviewAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(View view, int position) {
@@ -156,6 +158,16 @@ public class GroupChattingActivity extends BaseActivity implements View.OnTouchL
                     }else {
                         show1("很遗憾，你错过了大奖...");
                     }
+
+                }else if (chattingItems.get(position).getViewType()==ChattingItem.LEFT_VOTE||chattingItems.get(position).getViewType()==ChattingItem.RIGHT_VOTE){
+
+                    Intent intent = new Intent(GroupChattingActivity.this,SubmitVoteActivity.class);
+                    intent.putExtra("voteContent",chattingItems.get(position).getVoteContent());
+                    intent.putExtra("voteName",chattingItems.get(position).getVoteName());
+                    intent.putExtra("voteId",chattingItems.get(position).getVoteId());
+
+                    intent.putExtra("conferenceName",conversation.getTitle());
+                    startActivity(intent);
 
                 }
 
@@ -181,6 +193,7 @@ public class GroupChattingActivity extends BaseActivity implements View.OnTouchL
                     chattingItem.setPictureId(R.drawable.head2);
                     chattingItems.add(chattingItem);
                     chattingRecyclerviewAdapter.notifyDataSetChanged();
+                    ((LinearLayoutManager)recyclerView.getLayoutManager()).scrollToPositionWithOffset(chattingItems.size()-1,0);
                     emojiconEditText.setText("");
 
                 } else {
@@ -189,9 +202,9 @@ public class GroupChattingActivity extends BaseActivity implements View.OnTouchL
                 }
             }
         });
-        MessageSendingOptions options = new MessageSendingOptions();
-        options.setRetainOffline(true);
-        JMessageClient.sendMessage(message,options);
+//        MessageSendingOptions options = new MessageSendingOptions();
+//        options.setRetainOffline(true);
+        JMessageClient.sendMessage(message);
 
     }
 
@@ -215,6 +228,7 @@ public class GroupChattingActivity extends BaseActivity implements View.OnTouchL
                     chattingItem.setPictureId(R.drawable.head2);
                     chattingItems.add(chattingItem);
                     chattingRecyclerviewAdapter.notifyDataSetChanged();
+                    ((LinearLayoutManager)recyclerView.getLayoutManager()).scrollToPositionWithOffset(chattingItems.size()-1,0);
                     Log.d(Tag,"---->图片发送成功");
 
                 }else {
@@ -225,9 +239,9 @@ public class GroupChattingActivity extends BaseActivity implements View.OnTouchL
 
             }
         });
-        MessageSendingOptions messageSendingOptions = new MessageSendingOptions();
-        messageSendingOptions.setRetainOffline(true);
-        JMessageClient.sendMessage(message,messageSendingOptions);
+//        MessageSendingOptions messageSendingOptions = new MessageSendingOptions();
+//        messageSendingOptions.setRetainOffline(true);
+        JMessageClient.sendMessage(message);
 
 
     }
@@ -271,6 +285,9 @@ public class GroupChattingActivity extends BaseActivity implements View.OnTouchL
             Intent intent = new Intent();
             if (textContent.getText().startsWith("lottery")){
              intent.putExtra("isLottery",true);
+            }
+            if (textContent.getText().startsWith("vote")){
+                intent.putExtra("isVote",true);
             }
             intent.putExtra("type","text");
             intent.putExtra("userName",userInfo.getUserName());
@@ -329,6 +346,12 @@ public class GroupChattingActivity extends BaseActivity implements View.OnTouchL
 
                     TextContent textContent = (TextContent)message.getContent();
                     Intent intent = new Intent();
+                    if (textContent.getText().startsWith("lottery")){
+                        intent.putExtra("isLottery",true);
+                    }
+                    if (textContent.getText().startsWith("vote")){
+                        intent.putExtra("isVote",true);
+                    }
                     intent.putExtra("type","text");
                     intent.putExtra("userName",userInfo.getUserName());
                     intent.putExtra("message",textContent.getText());
@@ -349,7 +372,10 @@ public class GroupChattingActivity extends BaseActivity implements View.OnTouchL
                 break;
             case R.id.statistics:
                 Intent intent1 = new Intent(GroupChattingActivity.this,CreateVoteActivity.class);
-                startActivity(intent1);
+                intent1.putExtra("conferenceName",conversation.getTitle());
+                intent1.putExtra("groupId",groupId);
+                intent1.putExtra("userName",myName);
+                startActivityForResult(intent1,STATISTICS);
                 break;
             case R.id.choose_album:
                 askForAlbum();
@@ -580,7 +606,10 @@ public class GroupChattingActivity extends BaseActivity implements View.OnTouchL
         relativeLayoutStatistics = (RelativeLayout) findViewById(R.id.statistics);
         relativeLayoutChooseAlbum = (RelativeLayout) findViewById(R.id.choose_album);
         relativeLayoutCamera = (RelativeLayout) findViewById(R.id.camera);
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        linearLayout = new LinearLayoutManager(this);
+//        linearLayout.setStackFromEnd(true);
+//        recyclerView.setItemViewCacheSize(100);
+        recyclerView.setLayoutManager(linearLayout);
         recyclerView.setItemAnimator(new DefaultItemAnimator());
         chattingItems = new ArrayList<>();
         mContext = this;
@@ -671,7 +700,7 @@ public class GroupChattingActivity extends BaseActivity implements View.OnTouchL
                             int number = nameList.size();
                             chattingItem.setViewType(ChattingItem.RIGHT_LOTTERY);
                             chattingItem.setLotteryName(nameList.get(number-2));
-                            chattingItem.setLotteryNumber(nameList.get(number-1));
+                            chattingItem.setLotteryNumber("今晚会诞生"+nameList.get(number-1)+"位幸运儿");
                             chattingItem.setNameList(nameList.subList(0,number-2));
                             chattingItem.setPictureId(R.drawable.head2);
                             chattingItems.add(chattingItem);
@@ -681,13 +710,60 @@ public class GroupChattingActivity extends BaseActivity implements View.OnTouchL
                             int number = nameList.size();
                             chattingItem.setViewType(ChattingItem.LEFT_LOTTERY);
                             chattingItem.setLotteryName(nameList.get(number-2));
-                            chattingItem.setLotteryNumber(nameList.get(number-1));
+                            chattingItem.setLotteryNumber("今晚会诞生"+nameList.get(number-1)+"位幸运儿");
                             chattingItem.setNameList(nameList.subList(0,number-2));
                             chattingItem.setPictureId(R.drawable.head2);
                             chattingItems.add(chattingItem);
                         }
 
-                    }else {
+                    }else if (textContent.getText().startsWith("vote")){
+
+                        if (userInfo1.getUserName().equals(myName)) {
+
+                            ChattingItem chattingItem = new ChattingItem();
+                            chattingItem.setViewType(ChattingItem.RIGHT_VOTE);
+                            List<String> voteList = getEveryVoteName(textContent.getText());
+                            chattingItem.setFirstOption(voteList.get(0));
+                            chattingItem.setSecondOption(voteList.get(1));
+                            chattingItem.setVoteName(voteList.get(voteList.size()-2));
+                            chattingItem.setVoteId(voteList.get(voteList.size()-1));
+                            StringBuilder stringBuilder = new StringBuilder();
+                            stringBuilder.append("vote");
+                            for (int j=0 ; j<voteList.size()-2 ; j++){
+
+                                stringBuilder.append(voteList.get(j));
+                                stringBuilder.append('/');
+
+                            }
+                            chattingItem.setVoteContent(stringBuilder.toString());
+                            chattingItem.setPictureId(R.drawable.head1);
+                            chattingItems.add(chattingItem);
+
+                        } else {
+
+                            ChattingItem chattingItem = new ChattingItem();
+                            chattingItem.setViewType(ChattingItem.LEFT_VOTE);
+                            List<String> voteList = getEveryVoteName(textContent.getText());
+                            chattingItem.setFirstOption(voteList.get(0));
+                            chattingItem.setSecondOption(voteList.get(1));
+                            chattingItem.setVoteName(voteList.get(voteList.size()-2));
+                            chattingItem.setVoteId(voteList.get(voteList.size()-1));
+                            StringBuilder stringBuilder = new StringBuilder();
+                            stringBuilder.append("vote");
+                            for (int j=0 ; j<voteList.size()-2 ; j++){
+
+                                stringBuilder.append(voteList.get(j));
+                                stringBuilder.append('/');
+
+                            }
+                            chattingItem.setVoteContent(stringBuilder.toString());
+                            chattingItem.setPictureId(R.drawable.head1);
+                            chattingItems.add(chattingItem);
+
+                        }
+
+
+                    } else {
                         if (userInfo1.getUserName().equals(myName)) {
                             ChattingItem chattingItem = new ChattingItem();
                             Log.d(Tag, textContent.getText());
@@ -734,11 +810,30 @@ public class GroupChattingActivity extends BaseActivity implements View.OnTouchL
                     chattingItem.setPictureId(R.drawable.head1);
                     int number = nameList.size();
                     chattingItem.setLotteryName(nameList.get(number-2));
-                    chattingItem.setLotteryNumber(nameList.get(number-1));
+                    chattingItem.setLotteryNumber("今晚会诞生"+nameList.get(number-1)+"位幸运儿");
                     chattingItem.setNameList(nameList.subList(0,number-2));
                     chattingItems.add(chattingItem);
 
-                }else{
+                }else if (textContent.getText().startsWith("vote")){
+
+                    ChattingItem chattingItem = new ChattingItem();
+                    chattingItem.setViewType(ChattingItem.LEFT_VOTE);
+                    List<String> voteList = getEveryVoteName(textContent.getText());
+                    chattingItem.setVoteName(voteList.get(voteList.size()-2));
+                    chattingItem.setVoteId(voteList.get(voteList.size()-1));
+                    chattingItem.setFirstOption(voteList.get(0));
+                    chattingItem.setSecondOption(voteList.get(1));
+                    StringBuilder stringBuilder = new StringBuilder();
+                    stringBuilder.append("vote");
+                    for (int i=0 ; i<voteList.size()-2 ; i++){
+                        stringBuilder.append(voteList.get(i));
+                        stringBuilder.append('/');
+                    }
+                    chattingItem.setVoteContent(stringBuilder.toString());
+                    chattingItem.setPictureId(R.drawable.head1);
+                    chattingItems.add(chattingItem);
+
+                } else{
 
                     ChattingItem chattingItem = new ChattingItem();
                     chattingItem.setViewType(ChattingItem.LEFT);
@@ -967,7 +1062,7 @@ public class GroupChattingActivity extends BaseActivity implements View.OnTouchL
                           Log.d(Tag,"---->发送抽奖成功");
                           ChattingItem chattingItem = new ChattingItem();
                           chattingItem.setLotteryName(lotteryName);
-                          chattingItem.setLotteryNumber(lotteryNumber);
+                          chattingItem.setLotteryNumber("今晚会诞生"+lotteryNumber+"位幸运儿");
                           chattingItem.setViewType(ChattingItem.RIGHT_LOTTERY);
                           chattingItem.setNameList(getEveryName(lotterryResult));
                           chattingItem.setPictureId(R.drawable.head1);
@@ -982,9 +1077,49 @@ public class GroupChattingActivity extends BaseActivity implements View.OnTouchL
 
                   }
               });
-              MessageSendingOptions messageSendingOptions = new MessageSendingOptions();
-              messageSendingOptions.setRetainOffline(true);
+//              MessageSendingOptions messageSendingOptions = new MessageSendingOptions();
+//              messageSendingOptions.setRetainOffline(true);
               JMessageClient.sendMessage(message);
+
+            }else if (requestCode==STATISTICS){
+
+                final String voteName = data.getStringExtra("voteName");
+                final String voteFirstOption = data.getStringExtra("firstOption");
+                final String voteSecondOption = data.getStringExtra("secondOption");
+                final String voteContent = data.getStringExtra("voteList");
+                final int voteId = data.getIntExtra("voteId",0);
+                Message message = conversation.createSendMessage(new TextContent(voteContent+voteName+"/"+voteId+"/"));
+                message.setOnSendCompleteCallback(new BasicCallback() {
+                    @Override
+                    public void gotResult(int i, String s) {
+
+                        if (i==0){
+
+                            Log.d(Tag,"---->发送投票成功");
+                            ChattingItem chattingItem = new ChattingItem();
+                            chattingItem.setViewType(ChattingItem.RIGHT_VOTE);
+                            chattingItem.setFirstOption(voteFirstOption);
+                            chattingItem.setSecondOption(voteSecondOption);
+                            chattingItem.setVoteName(voteName);
+                            chattingItem.setVoteId(String.valueOf(voteId));
+                            chattingItem.setVoteContent(voteContent);
+                            chattingItem.setPictureId(R.drawable.head1);
+                            chattingItems.add(chattingItem);
+                            chattingRecyclerviewAdapter.notifyDataSetChanged();
+
+                        }else {
+
+                            Log.d(Tag,"---->投票发送失败");
+
+                        }
+
+                    }
+                });
+//                MessageSendingOptions messageSendingOptions = new MessageSendingOptions();
+//                messageSendingOptions.setRetainOffline(true);
+                JMessageClient.sendMessage(message);
+
+
 
             }
         }
@@ -1026,7 +1161,39 @@ public class GroupChattingActivity extends BaseActivity implements View.OnTouchL
     }
 
 
+    public List<String> getEveryVoteName(String name){
 
+        List<String> nameList = new ArrayList<>();
+
+        if (name.startsWith("vote")){
+
+            name = name.replaceFirst("vote","");
+
+            StringBuilder stringBuilder = new StringBuilder();
+
+            for (int i=0 ; i<name.length() ; i++){
+
+                if (name.charAt(i)=='/'){
+
+                    nameList.add(stringBuilder.toString());
+                    stringBuilder = new StringBuilder();
+
+                }else{
+
+                    stringBuilder.append(name.charAt(i));
+
+                }
+
+            }
+
+        }else{
+
+            Log.d(Tag,"发送的消息格式有问题");
+
+        }
+        return nameList;
+
+    }
 
 
 

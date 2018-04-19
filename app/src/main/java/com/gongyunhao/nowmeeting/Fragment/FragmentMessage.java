@@ -136,7 +136,15 @@ public class FragmentMessage extends BaseFragment{
                                     messageItem.setMessage(userName+"：[抽奖活动]");
                                 }
 
-                            }else{
+                            }else if (textContent.getText().startsWith("vote")){
+
+                                if (userName.equals(myName)){
+                                    messageItem.setMessage("我：[投票活动]");
+                                }else {
+                                    messageItem.setMessage(userName+"：[投票活动]");
+                                }
+
+                            } else{
 
                                 if (userName.equals(myName)){
                                     messageItem.setMessage("我："+textContent.getText());
@@ -306,11 +314,32 @@ public class FragmentMessage extends BaseFragment{
                             MessageItem messageItem = new MessageItem();
                             messageItem.setUserName(conversation.getTitle());
                             messageItem.setDate(format.format(msg.getCreateTime()));
-                            if (fromName.equals(myName)){
-                                messageItem.setMessage("我："+textContent.getText());
-                            }else {
-                                messageItem.setMessage(fromName+"："+textContent.getText());
+
+                            if (textContent.getText().startsWith("lottery")){
+
+                                if (fromName.equals(myName)){
+                                    messageItem.setMessage("我：[抽奖活动]");
+                                }else {
+                                    messageItem.setMessage(fromName+"：[抽奖活动]");
+                                }
+
+                            }else if (textContent.getText().startsWith("vote")){
+
+                                if (fromName.equals(myName)){
+                                    messageItem.setMessage("我：[投票活动]");
+                                }else {
+                                    messageItem.setMessage(fromName+"：[投票活动]");
+                                }
+
                             }
+                            else {
+                                if (fromName.equals(myName)){
+                                    messageItem.setMessage("我："+textContent.getText());
+                                }else {
+                                    messageItem.setMessage(fromName+"："+textContent.getText());
+                                }
+                            }
+
                             messageItem.setMessageType(MessageItem.GROUP);
                             messageItem.setImageId(R.drawable.head6);
                             messageItem.setConversation(conversation);
@@ -322,11 +351,31 @@ public class FragmentMessage extends BaseFragment{
                             MessageItem messageItem = new MessageItem();
                             messageItem.setUserName(conversation.getTitle());
                             messageItem.setDate(format.format(msg.getCreateTime()));
-                            if (fromName.equals(myName)){
-                                messageItem.setMessage("我："+textContent.getText());
-                            }else {
-                                messageItem.setMessage(fromName+"："+textContent.getText());
+                            if (textContent.getText().startsWith("lottery")){
+
+                                if (fromName.equals(myName)){
+                                    messageItem.setMessage("我：[抽奖活动]");
+                                }else {
+                                    messageItem.setMessage(fromName+"：[抽奖活动]");
+                                }
+
+                            }else if (textContent.getText().startsWith("vote")){
+
+                                if (fromName.equals(myName)){
+                                    messageItem.setMessage("我：[投票活动]");
+                                }else {
+                                    messageItem.setMessage(fromName+"：[投票活动]");
+                                }
+
                             }
+                            else {
+                                if (fromName.equals(myName)){
+                                    messageItem.setMessage("我："+textContent.getText());
+                                }else {
+                                    messageItem.setMessage(fromName+"："+textContent.getText());
+                                }
+                            }
+
                             messageItem.setMessageType(MessageItem.GROUP );
                             messageItem.setImageId(R.drawable.head6);
                             messageItem.setConversation(conversation);
@@ -437,7 +486,8 @@ public class FragmentMessage extends BaseFragment{
 
                  case 2:
 
-                     Boolean isLottery = data.getBooleanExtra("isLottery",false);
+                     boolean isLottery = data.getBooleanExtra("isLottery",false);
+                     boolean isVote = data.getBooleanExtra("isVote",false);
                      String type1 = data.getStringExtra("type");
                      String name1 = data.getStringExtra("userName");
                      String message1 = data.getStringExtra("message");
@@ -458,7 +508,15 @@ public class FragmentMessage extends BaseFragment{
                              messageItem1.setMessage(name1+"：[抽奖活动]");
                          }
 
-                     }else{
+                     }else if (isVote){
+
+                         if (name1.equals(myName)){
+                             messageItem1.setMessage("我：[投票活动]");
+                         }else {
+                             messageItem1.setMessage(name1+"：[投票活动]");
+                         }
+
+                     } else{
 
                          if (type1.equals("text")){
                              if (name1.equals(myName)){

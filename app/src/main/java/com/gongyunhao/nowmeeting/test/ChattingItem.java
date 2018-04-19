@@ -51,6 +51,66 @@ public class ChattingItem {
 
     private List<String> nameList;
 
+    private String voteContent;
+
+    public String getVoteId() {
+        return voteId;
+    }
+
+    public void setVoteId(String voteId) {
+        this.voteId = voteId;
+    }
+
+    private String voteId;
+
+    public String getVoteContent() {
+        return voteContent;
+    }
+
+    public void setVoteContent(String voteContent) {
+        this.voteContent = voteContent;
+    }
+
+    public List<String> getVoteList() {
+        return voteList;
+    }
+
+    public void setVoteList(List<String> voteList) {
+        this.voteList = voteList;
+    }
+
+    private List<String> voteList;
+
+    private String firstOption;
+
+    private String secondOption;
+
+    public String getVoteName() {
+        return voteName;
+    }
+
+    public void setVoteName(String voteName) {
+        this.voteName = voteName;
+    }
+
+    private String voteName;
+
+    public String getFirstOption() {
+        return firstOption;
+    }
+
+    public void setFirstOption(String firstOption) {
+        this.firstOption = firstOption;
+    }
+
+    public String getSecondOption() {
+        return secondOption;
+    }
+
+    public void setSecondOption(String secondOption) {
+        this.secondOption = secondOption;
+    }
+
     private Bitmap bitmap;
 
     public String getLotteryName() {

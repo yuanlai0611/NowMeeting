@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <include
+        layout="@layout/title_scratch"/>
+
+    <yyydjk.com.library.CouponView
+        android:id="@+id/couponView"
+        android:layout_width="match_parent"
+        android:layout_height="200dp"
+        android:background="#ea3260"
+        android:orientation="vertical"
+        android:padding="10dp"
+        app:cv_dash_line_color="@android:color/white"
+        app:cv_dash_line_gap="5dp"
+        app:cv_dash_line_height="0.8dp"
+        app:cv_dash_line_length="10dp"
+        app:cv_dash_line_margin_bottom="5dp"
+        app:cv_dash_line_margin_left="5dp"
+        app:cv_dash_line_margin_right="5dp"
+        app:cv_dash_line_margin_top="8dp"
+        app:cv_is_dash_line_bottom="true"
+        app:cv_is_dash_line_left="false"
+        app:cv_is_dash_line_right="false"
+        app:cv_is_dash_line_top="true"
+        app:cv_is_semicircle_bottom="false"
+        app:cv_is_semicircle_left="true"
+        app:cv_is_semicircle_right="true"
+        app:cv_is_semicircle_top="false"
+        app:cv_semicircle_color="@android:color/white"
+        app:cv_semicircle_gap="4dp"
+        app:cv_semicircle_radius="4dp">
+
+        <FrameLayout
+            android:layout_margin="15dp"
+            android:background="@color/accent_white"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <ImageView
+                android:background="@drawable/scratch_background"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+
+            <com.cooltechworks.views.ScratchTextView
+                android:id="@+id/result"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:text="恭喜你中奖了！！！"
+                android:textSize="25sp"
+                android:textStyle="bold" />
+
+
+        </FrameLayout>
+
+    </yyydjk.com.library.CouponView>
+
+
+</LinearLayout>

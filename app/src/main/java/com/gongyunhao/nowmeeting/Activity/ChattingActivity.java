@@ -106,7 +106,6 @@ public class ChattingActivity extends BaseActivity implements View.OnTouchListen
         swipeLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-
                 swipeLayout.setRefreshing(false);
             }
         });
@@ -144,6 +143,7 @@ public class ChattingActivity extends BaseActivity implements View.OnTouchListen
                     chattingItem.setPictureId(R.drawable.head2);
                     chattingItems.add(chattingItem);
                     chattingRecyclerviewAdapter.notifyDataSetChanged();
+                    ((LinearLayoutManager)recyclerView.getLayoutManager()).scrollToPositionWithOffset(chattingItems.size()-1,0);
                     emojiconEditText.setText("");
 
                 } else {
@@ -152,9 +152,9 @@ public class ChattingActivity extends BaseActivity implements View.OnTouchListen
                 }
             }
         });
-        MessageSendingOptions options = new MessageSendingOptions();
-        options.setRetainOffline(true);
-        JMessageClient.sendMessage(message,options);
+//        MessageSendingOptions options = new MessageSendingOptions();
+//        options.setRetainOffline(true);
+        JMessageClient.sendMessage(message);
 
     }
 
@@ -178,6 +178,7 @@ public class ChattingActivity extends BaseActivity implements View.OnTouchListen
                     chattingItem.setPhotoPath(picturePath);
                     chattingItem.setPictureId(R.drawable.head2);
                     chattingItems.add(chattingItem);
+                    ((LinearLayoutManager)recyclerView.getLayoutManager()).scrollToPositionWithOffset(chattingItems.size()-1,0);
                     chattingRecyclerviewAdapter.notifyDataSetChanged();
                     Log.d(Tag,"---->图片发送成功");
 
@@ -189,9 +190,9 @@ public class ChattingActivity extends BaseActivity implements View.OnTouchListen
 
             }
         });
-        MessageSendingOptions messageSendingOptions = new MessageSendingOptions();
-        messageSendingOptions.setRetainOffline(true);
-        JMessageClient.sendMessage(message,messageSendingOptions);
+//        MessageSendingOptions messageSendingOptions = new MessageSendingOptions();
+//        messageSendingOptions.setRetainOffline(true);
+        JMessageClient.sendMessage(message);
 
 
         }
@@ -212,6 +213,7 @@ public class ChattingActivity extends BaseActivity implements View.OnTouchListen
     public void onEmojiconClicked(Emojicon emojicon) {
         EmojiconsFragment.input(mEditEmojicon, emojicon);
     }
+
     //删除表情点击回调
     @Override
     public void onEmojiconBackspaceClicked(View v) {
@@ -482,6 +484,8 @@ public class ChattingActivity extends BaseActivity implements View.OnTouchListen
     }
 
     public void onEventMainThread(MessageEvent event){
+
+        Log.d(Tag,"---->收到消息了");
         //do your own business
         Message msg = event.getMessage();
         switch (msg.getContentType()){

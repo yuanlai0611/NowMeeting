@@ -174,6 +174,23 @@ public class OkHttpUtil {
         return 0;
     }
 
+
+    public void getConferenceIdByName(String conferenceName,String url,Callback callback)throws IOException{
+
+        RequestBody requestBody = new FormBody.Builder()
+                .add("conferenceName",conferenceName)
+                .build();
+
+        Request request = new Request.Builder()
+                .url(url)
+                .post(requestBody)
+                .build();
+        mClient.newCall(request).enqueue(callback);
+
+    }
+
+
+
     public void doSignInConference(String userID,String conferenceId,String url,okhttp3.Callback callback){
         //?userId=36&conferenceId=33
         RequestBody requestBody = new FormBody.Builder()
@@ -200,6 +217,71 @@ public class OkHttpUtil {
                 .post(requestBody)
                 .build();
         mClient.newCall( request ).enqueue( callback );
+    }
+
+    public void createVote(String conferenceId,String userId,String voteName,String voteOptionName,String createVoteUrl,Callback callback)throws IOException{
+
+        RequestBody requestBody = new FormBody.Builder()
+                .add("conferenceId",conferenceId)
+                .add("userId",userId)
+                .add("voteName",voteName)
+                .add("voteOptionName",voteOptionName)
+                .build();
+        Request request = new Request.Builder()
+                .url(createVoteUrl)
+                .post(requestBody)
+                .build();
+        mClient.newCall(request).enqueue(callback);
+
+    }
+
+    public void isVoted(String userId,String voteId,String isVotedUrl,Callback callback){
+
+        RequestBody requestBody = new FormBody.Builder()
+                .add("userId",userId)
+                .add("voteId",voteId)
+                .build();
+
+        Request request = new Request.Builder()
+                .url(isVotedUrl)
+                .post(requestBody)
+                .build();
+
+        mClient.newCall(request).enqueue(callback);
+
+
+    }
+
+    public void userVote(String voteId,String userId,String optionName,String voteUrl,Callback callback ){
+
+       RequestBody requestBody = new FormBody.Builder()
+               .add("voteId",voteId)
+               .add("",userId)
+               .add("",optionName)
+               .build();
+
+       Request request = new Request.Builder()
+               .url(voteUrl)
+               .post(requestBody)
+               .build();
+
+       mClient.newCall(request).enqueue(callback);
+    }
+
+    public void voteInformation(String conferenceId	,String voteName,String informationUrl,Callback callback){
+
+        RequestBody requestBody = new FormBody.Builder()
+                .add("conferenceId",conferenceId)
+                .add("voteName",voteName)
+                .build();
+
+        Request request = new Request.Builder()
+                .url(informationUrl)
+                .post(requestBody)
+                .build();
+
+        mClient.newCall(request).enqueue(callback);
+
     }
 
 }
