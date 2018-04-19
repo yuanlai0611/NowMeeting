@@ -176,6 +176,26 @@ public class FragmentMeeting extends BaseFragment{
                         meeting.setViewType(MEETING);
                         usermeetingList.add( meeting );
                     }
+                    MeetingInformation meetingItem5 = new MeetingInformation();
+                    meetingItem5.setViewType(MEETING);
+                    meetingItem5.setName("电影讨论大会");
+                    meetingItem5.setMeetingPictureId(R.drawable.meeting_test_2);
+                    meetingItem5.setMeetingType(MeetingInformation.FRIEND_PARTICIPATE);
+                    usermeetingList.add(meetingItem5);
+
+                    MeetingInformation meetingItem6 = new MeetingInformation();
+                    meetingItem6.setViewType(MEETING);
+                    meetingItem6.setName("穿衣搭配");
+                    meetingItem6.setSponsorName("龚云浩");
+                    meetingItem6.setIntroduction( "还在为怎么穿衣搭配而烦扰吗？还在为自己的身材，身高，体型怎么搭配衣服而烦扰吗？你是衣服搭配选择困难户吗？\n" +
+                            "\n" +
+                            "不怕，来参加此会议吧，教您各种穿衣搭配哦。只要您每日来访问我都会有新的发现。哈哈，废话不多说，请猛戳开始自己的穿衣搭配风格吧。\n" );
+                    meetingItem6.setCity( "杭州" );
+                    meetingItem6.setLocation( "杭州西湖旁" );
+                    meetingItem6.setTime( "2018-6-2" );
+                    meetingItem6.setMeetingPictureId(R.drawable.meeting_test_3);
+                    meetingItem6.setMeetingType(MeetingInformation.HOT);
+                    usermeetingList.add(meetingItem6);
                     getActivity().runOnUiThread( new Runnable( ) {
                         @Override
                         public void run() {
@@ -188,19 +208,7 @@ public class FragmentMeeting extends BaseFragment{
             }
         } );
 
-//        MeetingInformation meetingItem5 = new MeetingInformation();
-//        meetingItem5.setViewType(MEETING);
-//        meetingItem5.setName("GDG Wuhan");
-//        meetingItem5.setMeetingPictureId(R.drawable.meeting_test_2);
-//        meetingItem5.setMeetingType(MeetingInformation.FRIEND_PARTICIPATE);
-//        usermeetingList.add(meetingItem5);
-//
-//        MeetingInformation meetingItem6 = new MeetingInformation();
-//        meetingItem6.setViewType(MEETING);
-//        meetingItem6.setName("GDG Wuhan");
-//        meetingItem6.setMeetingPictureId(R.drawable.meeting_test_3);
-//        meetingItem6.setMeetingType(MeetingInformation.HOT);
-//        usermeetingList.add(meetingItem6);
+
 
         //设置参加的会议的具体会议
     }

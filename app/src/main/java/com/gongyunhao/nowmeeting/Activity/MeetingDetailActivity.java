@@ -92,6 +92,7 @@ public class MeetingDetailActivity extends BaseActivity implements View.OnClickL
         userItems = new ArrayList<>();
         lotteryItemList = new ArrayList<>();
         imageView_meeting_detail = findViewById( R.id.imageView_collapsing );
+        Glide.with( this ).load( R.drawable.meeting_test_2 ).into( imageView_meeting_detail );
         collapsingToolbarLayout = findViewById( R.id.collapsing_toolbar_meeting_detail );
         recycler_rough = findViewById(R.id.detail_user_recycler_rough);
         tv_detail_meeting_place = findViewById( R.id.detail_meeting_place );

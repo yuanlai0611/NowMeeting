@@ -49,6 +49,8 @@ import java.util.List;
 public class SearchFriendAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
     private List<Data> userdatas=new ArrayList<>(  );
     private Context mContext;
+    private int[] drawables={R.drawable.head1,R.drawable.head2,R.drawable.head3,R.drawable.head4,R.drawable.head5,
+    R.drawable.head6,R.drawable.head7};
 
     public SearchFriendAdapter(List<Data> userdatas,Context context) {
         this.userdatas = userdatas;
@@ -77,7 +79,7 @@ public class SearchFriendAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
         searchFriendViewHolder.username.setText( mdata.getUsername() );
         searchFriendViewHolder.signature.setText( mdata.getSignature() );
         searchFriendViewHolder.address.setText( mdata.getAddress() );
-        Glide.with(mContext).load("http://upload.jianshu.io/users/upload_avatars/8349018/3f572caa-241f-4ee4-ae8c-c206703695ab.jpg?imageMogr2/auto-orient/strip|imageView2/1/w/96/h/96").into(searchFriendViewHolder.user_image);
+        Glide.with(mContext).load(drawables[position]).into(searchFriendViewHolder.user_image);
     }
 
     class SearchFriendViewHolder extends RecyclerView.ViewHolder {
