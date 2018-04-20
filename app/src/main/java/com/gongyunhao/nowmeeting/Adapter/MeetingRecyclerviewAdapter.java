@@ -35,6 +35,7 @@ public class MeetingRecyclerviewAdapter extends RecyclerView.Adapter<RecyclerVie
     private Context mContext;
     private final int MEETING = 2;
     private OnItemClickListener onItemClickListener;
+    private int[] drawables={R.drawable.meeting_test_1,R.drawable.meeting_test_2,R.drawable.meeting_test_3};
 
     public MeetingRecyclerviewAdapter(Context mContext,List<MeetingInformation> meetingItemList){
         this.mContext = mContext;
@@ -76,7 +77,7 @@ public class MeetingRecyclerviewAdapter extends RecyclerView.Adapter<RecyclerVie
     {
         View meetingView;
         ImageView imageViewMeetingPicture;
-        TextView textViewMeetingName;
+        TextView textViewMeetingName,sponsorname,mdate,location,city;
         LinearLayout linearLayoutMeetingType;
         ImageView imageViewMeetingType;
         TextView textViewMeetingTypeName;
@@ -90,6 +91,10 @@ public class MeetingRecyclerviewAdapter extends RecyclerView.Adapter<RecyclerVie
             linearLayoutMeetingType = (LinearLayout)view.findViewById(R.id.linearLayoutMeetingType);
             imageViewMeetingType = (ImageView)view.findViewById(R.id.imageViewMeetingType);
             textViewMeetingTypeName = (TextView)view.findViewById(R.id.textViewMeetingName);
+            sponsorname=view.findViewById( R.id.text_speaker );
+            city=view.findViewById( R.id.meeting_place );
+            mdate=view.findViewById( R.id.meeting_date );
+            location=view.findViewById( R.id.meeting_location );
 
         }
     }
@@ -119,7 +124,12 @@ public class MeetingRecyclerviewAdapter extends RecyclerView.Adapter<RecyclerVie
                 meetingViewHolder.linearLayoutMeetingType.setBackground(mContext.getResources().getDrawable(R.drawable.meeting_type_participate));
                 Glide.with(mContext).load(R.drawable.participate).into(meetingViewHolder.imageViewMeetingType);
                 meetingViewHolder.textViewMeetingTypeName.setText("参与的会议");
+//                Glide.with( mContext ).load( drawables[position%4] ).into( meetingViewHolder.imageViewMeetingPicture );
             }
+            meetingViewHolder.sponsorname.setText( meetingItemList.get( position ).getSponsorName() );
+            meetingViewHolder.location.setText( meetingItemList.get( position ).getLocation() );
+            meetingViewHolder.mdate.setText( meetingItemList.get( position ).getTime() );
+            meetingViewHolder.city.setText( meetingItemList.get( position ).getCity() );
             meetingViewHolder.textViewMeetingName.setText(meetingItemList.get(position).getName());
             Glide.with(mContext).load(meetingItemList.get(position).getMeetingPictureId()).into(meetingViewHolder.imageViewMeetingPicture);
             meetingViewHolder.meetingView.setTag(position);

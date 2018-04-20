@@ -37,6 +37,7 @@ import cn.jpush.im.android.api.model.Conversation;
 import cn.jpush.im.android.api.model.GroupInfo;
 import cn.jpush.im.android.api.model.UserInfo;
 import jp.wasabeef.glide.transformations.BlurTransformation;
+import okhttp3.Call;
 import okhttp3.Response;
 import rx.Observable;
 import rx.Observer;
@@ -53,12 +54,12 @@ public class MeetingDetailActivity extends BaseActivity implements View.OnClickL
     private LotteryRecyclerviewAdapter lotteryRecyclerviewAdapter;
     private VoteRecyclerAdapter voteRecyclerAdapter;
     private RelativeLayout relativeLayout;
-    private TextView tv_detail_meeting_place,tv_detail_meeting_date;
+    private TextView tv_detail_meeting_place,tv_detail_meeting_date,tv_check_in;
     private String QR_CODE_CONTENT="Extra_Qr_Content";
     private List<LotteryItem> lotteryItemList;
     private List<Voteitem> voteitemList;
     private List<UserInfo> userItems;
-    private String getMeetingUrl = "http://39.106.47.27:8080/conference//api/conference/dogetConferenceInfo";
+    private String getMeetingUrl = "http://39.106.47.27:8080/conference//api/conference/dogetConferenceInfoById";
     private int groupId;
     private String meetingID;
     private Typeface typeface;
@@ -91,12 +92,14 @@ public class MeetingDetailActivity extends BaseActivity implements View.OnClickL
         userItems = new ArrayList<>();
         lotteryItemList = new ArrayList<>();
         imageView_meeting_detail = findViewById( R.id.imageView_collapsing );
+        Glide.with( this ).load( R.drawable.meeting_test_2 ).into( imageView_meeting_detail );
         collapsingToolbarLayout = findViewById( R.id.collapsing_toolbar_meeting_detail );
         recycler_rough = findViewById(R.id.detail_user_recycler_rough);
         tv_detail_meeting_place = findViewById( R.id.detail_meeting_place );
         tv_detail_meeting_date = findViewById( R.id.detail_meeting_date );
         imageView_qr_code = findViewById( R.id.iv_meeting_detail_qr_code );
         relativeLayout = findViewById( R.id.relativate_vote );
+        tv_check_in=findViewById( R.id.check_in );
         recyclerView_lottery = findViewById(R.id.recyclerview_lottery);
         recycler_vote_small = findViewById( R.id.recycler_vote_small );
         LinearLayoutManager linearLayoutManager1 = new LinearLayoutManager(MeetingDetailActivity.this,LinearLayoutManager.HORIZONTAL,false);
@@ -119,7 +122,7 @@ public class MeetingDetailActivity extends BaseActivity implements View.OnClickL
 
     @Override
     public void initListeners() {
-
+        tv_check_in.setOnClickListener( this );
         imageView_qr_code.setOnClickListener( this );
         relativeLayout.setOnClickListener( this );
 
@@ -160,98 +163,54 @@ public class MeetingDetailActivity extends BaseActivity implements View.OnClickL
             case R.id.relativate_vote:
                 startIntent( PieChartActivity.class );
                 break;
+            case R.id.check_in:
+                Intent intent1=new Intent( MeetingDetailActivity.this,CheckInActivity.class );
+                intent1.putExtra( "meetingId",meetingID );
+                startActivity( intent1 );
+                break;
         }
     }
 
     public void getMeetingInfo(final String meetingId){
 
-        Observable.create(new Observable.OnSubscribe<String>() {
-            @Override
-            public void call(Subscriber<? super String > subscriber) {
-                try {
+        try {
+            OkHttpUtil.getInstance().getMeetingInfoResponse(meetingId,getMeetingUrl, new okhttp3.Callback() {
+                @Override
+                public void onFailure(Call call, IOException e) {
 
-                    Response response = OkHttpUtil.getInstance().getMeetingInfoResponse(meetingId,getMeetingUrl);
-
-                    if (response.code()==200){
-
-                        subscriber.onNext(response.body().string());
-                        subscriber.onCompleted();
-
-                    }else{
-
-                        throw new IOException();
-
-                    }
-
-                } catch (IOException e) {
-                    e.printStackTrace();
-                    subscriber.onError(e);
                 }
 
-            }
-        })
-                .subscribeOn(Schedulers.io()) // 指定 subscribe() 发生在 IO 线程
-                .observeOn(AndroidSchedulers.mainThread()) // 指定 Subscriber 的回调发生在主线程
-                .subscribe(new Observer<String>()
-                {
+                @Override
+                public void onResponse(Call call, Response response) throws IOException {
+                    final String reponddata=response.body().string();
 
-                    @Override
-                    public void onNext(String response) {
-
-                        try {
-
-                            JSONObject jsonObject = new JSONObject(response);
-                            JSONObject jsonObject1 = jsonObject.getJSONObject("data");
-                            groupId = jsonObject1.getInt("chatroomId");
-                            meetingID=jsonObject1.getString( "id" );
-                            String meetingDate = jsonObject1.getString("time");
-                            String meetingPlace = jsonObject1.getString("location");
-                            String meetingTitle = jsonObject1.getString("name");
-                            tv_detail_meeting_date.setText(meetingDate);
-                            tv_detail_meeting_place.setText(meetingPlace);
-                            collapsingToolbarLayout.setTitle(meetingTitle);
-
-                        }catch (JSONException e){
-                            e.printStackTrace();
+                    runOnUiThread( new Runnable( ) {
+                        @Override
+                        public void run() {
+//                            showToast( reponddata );
+                            JSONObject jsonObject = null;
+                            try {
+                                jsonObject = new JSONObject(reponddata);
+                                JSONObject jsonObject1 = jsonObject.getJSONObject("data");
+                                groupId = jsonObject1.getInt("chatroomId");
+                                meetingID=jsonObject1.getString( "id" );
+                                String meetingDate = jsonObject1.getString("time");
+                                String meetingPlace = jsonObject1.getString("location");
+                                String meetingTitle = jsonObject1.getString("name");
+                                tv_detail_meeting_date.setText(meetingDate);
+                                tv_detail_meeting_place.setText(meetingPlace);
+                                collapsingToolbarLayout.setTitle(meetingTitle);
+                            } catch (JSONException e) {
+                                e.printStackTrace( );
+                            }
                         }
-
-                    }
-
-                    @Override
-                    public void onCompleted() {
-
-                       // Toast.makeText(MeetingDetailActivity.this,"会议界面加载成功",Toast.LENGTH_SHORT).show();
-                        JMessageClient.getGroupMembers(groupId,
-                                new GetGroupMembersCallback() {
-                                    @Override
-                                    public void gotResult(int i, String s, List<UserInfo> list) {
-
-                                        if (i==0){
-                                            Log.d(Tag,"---->获取用户信息成功");
-
-                                            userItems.clear();
-                                            userItems.addAll( list );
-                                            userRecyclerviewAdapter.notifyDataSetChanged();
-
-                                        }else{
-                                            Log.d(Tag,"---->获取用户信息失败");
-                                        }
-
-                                    }
-                                });
-
-                    }
-
-                    @Override
-                    public void onError(Throwable e) {
-
-                       // Toast.makeText(MeetingDetailActivity.this,"会议界面加载失败...",Toast.LENGTH_SHORT).show();
-
-
-                    }
-                });
-
+                    } );
+                }
+            });
+        } catch (IOException e) {
+            e.printStackTrace( );
+        }
 
     }
-
 }
+

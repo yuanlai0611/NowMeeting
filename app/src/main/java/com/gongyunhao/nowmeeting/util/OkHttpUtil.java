@@ -1,14 +1,19 @@
 package com.gongyunhao.nowmeeting.util;
 
+import android.os.Environment;
+
+import org.apache.jpush.http.entity.mime.content.FileBody;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 
 import okhttp3.Callback;
 import okhttp3.FormBody;
 import okhttp3.MediaType;
+import okhttp3.MultipartBody;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.RequestBody;
@@ -84,24 +89,51 @@ public class OkHttpUtil {
     }
 
     public String getSignInfo(String remark_name,String password,String phone_number,String email,
-                              String user_address, String company,String signature,String workplace)throws IOException{
+                              String user_address, String company,String signature,String workplace,String filePath)throws IOException{
 
-        RequestBody requestBody=new FormBody.Builder()
-                .add( "username",remark_name )
-                .add( "password",password )
-                .add( "telephone",phone_number )
-                .add( "email",email )
-                .add( "avatar","null" )
-                .add( "address",user_address )
-                .add( "signature",signature )
-                .add( "graduateSchool",company )
-                .add( "workingPlace",workplace )
+        /* 第一个要上传的file */
+        File file1 = new File(filePath);
+        RequestBody fileBody1 = RequestBody.create(MediaType.parse("application/octet-stream") , file1);
+        String file1Name = "testpicture.png";
+
+        MultipartBody mBody = new MultipartBody.Builder().setType(MultipartBody.FORM)
+                /* 上传一个普通的String参数 , key 叫 "p" */
+//                .addFormDataPart("p" , "你大爷666")
+                .addFormDataPart( "username",remark_name )
+                .addFormDataPart( "password",password )
+                .addFormDataPart( "telephone",phone_number )
+                .addFormDataPart( "gender","1" )
+                .addFormDataPart( "birthday","1998/12/27" )
+                .addFormDataPart( "email",email )
+                .addFormDataPart( "address",user_address )
+                .addFormDataPart( "signature",signature )
+                .addFormDataPart( "graduateSchool",company )
+                .addFormDataPart( "workingPlace",workplace )
+                /* 底下是上传了两个文件 */
+                .addFormDataPart("avatar" , file1Name , fileBody1)
+//                .addFormDataPart("file" , file2Name , fileBody2)
                 .build();
-        Request request=new Request.Builder()
-                .url("http://39.106.47.27:8080/conference/api/user/doregister")
-                .post( requestBody )
-                .build();
+
+        /* 下边的就和post一样了 */
+        Request request = new Request.Builder().url("http://39.106.47.27:8080/conference/api/user/doregister").post(mBody).build();
         Response response=mClient.newCall(request).execute();
+
+//            RequestBody requestBody=new FormBody.Builder()
+//                .add( "username",remark_name )
+//                .add( "password",password )
+//                .add( "telephone",phone_number )
+//                .add( "email",email )
+//                .add( "avatar","null" )
+//                .add( "address",user_address )
+//                .add( "signature",signature )
+//                .add( "graduateSchool",company )
+//                .add( "workingPlace",workplace )
+//                .build();
+//        Request request=new Request.Builder()
+//                .url("http://39.106.47.27:8080/conference/api/user/doregister")
+//                .post( requestBody )
+//                .build();
+//        Response response=mClient.newCall(request).execute();
         return response.body().string();
 
     }
@@ -121,7 +153,7 @@ public class OkHttpUtil {
         return response.body().string();
     }
 
-    public Response getMeetingInfoResponse(String conferenId,String url) throws IOException{
+    public void getMeetingInfoResponse(String conferenId,String url,okhttp3.Callback callback) throws IOException{
 
         RequestBody requestBody = new FormBody.Builder()
                 .add("conferenceId",conferenId)
@@ -132,8 +164,7 @@ public class OkHttpUtil {
                 .post(requestBody)
                 .build();
 
-        Response response = mClient.newCall(request).execute();
-        return response;
+        mClient.newCall(request).enqueue( callback );
     }
 
     public void getLotteryPeople(String conferenceId,String name,String number,String url,Callback callback)throws IOException{

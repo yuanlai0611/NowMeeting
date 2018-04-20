@@ -617,8 +617,7 @@ public class ChattingActivity extends BaseActivity implements View.OnTouchListen
             intent.putExtra(MediaStore.EXTRA_OUTPUT, uri);
             startActivityForResult(intent, CAMERA_REQUEST_CODE);
         } else {
-            Toast.makeText(ChattingActivity.this, "请确认已经插入SD卡",
-                    Toast.LENGTH_LONG).show();
+            showToast( "请确认已经插入SD卡" );
         }
 
     }
@@ -633,9 +632,9 @@ public class ChattingActivity extends BaseActivity implements View.OnTouchListen
     public void onPermissionsGranted(int requestCode, List<String> list) {
 
         if (requestCode==RC_CAMERA){
-            Toast.makeText(ChattingActivity.this,"照相机权限同意",Toast.LENGTH_SHORT).show();
+            showToast( "照相机权限同意" );
         }else if(requestCode==RC_ALBUM){
-            Toast.makeText(ChattingActivity.this,"相册权限同意",Toast.LENGTH_SHORT).show();
+            showToast( "相册权限同意" );
         }
 
     }
@@ -644,9 +643,9 @@ public class ChattingActivity extends BaseActivity implements View.OnTouchListen
     public void onPermissionsDenied(int requestCode, List<String> list) {
 
         if (requestCode==RC_CAMERA){
-            Toast.makeText(ChattingActivity.this,"照相机权限拒绝",Toast.LENGTH_SHORT).show();
+            showToast( "照相机权限拒绝" );
         }else if(requestCode==RC_ALBUM){
-            Toast.makeText(ChattingActivity.this,"相册权限拒绝",Toast.LENGTH_SHORT).show();
+            showToast( "相册权限拒绝" );
         }
         if (EasyPermissions.somePermissionPermanentlyDenied(this, list)) {
             new AppSettingsDialog.Builder(this).build().show();

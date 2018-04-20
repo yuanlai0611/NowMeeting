@@ -41,6 +41,7 @@ public class SearchFriendActivity extends BaseActivity {
     private boolean issuccess;
     private SearchFriendAdapter searchFriendAdapter;
     private String inforUrl = "http://39.106.47.27:8080/conference/api/user/dogetInfo";
+    private String searchUrl="http://39.106.47.27:8080/conference/api/user/dosearchUsersByName";
     private String response;
     private static final int REQUEST_SUCCESS=0;
     private static final int REQUEST_FAILED=1;
@@ -91,7 +92,7 @@ public class SearchFriendActivity extends BaseActivity {
                         @Override
                         public void run() {
                             try {
-                                friendlistdata= OkHttpUtil.getInstance().doSearchByName( et_search.getText().toString(),inforUrl );
+                                friendlistdata= OkHttpUtil.getInstance().doSearchByName( et_search.getText().toString(),searchUrl );
                             } catch (IOException e) {
                                 e.printStackTrace( );
                             }

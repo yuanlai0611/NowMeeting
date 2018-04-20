@@ -1160,7 +1160,6 @@ public class GroupChattingActivity extends BaseActivity implements View.OnTouchL
 
     }
 
-
     public List<String> getEveryVoteName(String name){
 
         List<String> nameList = new ArrayList<>();
@@ -1194,8 +1193,5 @@ public class GroupChattingActivity extends BaseActivity implements View.OnTouchL
         return nameList;
 
     }
-
-
-
 
 }

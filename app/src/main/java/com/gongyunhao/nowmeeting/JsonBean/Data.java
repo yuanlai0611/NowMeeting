@@ -22,9 +22,29 @@ public class Data {
 
     private String workingPlace;
 
+    private String birthday;
+
+    private String gender;
+
     private long createTime;
 
     private long updateTime;
+
+    public String getBirthday() {
+        return birthday;
+    }
+
+    public void setBirthday(String birthday) {
+        this.birthday = birthday;
+    }
+
+    public String getGender() {
+        return gender;
+    }
+
+    public void setGender(String gender) {
+        this.gender = gender;
+    }
 
     public void setId(int id){
         this.id = id;

@@ -8,12 +8,15 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.gongyunhao.nowmeeting.Base.BaseActivity;
 import com.gongyunhao.nowmeeting.JsonBean.Data;
 import com.gongyunhao.nowmeeting.JsonBean.Root;
 import com.gongyunhao.nowmeeting.R;
 import com.gongyunhao.nowmeeting.util.OkHttpUtil;
 import com.google.gson.Gson;
+
+import org.raphets.roundimageview.RoundImageView;
 
 import java.io.IOException;
 
@@ -27,6 +30,7 @@ public class UserDetailActivity extends BaseActivity {
     private String response;
     private AlertDialog alertDialog;
     private Data userdata;
+    private RoundImageView user_picture;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -91,6 +95,8 @@ public class UserDetailActivity extends BaseActivity {
         email.setText( userdata.getEmail() );
         workplace.setText( userdata.getWorkingPlace() );
         school.setText( userdata.getGraduateSchool() );
+//        Glide.with( this ).load( userdata.getAvatar() ).into( user_picture );
+
     }
 
     @Override
@@ -107,6 +113,7 @@ public class UserDetailActivity extends BaseActivity {
         email=findViewById( R.id.tv_email_detail );
         workplace=findViewById( R.id.tv_workplace_detail );
         school=findViewById( R.id.tv_school_detail );
+        user_picture=findViewById( R.id.user_detail_user_picture );
         btn_add_friend_detail=findViewById( R.id.btn_add_friend_detail );
     }
 
